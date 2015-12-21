@@ -1,0 +1,133 @@
+<?php $helper = $this->helper('\Celebros\ConversionPro\Helper\Data'); ?>
+<script>
+function ConversionPro(multiselect, collapse, qty) {
+    this.isMultiselect = multiselect;
+    this.isCollapsed = collapse;
+    this.collapsedQty = qty;
+    this.itemSelector = 'li.item';
+    this.moreClass = 'more-button';
+    this.lessClass = 'less-button';
+    this.moreButton = '<li><a class="filters_more_button" href="#">+ <?php echo __('More') ?></a></li>';
+    this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
+    here = this;
+    this.clickCheckbox = function (el) {
+        href = jQuery(el).next().attr('href');
+        window.location.href = href;
+    };
+    this.clickHLink = function (el) {
+        checkbox = jQuery(el).prev();
+        if (checkbox.prop("checked")) {
+            checkbox.prop("checked", false);
+        } else {
+            checkbox.prop("checked", true);
+        }
+    };
+    this.collapse = function(el) {
+        elmnts = jQuery(el).parent().find(here.itemSelector);
+        if (jQuery(el).data('collapse') == 'more') { console.log(elmnts);
+            elmnts.each( function(i, e) {
+                if (jQuery(e).hasClass(here.moreClass)) {
+                    jQuery(e).addClass('hided');
+                } else {
+                    jQuery(e).removeClass('hided');
+                }   
+                /*
+                if (!jQuery(e).hasClass(here.lessClass)) {
+                    jQuery(e).show();
+                }*/
+            });
+        } else {
+            elmnts.each( function(i, e) {
+                if (i >= here.collapsedQty && !jQuery(e).hasClass(here.moreClass)) {
+                    jQuery(e).addClass('hided');
+                } else {
+                    jQuery(e).removeClass('hided');
+                }
+            });
+        }
+    };
+    /*if (this.isCollapsed) {
+		jQuery('#narrow-by-list dd ol').each( function(filter){
+			here.showed[filter] = [];
+			here.hided[filter] = [];
+			jQuery(this).find('li').each( function(index) {
+				if (index < here.maxQty) {
+					here.showed[filter].push(jQuery(this));
+				} else {
+					here.hided[filter].push(jQuery(this));
+				}
+			});
+			if (here.hided[filter].length) {
+				jQuery(this).find('li').last().after(here.moreButton).after(here.lessButton);
+				jQuery(this).find('.filters_less_button').hide();
+				here.hided[filter].each( function(el){
+					el.hide();
+				});
+				jQuery(this).find('.filters_less_button').click( function(){
+					jQuery(this).parent().parent().find('.filters_more_button').show();
+					jQuery(this).hide();
+					here.hided[filter].each( function(el){
+						el.hide();
+					});
+                    return false;					
+				});
+				jQuery(this).find('.filters_more_button').click( function(){
+					jQuery(this).parent().parent().find('.filters_less_button').show();
+					jQuery(this).hide();
+					here.hided[filter].each( function(el){
+						el.show();
+					});
+                    return false;					
+				});
+			}
+		});    
+    }*/
+};
+convpro = new ConversionPro(true, true, 2);
+<?php /*
+var Celebros_Filters = {
+    //maxQty : <?php echo (int)$helper->getCollapsedQty(); ?>,
+    moreButton : '<li><a class="filters_more_button" href="#">+ More</a></li>',
+    lessButton : '<li><a class="filters_less_button" href="#">- Less</a></li>',
+    showed : new Object(),
+    hided : new Object(),
+	init : function() {
+	    here = this;
+		jQuery('#narrow-by-list dd ol').each( function(filter){
+			here.showed[filter] = [];
+			here.hided[filter] = [];
+			jQuery(this).find('li').each( function(index) {
+				if (index < here.maxQty) {
+					here.showed[filter].push(jQuery(this));
+				} else {
+					here.hided[filter].push(jQuery(this));
+				}
+			});
+			if (here.hided[filter].length) {
+				jQuery(this).find('li').last().after(here.moreButton).after(here.lessButton);
+				jQuery(this).find('.filters_less_button').hide();
+				here.hided[filter].each( function(el){
+					el.hide();
+				});
+				jQuery(this).find('.filters_less_button').click( function(){
+					jQuery(this).parent().parent().find('.filters_more_button').show();
+					jQuery(this).hide();
+					here.hided[filter].each( function(el){
+						el.hide();
+					});
+                    return false;					
+				});
+				jQuery(this).find('.filters_more_button').click( function(){
+					jQuery(this).parent().parent().find('.filters_less_button').show();
+					jQuery(this).hide();
+					here.hided[filter].each( function(el){
+						el.show();
+					});
+                    return false;					
+				});
+			}
+		});
+	}
+};
+//Celebros_Filters.init();*/ ?>
+</script>

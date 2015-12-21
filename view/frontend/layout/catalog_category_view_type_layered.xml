@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="catalog.navigation.renderer">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Celebros_ConversionPro::layered_navigation/layer/filter.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

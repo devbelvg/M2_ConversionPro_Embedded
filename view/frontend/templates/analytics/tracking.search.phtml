@@ -1,0 +1,18 @@
+<?php if($this->getCustomerId() && $this->getHost()): ?>
+<!-- BEGIN: Analytics.Celebros.Search-->
+<script src="http://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>" type="text/javascript"></script>
+<script type="text/javascript">
+    anlxCallback = function() {
+        var x = '';
+    };
+    CelebrosAnalytics.customerid = '<?php echo $this->getCustomerId(); ?>';
+    CelebrosAnalytics.pagereferrer = '<?php echo $this->getPageReferrer(); ?>';
+    CelebrosAnalytics.qwisersearchsessionid = '<?php echo $this->getQwiserSearchSessionId(); ?>';
+    CelebrosAnalytics.websessionid = '<?php echo $this->getWebsessionId(); ?>';
+<?php if ($qwisersearchloghandle = $this->getQwiserSearchLogHandle()): ?>
+    CelebrosAnalytics.qwisersearchloghandle = '<?php echo $qwisersearchloghandle ?>';
+<?php endif; ?>
+    CelebrosAnalytics.AI_LogSearchResult();
+</script>
+<!-- END: Analytics.Search -->
+<?php endif; ?>

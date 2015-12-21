@@ -1,0 +1,14 @@
+<?php
+/**
+ * @var Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner $block
+ */
+?>
+<?php if ($this->helper('Celebros\ConversionPro\Helper\Data')->isCampaignsEnabled()) : ?>
+    <?php if ($block->hasBannerImage()) : ?>
+        <?php $image = $block->getBannerImage() ?>
+        <?php if ($image->hasUrl()) : ?><a href="<?php echo $image->getUrl() ?>"><?php endif ?>
+            <img src="<?php echo $image->getImageUrl() ?>" width="100%" />
+        <?php if ($image->hasUrl()) : ?></a><?php endif ?>
+    <?php endif ?>
+<?php endif ?>
+<?php /* TODO: flash banner */ ?>

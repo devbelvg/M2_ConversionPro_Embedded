@@ -1,0 +1,57 @@
+<?php
+/**
+ * Template for filter items block
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Layer\Filter\Renderer
+ */
+?>
+<?php $helper = $this->helper('\Celebros\ConversionPro\Helper\Data') ?>
+<style>
+.item.hided {
+    display: none;
+}
+.item.more-button,
+.item.less-button {
+    cursor: pointer;
+}
+</style>
+<ol class="items">
+    <?php foreach ($filterItems as $key => $filterItem): ?>
+    <?php if ($helper->isCollapsed() && ($helper->collapseQty() < $filterItem->getCount())): ?>
+    <li class="item<?php if ($key >= (int)$helper->collapseQty()) echo ' hided' ?>">
+    <?php else: ?>
+    <li class="item">
+    <?php endif; ?>
+    <?php if ($filterItem->getCount() > 0): ?>
+        <?php if ($helper->isMultiselectEnabled()): ?>
+        <input type="checkbox" onclick="convpro.clickCheckbox(this)"<?php if ($filterItem->isSelected()): ?> checked="checked"<?php endif; ?>>
+        <?php endif; ?>
+        <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>" onclick="convpro.clickHLink(this)">
+            <?php echo $filterItem->getLabel() ?>
+            <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+            <span class="count"><?php echo $filterItem->getCount()?><span class="filter-count-label">
+            <?php if ($filterItem->getCount() == 1):?>
+                <?php echo __('item') ?>
+            <?php else:?>
+                <?php echo __('items') ?>
+            <?php endif;?>
+            </span></span>
+            <?php endif; ?>
+        </a>
+        <?php else:?>
+        <?php echo $filterItem->getLabel() ?>
+        <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+        <span class="count">(<?php echo $filterItem->getCount()?>)<span class="filter-count-label">
+            <?php if ($filterItem->getCount() == 1):?>
+                <?php echo __('item')?><?php else:?><?php echo __('items') ?>
+            <?php endif;?>
+        </span></span>
+        <?php endif; ?>
+    <?php endif; ?>
+    </li>
+    <?php endforeach ?>
+    <?php if ($helper->isCollapsed() && ($helper->collapseQty() < $filterItem->getCount())): ?>
+    <li class="item more-button" data-collapse="more" onclick="convpro.collapse(this, true)">+ <?php echo __('More') ?></li>
+    <li class="item less-button hided" data-collapse="less" onclick="convpro.collapse(this, false)">+ <?php echo __('Less') ?></li>
+    <?php endif; ?>
+</ol>

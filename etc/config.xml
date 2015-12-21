@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <conversionpro>
+            <general_settings>
+                <enabled>1</enabled>
+                <host></host>
+                <port>6035</port>
+                <sitekey></sitekey>
+            </general_settings>
+            <display_settings>
+                <campaigns_enabled>0</campaigns_enabled>
+                <filter_multiselect_enabled>1</filter_multiselect_enabled>
+                <collapse>0</collapse>
+                <collapse_qty>4</collapse_qty>
+            </display_settings>
+            <nav_to_search>
+                <enabled>1</enabled>
+                <nav_to_search_search_by>textual</nav_to_search_search_by>
+                <category_query_type>name</category_query_type>
+            </nav_to_search>
+            <crosssell_settings>
+                <crosssell_enabled>0</crosssell_enabled>
+                <crosssell_limit>4</crosssell_limit>
+                <upsell_enabled>0</upsell_enabled>
+                <upsell_limit>4</upsell_limit>
+                <crosssell_customer_name></crosssell_customer_name>
+                <crosssell_request_handle></crosssell_request_handle>
+                <crosssell_address></crosssell_address>
+            </crosssell_settings>
+            <anlx_settings>
+                <host></host>
+                <cid></cid>
+            </anlx_settings>
+            <advanced>
+                <request_lifetime>13600</request_lifetime>
+            </advanced>
+        </conversionpro>
+    </default>
+</config>

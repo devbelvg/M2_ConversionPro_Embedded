@@ -1,0 +1,4 @@
+<?php $message = $block->getRecommendedMessage() ?>
+<?php if (!empty($message)) : ?>
+<div class="message info empty"><div><?php echo $this->escapeHtml($message) ?></div></div>
+<?php endif ?>

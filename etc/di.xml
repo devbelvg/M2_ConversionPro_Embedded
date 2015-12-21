@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Model\Layer\Search" type="Celebros\ConversionPro\Model\Catalog\Layer\Search" />
+    <preference for="searchFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\Search\FilterList" />
+    <type name="Celebros\ConversionPro\Model\Search\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Search\FilterableAttributeList</argument>
+        </arguments>
+    </type>
+    <preference for="categoryFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\FilterList" />
+    <type name="Magento\Catalog\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Category\FilterableAttributeList</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\CatalogSearch\Model\Search\RequestGenerator" type="Celebros\ConversionPro\Model\CatalogSearch\Search\RequestGenerator" />
+    <preference for="Magento\Search\Model\AdapterFactory" type="Celebros\ConversionPro\Model\Search\AdapterFactory" />
+    <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
+    <preference for="Magento\CatalogSearch\Model\Resource\Fulltext\Collection" type="Celebros\ConversionPro\Model\Resource\CatalogSearch\Fulltext\Collection" />
+    <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
+    <preference for="Magento\Checkout\Block\Cart\Crosssell" type="Celebros\ConversionPro\Block\Checkout\Cart\Crosssell" />
+    <preference for="Magento\Catalog\Block\Product\ProductList\Upsell" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Upsell" />
+</config>
