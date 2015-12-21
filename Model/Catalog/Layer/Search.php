@@ -4,7 +4,7 @@ namespace Celebros\ConversionPro\Model\Catalog\Layer;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\ContextInterface;
-use Magento\Catalog\Model\Resource;
+use Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\Layer\StateFactory;
 
 class Search extends \Magento\Catalog\Model\Layer\Search
@@ -12,8 +12,8 @@ class Search extends \Magento\Catalog\Model\Layer\Search
     /**
      * @param ContextInterface $context
      * @param StateFactory $layerStateFactory
-     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param Resource\Product $catalogProduct
+     * @param ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param ResourceModel\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
@@ -22,8 +22,8 @@ class Search extends \Magento\Catalog\Model\Layer\Search
     public function __construct(
         ContextInterface $context,
         StateFactory $layerStateFactory,
-        Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        Resource\Product $catalogProduct,
+        ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        ResourceModel\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,

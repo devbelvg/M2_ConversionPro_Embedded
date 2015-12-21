@@ -30,7 +30,7 @@ class Upsell extends \Magento\Catalog\Block\Product\ProductList\Upsell
     
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Checkout\Model\Resource\Cart $checkoutCart,
+        \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Module\Manager $moduleManager,

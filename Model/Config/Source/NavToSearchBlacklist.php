@@ -4,7 +4,7 @@ namespace Celebros\ConversionPro\Model\Config\Source;
 class NavToSearchBlacklist implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $categoryCollection;
 
@@ -13,7 +13,7 @@ class NavToSearchBlacklist implements \Magento\Framework\Option\ArrayInterface
      */
     protected $options;
 
-    public function __construct(\Magento\Catalog\Model\Resource\Category\Collection $categoryCollection)
+    public function __construct(\Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection)
     {
         $this->categoryCollection = $categoryCollection;
         $this->categoryCollection->addFieldToSelect('name');

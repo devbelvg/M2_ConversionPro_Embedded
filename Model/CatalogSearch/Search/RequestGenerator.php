@@ -1,7 +1,7 @@
 <?php
 namespace Celebros\ConversionPro\Model\CatalogSearch\Search;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;

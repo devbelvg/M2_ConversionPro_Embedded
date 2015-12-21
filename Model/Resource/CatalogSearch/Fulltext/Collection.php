@@ -3,7 +3,7 @@ namespace Celebros\ConversionPro\Model\Resource\CatalogSearch\Fulltext;
 
 use Magento\Framework\DB\Select;
 
-class Collection extends \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
 {
     /**
      * @var \Celebros\ConversionPro\Helper\Data
@@ -15,62 +15,10 @@ class Collection extends \Magento\CatalogSearch\Model\Resource\Fulltext\Collecti
      */
     protected $searchHelper;
     
-    public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Search\Model\QueryFactory $catalogSearchData,
-        \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
-        \Magento\Framework\Search\Request\Builder $requestBuilder,
-        \Magento\Search\Model\SearchEngine $searchEngine,
-        \Celebros\ConversionPro\Helper\Data $helper,
-        \Celebros\ConversionPro\Helper\Search $searchHelper,
-        $connection = null)
-    {
-        $this->helper = $helper;
-        $this->searchHelper = $searchHelper;
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $eavConfig,
-            $resource,
-            $eavEntityFactory,
-            $resourceHelper,
-            $universalFactory,
-            $storeManager,
-            $moduleManager,
-            $catalogProductFlatState,
-            $scopeConfig,
-            $productOptionFactory,
-            $catalogUrl,
-            $localeDate,
-            $customerSession,
-            $dateTime,
-            $groupManagement,
-            $catalogSearchData,
-            $catalogSearchFulltext,
-            $requestBuilder,
-            $searchEngine,
-            $connection);
-            
+    public function _construct() {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
+        $this->searchHelper = $objectManager->get('\Celebros\ConversionPro\Helper\Search');
         if ($this->helper->isEnabled()) {
             // always use same order as Celebros search
             // (setOrder method is disabled)

@@ -2,8 +2,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product_list_toolbar">
-            <remove name="product_list_toolbar_pager" />
-            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar\Pager" name="product_list_toolbar_pager_celebros" as ="product_list_toolbar_pager" cacheable="false" />
+            <!--<remove name="product_list_toolbar_pager" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar\Pager" name="product_list_toolbar_pager_celebros" as ="product_list_toolbar_pager" cacheable="false" />-->
         </referenceBlock>
     </body>
 </page>

@@ -5,7 +5,7 @@ use Magento\Framework\Object;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
-use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 

@@ -1,7 +1,7 @@
 <?php
 namespace Celebros\ConversionPro\Model;
 
-use \Magento\Framework\Object;
+use \Magento\Framework\DataObject;
 use \Magento\Framework\Simplexml\Element as XmlElement;
 
 class SearchException extends \Exception {}
@@ -12,7 +12,7 @@ class SearchResponseErrorException extends SearchException {}
 class Search
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $attributeCollectionFactory;
     
@@ -39,7 +39,7 @@ class Search
     protected $attributeCollection;
     
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         Session $session,
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Cache $cache,
@@ -59,9 +59,9 @@ class Search
     }
     
     // see Magento 1 version: Celebros/Conversionpro/Model/Mysql4/Fulltext/Engine.php:100
-    public function createSearchInfoXml(Object $params = null)
+    public function createSearchInfoXml(DataObject $params = null)
     {
-        !is_null($params) or $params = new Object();
+        !is_null($params) or $params = new DataObject();
         
         // Search string
         $searchInfoXml = new XmlElement('<SearchInformation/>');

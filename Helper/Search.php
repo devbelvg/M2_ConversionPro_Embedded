@@ -3,7 +3,7 @@ namespace Celebros\ConversionPro\Helper;
 
 use Magento\Framework\App\Helper;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Category;
 use Celebros\ConversionPro\Model\Config\Source\CategoryQueryType;
 
@@ -52,7 +52,7 @@ class Search extends Helper\AbstractHelper
     public function getSearchParams()
     {
         $request = $this->_getRequest();
-        $params = new Object();
+        $params = new DataObject();
         
         $queryText = '';
         
@@ -87,7 +87,7 @@ class Search extends Helper\AbstractHelper
         return $params;
     }
     
-    public function getCustomResults(Object $params = null)
+    public function getCustomResults(DataObject $params = null)
     {
         $params = is_null($params) ? $this->getSearchParams() : clone $params;
         
