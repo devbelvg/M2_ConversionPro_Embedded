@@ -1,7 +1,7 @@
 <?php
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject as DataObject;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
@@ -31,7 +31,7 @@ class Mapper
     }
 
     protected function processQuery(
-        RequestQueryInterface $query, Object $params, $conditionType)
+        RequestQueryInterface $query, DataObject $params, $conditionType)
     {
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_MATCH:
@@ -47,7 +47,7 @@ class Mapper
     }
 
     protected function processMatchQuery(
-        MatchQuery $query, Object $params, $conditionType /* ignored */)
+        MatchQuery $query, DataObject $params, $conditionType /* ignored */)
     {
         $queryText = $params->hasQueryText() ? $params->getQueryText() . ' ' : '';
         $queryText .= $query->getValue();
@@ -55,7 +55,7 @@ class Mapper
     }
 
     protected function processBoolQuery(
-        BoolQuery $query, Object $params, $conditionType)
+        BoolQuery $query, DataObject $params, $conditionType)
     {
         $this->processBoolQueryCondition(
             $query->getMust(),
@@ -74,7 +74,7 @@ class Mapper
     }
 
     protected function processFilterQuery(
-        FilterQuery $query, Object $params, $conditionType)
+        FilterQuery $query, DataObject $params, $conditionType)
     {
         switch ($query->getReferenceType()) {
             case FilterQuery::REFERENCE_QUERY:
@@ -87,7 +87,7 @@ class Mapper
     }
 
     protected function processBoolQueryCondition(
-        array $subQueryList, Object $params, $conditionType)
+        array $subQueryList, DataObject $params, $conditionType)
     {
         foreach ($subQueryList as $subQuery) {
             $this->processQuery($subQuery, $params, $conditionType);
@@ -96,7 +96,7 @@ class Mapper
 
     // see Magento/Framework/Search/Adapter/Mysql/Filter/Builder.php
     protected function processFilter(
-        RequestFilterInterface $filter, Object $params, $conditionType /* ignored */)
+        RequestFilterInterface $filter, DataObject $params, $conditionType /* ignored */)
     {
         if ($filter->getType() == RequestFilterInterface::TYPE_TERM) {
             $filters = $params->hasFilters() ? $params->getFilters() : [];

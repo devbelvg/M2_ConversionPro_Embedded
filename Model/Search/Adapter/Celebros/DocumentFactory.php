@@ -23,13 +23,20 @@ class DocumentFactory
             if ($name == $entityId) {
                 $documentId = $value;
             } else {
-                $fields[] = $this->objectManager->create(
+                $fields[$name] = $this->objectManager->create(
                     'Magento\Framework\Search\DocumentField',
                     ['name' => $name, 'value' => $value]);
             }
         }
+        
+        $fields['score'] = $this->objectManager->create(
+            'Magento\Framework\Search\DocumentField',
+            ['name' => 'score', 'value' => 0]
+        );
+        
         return $this->objectManager->create(
             'Magento\Framework\Search\Document',
-            ['documentFields' => $fields, 'documentId' => $documentId]);
+            ['documentFields' => $fields, 'documentId' => $documentId]
+        );
     }
 }

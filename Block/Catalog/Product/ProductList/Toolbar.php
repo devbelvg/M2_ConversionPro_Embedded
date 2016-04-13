@@ -61,7 +61,8 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         $this->searchHelper->setPageSize($this->getLimit());
         $this->searchHelper->setOrder(
             $this->getCurrentOrder(),
-            $this->getCurrentDirection());
+            $this->getCurrentDirection()
+        );
     }
 
     public function setCollection($collection)

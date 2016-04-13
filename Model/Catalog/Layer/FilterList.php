@@ -58,6 +58,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             foreach ($questions->children() as $question)
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
         }
+
         return $this->filters;
     }
 

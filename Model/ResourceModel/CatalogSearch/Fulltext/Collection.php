@@ -1,5 +1,5 @@
 <?php
-namespace Celebros\ConversionPro\Model\Resource\CatalogSearch\Fulltext;
+namespace Celebros\ConversionPro\Model\ResourceModel\CatalogSearch\Fulltext;
 
 use Magento\Framework\DB\Select;
 
@@ -15,10 +15,10 @@ class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Col
      */
     protected $searchHelper;
     
-    public function _construct() {
+    /*public function _construct() {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
-        $this->searchHelper = $objectManager->get('\Celebros\ConversionPro\Helper\Search');
+        $this->searchHelper = $objectManager->get('\Celebros\ConversionPro\Helper\Search');       
         if ($this->helper->isEnabled()) {
             // always use same order as Celebros search
             // (setOrder method is disabled)
@@ -51,6 +51,6 @@ class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Col
         
         // ignore order change
         return $this;
-    }
+    }*/
     
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 
@@ -35,7 +35,7 @@ class Adapter implements AdapterInterface
         return $this->responseFactory->create($response);
     }
 
-    public function executeQuery(Object $params)
+    public function executeQuery(DataObject $params)
     {
         return $this->searchHelper->getCustomResults($params);
     }

@@ -22,8 +22,8 @@ class Search extends \Magento\Catalog\Model\Layer\Search
     public function __construct(
         ContextInterface $context,
         StateFactory $layerStateFactory,
-        ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        ResourceModel\Product $catalogProduct,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,
