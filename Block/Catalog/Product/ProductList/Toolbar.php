@@ -117,8 +117,47 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         }
     }
 
-    public function getPagerHtml()
+    /*public function getPagerHtml()
     {
+        $pagerBlock = $this->getChildBlock('product_list_toolbar_pager_celebros');
+
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
+            $pagerBlock->setAvailableLimit($this->getAvailableLimit());
+
+            $pagerBlock->setUseContainer(
+                false
+            )->setShowPerPage(
+                false
+            )->setShowAmounts(
+                false
+            )->setFrameLength(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setJump(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame_skip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setLimit(
+                $this->getLimit()
+            )->setLastPageNum(
+                $this->getLastPageNum()
+            )->setCollection(
+                $this->getCollection()
+            )->setCurrentPage($this->getCurrentPage())
+                    ->setFirstNum($this->getFirstNum())
+                    ->setLastNum($this->getLastNum())
+                    ->setTotalNum($this->getTotalNum());
+            
+//return $pagerBlock->getLastPageNum(); return get_class($pagerBlock);
+            
+            return $pagerBlock->toHtml();
+        }
+        
+        return 'none';
+        
         if ($this->helper->isEnabled()) {
             $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
             if ($pagerBlock instanceof \Magento\Framework\Object) {
@@ -131,5 +170,5 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             }
         }
         return parent::getPagerHtml();
-    }
+    }*/
 }

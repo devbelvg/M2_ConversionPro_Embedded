@@ -127,7 +127,7 @@ class Search
         // some mandatory arguments
         $searchInfoXml->setAttribute('PriceFieldName', 'Price');
         $searchInfoXml->setAttribute('NumberOfPages', 9999999);
-       
+   
         return $searchInfoXml;
     }
     
@@ -286,13 +286,11 @@ class Search
     protected function _request($request)
     {
         $requestUrl = $this->_requestUrl($request);
-//print_r($requestUrl);        
+print_r($requestUrl);       
         $cacheId = $this->cache->getId(__METHOD__, array($request));
-        if ($response = $this->cache->load($cacheId)) { //print_r($requestUrl . ' :: cached<br>');
+        if ($response = $this->cache->load($cacheId)) {
             return $this->_parseResponse($response);
         } else {
-            //print_r($requestUrl . ' :: sended<br>');
-            
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $this->_requestUrl($request));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

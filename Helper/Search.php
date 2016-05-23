@@ -103,7 +103,6 @@ class Search extends Helper\AbstractHelper
         
         
         $searchHandle = $this->search->createSearchHandle($params);
-//print_r($searchHandle);die;
         if (!isset($this->customResultsCache[$searchHandle])) {
             $this->customResultsCache[$searchHandle] = 
                 $this->search->getCustomResults($searchHandle, true, '');

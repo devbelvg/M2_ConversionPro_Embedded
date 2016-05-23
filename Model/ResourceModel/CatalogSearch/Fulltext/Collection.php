@@ -15,42 +15,41 @@ class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Col
      */
     protected $searchHelper;
     
-    /*public function _construct() {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
-        $this->searchHelper = $objectManager->get('\Celebros\ConversionPro\Helper\Search');       
-        if ($this->helper->isEnabled()) {
-            // always use same order as Celebros search
-            // (setOrder method is disabled)
-            parent::setOrder('relevance', Select::SQL_ASC);
-        }
-    }
-    
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
+        $this->searchHelper = $objectManager->get('\Celebros\ConversionPro\Helper\Search');
+        
         if (!$this->helper->isEnabled()) {
             return parent::addCategoryFilter($category);
         }
         
         if (!$this->helper->isTextualNav2Search() && ($answerId = $this->searchHelper->getAnswerIdByCategoryId($category))) {
             // search by cat answer id
-            $this->addFieldToFilter(\Celebros\ConversionPro\Helper\Search::CATEGORY_QUESTION_TEXT, $answerId);
+            //$this->addFieldToFilter(\Celebros\ConversionPro\Helper\Search::CATEGORY_QUESTION_TEXT, $answerId);
+            $this->addFieldToFilter('category_ids', $answerId);
         } else {
             // search by category path
             $this->addSearchFilter($this->searchHelper->getCategoryQueryTerm($category));
         }
+        
+        \Magento\Catalog\Model\ResourceModel\Product\Collection::addCategoryFilter($category);
         
         return $this;
     }
     
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
+        
         if (!$this->helper->isEnabled()) {
             return parent::setOrder($attribute, $dir);
         }
         
         // ignore order change
         return $this;
-    }*/
+    }
     
 }
