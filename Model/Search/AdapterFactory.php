@@ -27,7 +27,8 @@ class AdapterFactory extends \Magento\Search\Model\AdapterFactory
         parent::__construct($objectManager, $scopeConfig, $adapters, $path, $scopeType);
     }
 
-    public function create(array $data = []) {
+    public function create(array $data = [])
+    {
         if ($this->helper->isEnabled()) {
             $adapter = $this->objectManager->create(
                 'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter');

@@ -89,6 +89,7 @@ class Question extends Layer\Filter\AbstractFilter
                     return $this->_prepareAnswerText($answer);
             }
         }
+        
         return __('Unknown value');
     }
 

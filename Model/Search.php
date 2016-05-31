@@ -38,6 +38,8 @@ class Search
     
     protected $attributeCollection;
     
+    protected $systemFilters = ['category_ids'];
+    
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         Session $session,
@@ -78,16 +80,19 @@ class Search
             $answersXml = $searchInfoXml->addChild('QwiserAnsweredAnswers');
             $answerCount = 0;
             foreach ($params->getFilters() as $name => $optionIds) {
-                is_array($optionIds) or $optionIds = array($optionIds);
-                foreach ($optionIds as $optionId) {
-                    // create answer element
-                    $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');
-                    $answerXml->setAttribute('AnswerId', $optionId);
-                    $answerXml->setAttribute('EffectOnSearchPath', '0');
-                    // add answer element
-                    ++$answerCount;
+                if (!in_array($name, $this->systemFilters)) {
+                    is_array($optionIds) or $optionIds = array($optionIds);
+                    foreach ($optionIds as $optionId) {
+                        // create answer element
+                        $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');
+                        $answerXml->setAttribute('AnswerId', $optionId);
+                        $answerXml->setAttribute('EffectOnSearchPath', '0');
+                        // add answer element
+                        ++$answerCount;
+                    }
                 }
             }
+            
             $answersXml->setAttribute('Count', $answerCount);
         }
         
@@ -286,7 +291,7 @@ class Search
     protected function _request($request)
     {
         $requestUrl = $this->_requestUrl($request);
-print_r($requestUrl);       
+//print_r($requestUrl);       
         $cacheId = $this->cache->getId(__METHOD__, array($request));
         if ($response = $this->cache->load($cacheId)) {
             return $this->_parseResponse($response);

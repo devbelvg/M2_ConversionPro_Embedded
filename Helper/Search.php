@@ -29,6 +29,7 @@ class Search extends Helper\AbstractHelper
     protected $order;
     protected $cache;
     protected $cacheState;
+    protected $category;
     
     /**
      * @var \Celebros\ConversionPro\Model\Search
@@ -40,12 +41,14 @@ class Search extends Helper\AbstractHelper
         Data $helper,
         \Magento\Framework\App\Cache $cache,
         \Magento\Framework\App\Cache\State $cacheState,
-        \Celebros\ConversionPro\Model\Search $search)
-    {
+        \Celebros\ConversionPro\Model\Search $search,
+        \Magento\Catalog\Model\Category $category
+    ) {
         $this->helper = $helper;
         $this->search = $search;
         $this->cache = $cache;
         $this->cacheState = $cacheState;
+        $this->category = $category;
         parent::__construct($context);
     }
     
@@ -64,15 +67,13 @@ class Search extends Helper\AbstractHelper
         $category = $this->helper->getCurrentCategory();
         if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId())
         {
-            if (!empty($queryText)) {
-                $queryText .= ' ';
-            }
-            
             if (!$this->helper->isTextualNav2Search()) {
                 $queryText = '';
+            } else {
+                $queryText = $this->getCategoryQueryTerm($category);
             }
         }
-        
+      
         $params->setQuery($queryText);
         
         // filters
@@ -82,6 +83,11 @@ class Search extends Helper\AbstractHelper
             if (!empty($value))
                 $filters[$requestVar] = $value;
         }
+        
+        if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId() && !$this->helper->isTextualNav2Search()) {
+            $filters[self::CATEGORY_QUESTION_TEXT][] = $this->getAnswerIdByCategoryId($category);
+        }
+        
         $params->setFilters($filters);
         
         return $params;
@@ -90,7 +96,6 @@ class Search extends Helper\AbstractHelper
     public function getCustomResults(DataObject $params = null)
     {
         $params = is_null($params) ? $this->getSearchParams() : clone $params;
-        
         // order
         if (!is_null($this->order) && !$params->hasSortBy())
             $params->setSortBy($this->order);
@@ -100,7 +105,6 @@ class Search extends Helper\AbstractHelper
         // current page
         if (!is_null($this->currentPage) && !$params->hasCurrentPage())
             $params->setCurrentPage($this->currentPage - 1);
-        
         
         $searchHandle = $this->search->createSearchHandle($params);
         if (!isset($this->customResultsCache[$searchHandle])) {
@@ -193,6 +197,11 @@ class Search extends Helper\AbstractHelper
         foreach ($questions->Questions->children() as $question)
             $names[] = $question->getAttribute('Text');
         return $names;
+    }
+    
+    public function getLabelByAnswerId($answerId)
+    {
+        return $this->questionAnswers;
     }
     
     public function setCurrentPage($page)
