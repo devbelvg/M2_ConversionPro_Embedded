@@ -194,8 +194,12 @@ class Search extends Helper\AbstractHelper
     {
         $questions = $this->getAllQuestions();
         $names = ['price'];
-        foreach ($questions->Questions->children() as $question)
-            $names[] = $question->getAttribute('Text');
+        if (!empty($questions->Questions)) {
+            foreach ($questions->Questions->children() as $question) {
+                $names[] = $question->getAttribute('Text');
+            }
+        }
+        
         return $names;
     }
     
