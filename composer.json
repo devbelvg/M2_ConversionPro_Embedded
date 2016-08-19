@@ -2,7 +2,7 @@
     "name": "celebros/module-conversionpro-embedded",
     "description": "Celebros ConversionPro Embedded",
     "type": "magento2-module",
-    "version": "0.9.91-beta",
+    "version": "0.9.10-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

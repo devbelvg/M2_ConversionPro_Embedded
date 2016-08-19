@@ -28,13 +28,12 @@ class View extends Template
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Search $searchHelper,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\UrlInterface $url,
         array $data = [])
     {
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
         $this->registry = $registry;
-        $this->url = $url;
+        $this->url = $context->getUrlBuilder();
         parent::__construct($context, $data);
     }
     

@@ -1,4 +1,16 @@
 <?php
+/**
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ */
 namespace Celebros\ConversionPro\Block\Catalog\Product\ProductList;
 
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
@@ -56,6 +68,11 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         // set block module name required to use same template as original
         $this->setModuleName('Magento_Catalog');
 
+        /*$avOrders = $this->getAvailableOrders();
+        $avOrders['relevance'] = 'Relevancy';*/
+        $this->addOrderToAvailableOrders('relevance', 'Relevance');
+        /*$this->setAvailable$avOrders;*/
+        
         // set current page, limit, order to search helper instead of collection
         $this->searchHelper->setCurrentPage($this->getCurrentPage());
         $this->searchHelper->setPageSize($this->getLimit());
@@ -116,59 +133,5 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             return parent::getLastPageNum();
         }
     }
-
-    /*public function getPagerHtml()
-    {
-        $pagerBlock = $this->getChildBlock('product_list_toolbar_pager_celebros');
-
-        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
-            $pagerBlock->setAvailableLimit($this->getAvailableLimit());
-
-            $pagerBlock->setUseContainer(
-                false
-            )->setShowPerPage(
-                false
-            )->setShowAmounts(
-                false
-            )->setFrameLength(
-                $this->_scopeConfig->getValue(
-                    'design/pagination/pagination_frame',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->setJump(
-                $this->_scopeConfig->getValue(
-                    'design/pagination/pagination_frame_skip',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->setLimit(
-                $this->getLimit()
-            )->setLastPageNum(
-                $this->getLastPageNum()
-            )->setCollection(
-                $this->getCollection()
-            )->setCurrentPage($this->getCurrentPage())
-                    ->setFirstNum($this->getFirstNum())
-                    ->setLastNum($this->getLastNum())
-                    ->setTotalNum($this->getTotalNum());
-            
-//return $pagerBlock->getLastPageNum(); return get_class($pagerBlock);
-            
-            return $pagerBlock->toHtml();
-        }
-        
-        return 'none';
-        
-        if ($this->helper->isEnabled()) {
-            $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
-            if ($pagerBlock instanceof \Magento\Framework\Object) {
-                $pagerBlock
-                    ->setCurrentPage($this->getCurrentPage())
-                    ->setFirstNum($this->getFirstNum())
-                    ->setLastNum($this->getLastNum())
-                    ->setTotalNum($this->getTotalNum())
-                    ->setLastPageNum($this->getLastPageNum());
-            }
-        }
-        return parent::getPagerHtml();
-    }*/
+    
 }

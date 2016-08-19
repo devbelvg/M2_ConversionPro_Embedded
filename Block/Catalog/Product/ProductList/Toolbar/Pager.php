@@ -1,4 +1,16 @@
 <?php
+/**
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ */
 namespace Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar;
 
 class Pager extends \Magento\Theme\Block\Html\Pager
@@ -8,20 +20,20 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      */
     protected $helper;
 
+    /**
+     * @var \Celebros\ConversionPro\Helper\Search
+     */
+    protected $searchHelper;
+    
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Celebros\ConversionPro\Helper\Data $helper,
+        \Celebros\ConversionPro\Helper\Search $searchHelper,
         array $data = [])
     {
         $this->helper = $helper;
+        $this->searchHelper = $searchHelper;
         parent::__construct($context, $data);
-    }
-
-    public function getCurrentPage()
-    {
-        if ($this->hasData('current_page'))
-            return $this->getData('current_page');
-        return parent::getCurrentPage();
     }
 
     public function setCollection($collection)
@@ -34,40 +46,57 @@ class Pager extends \Magento\Theme\Block\Html\Pager
         return $this;
 
     }
+    
+    public function getCurrentPage()
+    {
+        if ($this->helper->isEnabled()) {
+            $response = $this->searchHelper->getCustomResults();
+            $currentPage =  $response->QwiserSearchResults->SearchInformation->getAttribute('CurrentPage') + 1;
+            return $currentPage;
+        } else {
+            return parent::getCurrentPage();
+        }
+    }
+    
+    public function getTotalNum()
+    {
+        if ($this->helper->isEnabled()) {
+            $response = $this->searchHelper->getCustomResults();
+            $totalNum =  $response->QwiserSearchResults->getAttribute('RelevantProductsCount');
+            return $totalNum;
+        } else {
+            return parent::getTotalNum();
+        }
+    }
 
     public function getFirstNum()
     {
-        if ($this->hasData('first_num'))
-            return $this->getData('first_num');
-        return parent::getFirstNum();
+        if ($this->helper->isEnabled()) {
+            return ($this->getCurrentPage()  - 1) * $this->getLimit() + 1;
+        } else {
+            return parent::getFirstNum();
+        }
     }
 
     public function getLastNum()
     {
-        if ($this->hasData('last_num'))
-            return $this->getData('last_num');
-        return parent::getLastNum();
+        if ($this->helper->isEnabled()) {
+            $collection = $this->getCollection();
+            return ($this->getFirstNum() - 1) + $collection->count();
+        } else {
+            return parent::getLastNum();
+        }
     }
-
-    public function getTotalNum()
-    {
-        if ($this->hasData('total_num'))
-            return $this->getData('total_num');
-        return parent::getTotalNum();
-    }
-
-    public function isFirstPage()
-    {
-        if (!$this->helper->isEnabled())
-            return parent::isFirstPage();
-        return $this->getCurrentPage() == 1;
-    }
-
+    
     public function getLastPageNum()
     {
-        if ($this->hasData('last_page_num'))
-            return $this->getData('last_page_num');
-        return parent::getLastPageNum();
+        if ($this->helper->isEnabled()) {
+            $response = $this->searchHelper->getCustomResults();
+            $lastPageNum = $response->QwiserSearchResults->getAttribute('NumberOfPages');
+            return $lastPageNum;
+        } else {
+            return parent::getLastPageNum();
+        }
     }
 
     public function isLastPage()
@@ -149,7 +178,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
                 } elseif ($currentPage < $half) {
                     $start = 1;
                     $end = $this->getFrameLength();
-                } elseif ($currentPage > $lastPageNum() - $half) {
+                } elseif ($currentPage > $lastPageNum - $half) {
                     $end = $lastPageNum;
                     $start = $end - $this->getFrameLength() + 1;
                 }
@@ -161,4 +190,5 @@ class Pager extends \Magento\Theme\Block\Html\Pager
         }
         return $this;
     }
+    
 }

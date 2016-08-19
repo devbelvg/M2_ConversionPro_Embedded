@@ -28,6 +28,7 @@
     <preference for="Magento\CatalogSearch\Model\Search\RequestGenerator" type="Celebros\ConversionPro\Model\CatalogSearch\Search\RequestGenerator" />
     <preference for="Magento\Search\Model\AdapterFactory" type="Celebros\ConversionPro\Model\Search\AdapterFactory" />
     <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
+    <preference for="Magento\Theme\Block\Html\Pager" type="Celebros\ConversionPro\Block\CatalogSearch\Product\ProductList\Toolbar\Pager" />
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection" type="Celebros\ConversionPro\Model\ResourceModel\CatalogSearch\Fulltext\Collection" />
     <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
     <preference for="Magento\Checkout\Block\Cart\Crosssell" type="Celebros\ConversionPro\Block\Checkout\Cart\Crosssell" />

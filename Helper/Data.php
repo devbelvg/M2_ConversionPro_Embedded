@@ -46,6 +46,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_UPSELL = 'conversionpro/crosssell_settings/upsell_enabled';
     const XML_PATH_UPSELL_LIMIT = 'conversionpro/crosssell_settings/upsell_limit';
     
+    const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
+    
     /**
      * @var Registry
      */
@@ -234,6 +236,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_COLLAPSE_QTY, ScopeInterface::SCOPE_STORE, $store);   
+    }
+    
+    public function isRequestDebug($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEBUG_REQUEST, ScopeInterface::SCOPE_STORE, $store);     
     }
     
 }

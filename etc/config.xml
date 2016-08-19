@@ -46,6 +46,7 @@
             </anlx_settings>
             <advanced>
                 <request_lifetime>13600</request_lifetime>
+                <request_show>0</request_show>
             </advanced>
         </conversionpro>
     </default>

@@ -157,6 +157,10 @@
                     <label>Request Lifetime</label>
                     <validate>validate-number required-entry validate-greater-than-zero</validate>
                 </field>
+                <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Show Current Requests (Debug)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="about" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>About</label>

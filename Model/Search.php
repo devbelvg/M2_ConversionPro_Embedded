@@ -291,7 +291,9 @@ class Search
     protected function _request($request)
     {
         $requestUrl = $this->_requestUrl($request);
-//print_r($requestUrl);       
+        if ($this->helper->isRequestDebug()) {
+            print_r($requestUrl);       
+        }
         $cacheId = $this->cache->getId(__METHOD__, array($request));
         if ($response = $this->cache->load($cacheId)) {
             return $this->_parseResponse($response);
@@ -310,9 +312,6 @@ class Search
             
             $this->cache->save($response, $cacheId);
             
-            // TODO: handle errors
-            // pprint_r(htmlspecialchars($response)); echo '<hr>';
-            // $this->logger->debug($response);
             return $this->_parseResponse($response);
         }
     }
