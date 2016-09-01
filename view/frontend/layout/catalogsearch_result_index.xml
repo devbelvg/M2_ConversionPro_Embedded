@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="search_result_list">
-            <container name="search_result_list.additional" as="additional">
-                <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
-                <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
-            </container>
-        </referenceBlock>
+        <referenceContainer name="search_result_list.additional">
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
+        </referenceContainer>
         <!--<referenceBlock name="product_list_toolbar_pager" remove="true"/>
         <referenceBlock name="product_list_toolbar">
             <block class="Celebros\ConversionPro\Block\CatalogSearch\Product\ProductList\Toolbar\Pager" name="product_list_toolbar_pager_celebros" as="product_list_toolbar_pager" cacheable="false"/>
