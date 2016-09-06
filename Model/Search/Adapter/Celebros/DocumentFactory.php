@@ -24,18 +24,18 @@ class DocumentFactory
                 $documentId = $value;
             } else {
                 $fields[$name] = $this->objectManager->create(
-                    'Magento\Framework\Search\DocumentField',
+                    'Magento\Framework\Search\AbstractKeyValuePair',
                     ['name' => $name, 'value' => $value]);
             }
         }
         
         $fields['score'] = $this->objectManager->create(
-            'Magento\Framework\Search\DocumentField',
+            'Magento\Framework\Search\AbstractKeyValuePair',
             ['name' => 'score', 'value' => 0]
         );
-        
+      
         return $this->objectManager->create(
-            'Magento\Framework\Search\Document',
+            'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Document',
             ['documentFields' => $fields, 'documentId' => $documentId]
         );
     }
