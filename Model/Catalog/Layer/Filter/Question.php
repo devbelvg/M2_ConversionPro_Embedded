@@ -90,6 +90,12 @@ class Question extends Layer\Filter\AbstractFilter
             }
         }
         
+        foreach ($this->searchHelper->getQuestionAnswers($this->getQuestion()->getAttribute('Id'))->Answers->Answer as $answer) {
+            if ($answer->getAttribute('Id') == $optionId) {
+                return $this->_prepareAnswerText($answer); 
+            }
+        }
+        
         return __('Unknown value');
     }
 
