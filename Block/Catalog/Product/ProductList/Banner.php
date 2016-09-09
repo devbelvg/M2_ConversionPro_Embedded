@@ -90,24 +90,25 @@ class Banner extends Template
             $params = $this->searchHelper->getSearchParams();
             $this->response = $this->searchHelper->getCustomResults($params);
         }
+        
         return $this->response;
     }
 
     protected function _parseResponse()
     {
-        if ($this->isResponseParsed)
+        if ($this->isResponseParsed) {
             return;
+        }
 
         $response = $this->_getResponse();
         if (!isset($response->QwiserSearchResults->QueryConcepts)) {
             $this->isResponseParsed = true;
             return;
         }
-
+        
         foreach ($response->QwiserSearchResults->QueryConcepts->children() as $concept) {
             if (!isset($concept->DynamicProperties)) continue;
-
-            $params = new Object();
+            $params = new \Magento\Framework\DataObject();
             foreach ($concept->DynamicProperties->children() as $property) {
                 $value = $property->getAttribute('value');
                 switch ($property->getAttribute('name')) {
@@ -128,6 +129,7 @@ class Banner extends Template
                 }
             }
         }
+
         $this->isResponseParsed = true;
     }
 }
