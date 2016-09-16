@@ -20,7 +20,7 @@
     <?php if ($helper->isCollapsed() && ($helper->collapseQty() < $filterItem->getCount())): ?>
     <li class="item<?php if ($key >= (int)$helper->collapseQty()) echo ' hided' ?>">
     <?php else: ?>
-    <li class="item">
+    <li class="item<?php if ($filterItem->isSelected()): ?> selected<?php endif; ?>">
     <?php endif; ?>
     <?php if ($filterItem->getCount() > 0): ?>
         <?php if ($helper->isMultiselectEnabled()): ?>

@@ -1,18 +1,13 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
             <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
         </referenceContainer>
-        <!--<referenceBlock name="product_list_toolbar_pager" remove="true"/>
-        <referenceBlock name="product_list_toolbar">
-            <block class="Celebros\ConversionPro\Block\CatalogSearch\Product\ProductList\Toolbar\Pager" name="product_list_toolbar_pager_celebros" as="product_list_toolbar_pager" cacheable="false"/>
-        </referenceBlock>-->
-        <referenceBlock name="catalogsearch.navigation.renderer">
-            <action method="setTemplate">
-                <argument name="template" xsi:type="string">Celebros_ConversionPro::layered_navigation/layer/filter.phtml</argument>
-            </action>
+        <referenceBlock name="catalogsearch.navigation.renderer" remove="true"/>
+        <referenceBlock name="catalogsearch.leftnav">
+            <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="celebros.catalogsearch.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
         </referenceBlock>
         <referenceBlock name="content">
             <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" template="analytics/tracking.search.phtml" cacheable="false" />
