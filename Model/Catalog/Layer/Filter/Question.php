@@ -1,4 +1,16 @@
 <?php
+/*
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ */
 namespace Celebros\ConversionPro\Model\Catalog\Layer\Filter;
 
 use \Magento\Catalog\Model\Layer;
@@ -81,8 +93,20 @@ class Question extends Layer\Filter\AbstractFilter
         return $this->getQuestion()->getAttribute('Text');
     }
 
+    public function getCurrencySymbol()
+    {
+        return $this->_storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
+    }
+    
     protected function getOptionText($optionId)
     {
+        if ($this->_isPrice()) {
+            if (preg_match('@^_P(\d+)_(\d+)$@', $optionId, $matches)) {
+                $optionId = str_replace('_P', $this->getCurrencySymbol(), $optionId);
+                return str_replace('_', ' - ' . $this->getCurrencySymbol(), $optionId);
+            }
+        }
+        
         if ($this->hasAnswers()) {
             foreach ($this->getAnswers()->children() as $answer) {
                 if ($answer->getAttribute('Id') == $optionId)
