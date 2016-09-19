@@ -33,26 +33,34 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     {
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data);       
     }
 
+
+    protected function _construct()
+    {
+        parent::_construct();
+        $blockData = $this->searchHelper->getToolbarData();
+        foreach ($blockData->getData() as $key=>$param) {
+            $this->setData($key, $param);
+        }
+    }
+    
     public function setCollection($collection)
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled()) {
             return parent::setCollection($collection);
-
+        }
+       
         // just set collection object
         $this->_collection = $collection;
         return $this;
-
     }
     
     public function getCurrentPage()
     {
         if ($this->helper->isEnabled()) {
-            $response = $this->searchHelper->getCustomResults();
-            $currentPage =  $response->QwiserSearchResults->SearchInformation->getAttribute('CurrentPage') + 1;
-            return $currentPage;
+            return (int)$this->getData('current_page') + 1;
         } else {
             return parent::getCurrentPage();
         }
@@ -61,9 +69,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     public function getTotalNum()
     {
         if ($this->helper->isEnabled()) {
-            $response = $this->searchHelper->getCustomResults();
-            $totalNum =  $response->QwiserSearchResults->getAttribute('RelevantProductsCount');
-            return $totalNum;
+            return (int)$this->getData('total_num');
         } else {
             return parent::getTotalNum();
         }
@@ -91,9 +97,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     public function getLastPageNum()
     {
         if ($this->helper->isEnabled()) {
-            $response = $this->searchHelper->getCustomResults();
-            $lastPageNum = $response->QwiserSearchResults->getAttribute('NumberOfPages');
-            return $lastPageNum;
+            return (int)$this->getData('last_page_num');
         } else {
             return parent::getLastPageNum();
         }
@@ -101,8 +105,10 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function isLastPage()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled()) {
             return parent::isLastPage();
+        }
+        
         return $this->getCurrentPage() >= $this->getLastPageNum();
     }
 

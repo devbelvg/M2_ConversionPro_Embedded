@@ -329,4 +329,15 @@ class Search extends Helper\AbstractHelper
         
         return FALSE;
     }
+    
+    public function getToolbarData()
+    {
+        $searchResults = $this->getCustomResults()->QwiserSearchResults;
+        $data = new \Magento\Framework\DataObject();
+        $data->setCurrentPage($searchResults->SearchInformation->getAttribute('CurrentPage'));
+        $data->setTotalNum($searchResults->getAttribute('RelevantProductsCount'));
+        $data->setLastPageNum($searchResults->getAttribute('NumberOfPages'));
+        return $data;
+    }
+    
 }

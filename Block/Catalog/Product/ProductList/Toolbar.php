@@ -63,7 +63,8 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $urlEncoder,
             $productListHelper,
             $postDataHelper,
-            $data);
+            $data
+        );
 
         // set block module name required to use same template as original
         $this->setModuleName('Magento_Catalog');
@@ -80,6 +81,11 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $this->getCurrentOrder(),
             $this->getCurrentDirection()
         );
+        
+        $blockData = $this->searchHelper->getToolbarData();
+        foreach ($blockData->getData() as $key=>$param) {
+            $this->setData($key, $param);
+        }
     }
 
     public function setCollection($collection)
@@ -96,9 +102,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     public function getTotalNum()
     {
         if ($this->helper->isEnabled()) {
-            $response = $this->searchHelper->getCustomResults();
-            $totalNum =  $response->QwiserSearchResults->getAttribute('RelevantProductsCount');
-            return $totalNum;
+            return (int)$this->getData('total_num');
         } else {
             return parent::getTotalNum();
         }
@@ -126,9 +130,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     public function getLastPageNum()
     {
         if ($this->helper->isEnabled()) {
-            $response = $this->searchHelper->getCustomResults();
-            $lastPageNum = $response->QwiserSearchResults->getAttribute('NumberOfPages');
-            return $lastPageNum;
+            return (int)$this->getData('last_page_num');
         } else {
             return parent::getLastPageNum();
         }
