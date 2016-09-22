@@ -1,10 +1,30 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="catalog.navigation.renderer">
-            <action method="setTemplate">
-                <argument name="template" xsi:type="string">Celebros_ConversionPro::layered_navigation/layer/filter.phtml</argument>
-            </action>
-        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" before="catalog_list.celebros_banner" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" before="category.products" name="catalog_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" after="-" template="analytics/tracking.search.phtml" cacheable="false" />
+            <block class="Magento\Framework\View\Element\Template" name="conversionpro.js" after="-" template="Celebros_ConversionPro::catalog/js.phtml" />
+        </referenceContainer>
+        <referenceBlock name="catalog.leftnav" remove="true"/>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\LayeredNavigation\Block\Navigation\Category" name="celebros.catalog.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
+                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="celebros.catalog.navigation.state" as="state" />
+                <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="celebros.catalog.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>

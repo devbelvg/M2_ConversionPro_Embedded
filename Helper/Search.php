@@ -337,7 +337,24 @@ class Search extends Helper\AbstractHelper
         $data->setCurrentPage($searchResults->SearchInformation->getAttribute('CurrentPage'));
         $data->setTotalNum($searchResults->getAttribute('RelevantProductsCount'));
         $data->setLastPageNum($searchResults->getAttribute('NumberOfPages'));
+        $data->setData('_current_grid_order', $this->sortOrderMap($searchResults->SearchInformation->SortingOptions->getAttribute('FieldName')));
+        $data->setData('_current_grid_direction', ($searchResults->SearchInformation->SortingOptions->getAttribute('FieldName') == 'true') ? 'asc' : 'desc');
         return $data;
     }
     
+    public function sortOrderMap($order)
+    {
+        switch ($order) {
+            case 'Title':
+                $result = 'name';
+                break;
+            case 'Relevancy':
+                $result = 'relevance';
+                break;
+            default:
+                $result = strtolower($order);
+        }
+        
+        return $result;
+    }
 }

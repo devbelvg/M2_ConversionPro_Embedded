@@ -11,7 +11,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
-namespace Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar;
+namespace Celebros\ConversionPro\Block\Theme\Html;
 
 class Pager extends \Magento\Theme\Block\Html\Pager
 {

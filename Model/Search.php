@@ -47,6 +47,11 @@ class Search
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
     
     protected $attributeCollection;
     
@@ -57,6 +62,7 @@ class Search
         Session $session,
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Cache $cache,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Psr\Log\LoggerInterface $logger)
     {
         $this->session = $session;
@@ -64,6 +70,7 @@ class Search
         $this->helper = $helper;
         $this->cache = $cache;
         $this->logger = $logger;
+        $this->messageManager = $messageManager;
     }
     
     public function createSearchHandle($query, Object $params = null)
@@ -304,7 +311,7 @@ class Search
     {
         $requestUrl = $this->_requestUrl($request);
         if ($this->helper->isRequestDebug()) {
-            print_r($requestUrl);       
+            $this->messageManager->addWarning(__('Celebros Search Engine:') . '<br>' . $requestUrl);
         }
         $cacheId = $this->cache->getId(__METHOD__, array($request));
         if ($response = $this->cache->load($cacheId)) {

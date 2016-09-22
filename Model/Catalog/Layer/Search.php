@@ -1,4 +1,16 @@
 <?php
+/*
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ */
 namespace Celebros\ConversionPro\Model\Catalog\Layer;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -37,6 +49,7 @@ class Search extends \Magento\Catalog\Model\Layer\Search
             $storeManager,
             $registry,
             $categoryRepository,
-            $data);
+            $data
+        );
     }
 }

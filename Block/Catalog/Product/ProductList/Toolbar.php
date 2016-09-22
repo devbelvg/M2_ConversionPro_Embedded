@@ -73,7 +73,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         $avOrders['relevance'] = 'Relevancy';*/
         $this->addOrderToAvailableOrders('relevance', 'Relevance');
         /*$this->setAvailable$avOrders;*/
-        
+       
         // set current page, limit, order to search helper instead of collection
         $this->searchHelper->setCurrentPage($this->getCurrentPage());
         $this->searchHelper->setPageSize($this->getLimit());

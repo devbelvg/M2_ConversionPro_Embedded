@@ -1,17 +1,30 @@
 <?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
-            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" before="search_result_list.celebros_banner" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" before="search.result" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" after="-" template="analytics/tracking.search.phtml" cacheable="false" />
+            <block class="Magento\Framework\View\Element\Template" name="conversionpro.js" after="-" template="Celebros_ConversionPro::catalog/js.phtml" />
         </referenceContainer>
-        <referenceBlock name="catalogsearch.navigation.renderer" remove="true"/>
-        <referenceBlock name="catalogsearch.leftnav">
-            <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="celebros.catalogsearch.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
-        </referenceBlock>
-        <referenceBlock name="content">
-            <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" template="analytics/tracking.search.phtml" cacheable="false" />
-            <block class="Magento\Framework\View\Element\Template" name="conversionpro.js" before="-" template="Celebros_ConversionPro::catalog/js.phtml" />
-        </referenceBlock>
+        <referenceBlock name="catalogsearch.leftnav" remove="true"/>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\LayeredNavigation\Block\Navigation\Search" name="celebros.catalogsearch.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
+                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="celebros.catalogsearch.navigation.state" as="state" />
+                <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="celebros.catalogsearch.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>

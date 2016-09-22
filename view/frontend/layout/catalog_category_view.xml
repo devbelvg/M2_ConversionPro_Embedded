@@ -1,9 +1,23 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <!--<referenceBlock name="product_list_toolbar_pager" remove="true"/>
-        <referenceBlock name="product_list_toolbar">
-            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar\Pager" name="product_list_toolbar_pager_celebros" as ="product_list_toolbar_pager_celebros" cacheable="false" />
-        </referenceBlock>-->
+        <referenceContainer name="content">
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" before="-" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" before="-" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml" cacheable="false" />
+            <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" after="-" template="analytics/tracking.search.phtml" cacheable="false" />
+            <block class="Magento\Framework\View\Element\Template" name="conversionpro.js" after="-" template="Celebros_ConversionPro::catalog/js.phtml" />
+        </referenceContainer>
     </body>
 </page>
