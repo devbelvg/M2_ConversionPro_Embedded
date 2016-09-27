@@ -36,6 +36,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_NAV_TO_SEARCH_BLACKLIST         = 'conversionpro/nav_to_search/blacklist';
     const XML_PATH_CATEGORY_QUERY_TYPE             = 'conversionpro/nav_to_search/category_query_type';
     const XML_PATH_NAV2SEARCH_BY                   = 'conversionpro/nav_to_search/nav_to_search_search_by';
+    const XML_PATH_NAV2SEARCH_RELEVANCE            = 'conversionpro/nav_to_search/relevance_rename';
 
     const XML_PATH_ANALYTICS_CUST_ID = 'conversionpro/anlx_settings/cid';
     const XML_PATH_ANALYTICS_HOST    = 'conversionpro/anlx_settings/host';
@@ -242,6 +243,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEBUG_REQUEST, ScopeInterface::SCOPE_STORE, $store);     
+    }
+    
+    public function isRelevanceNav2Search($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_NAV2SEARCH_RELEVANCE,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );    
     }
     
 }

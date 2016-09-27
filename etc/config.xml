@@ -30,6 +30,7 @@
                 <enabled>1</enabled>
                 <nav_to_search_search_by>textual</nav_to_search_search_by>
                 <category_query_type>name</category_query_type>
+                <relevance_rename>0</relevance_rename>
             </nav_to_search>
             <crosssell_settings>
                 <crosssell_enabled>0</crosssell_enabled>

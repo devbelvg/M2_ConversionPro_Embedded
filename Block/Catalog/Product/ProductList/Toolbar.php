@@ -68,12 +68,6 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 
         // set block module name required to use same template as original
         $this->setModuleName('Magento_Catalog');
-
-        /*$avOrders = $this->getAvailableOrders();
-        $avOrders['relevance'] = 'Relevancy';*/
-        $this->addOrderToAvailableOrders('relevance', 'Relevance');
-        /*$this->setAvailable$avOrders;*/
-       
         // set current page, limit, order to search helper instead of collection
         $this->searchHelper->setCurrentPage($this->getCurrentPage());
         $this->searchHelper->setPageSize($this->getLimit());
@@ -87,7 +81,24 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $this->setData($key, $param);
         }
     }
-
+    
+    public function getAvailableOrders()
+    {
+        $avOrders = parent::getAvailableOrders();
+        if ($this->helper->isRelevanceNav2Search()) {
+            if (isset($avOrders['position'])) {
+                unset($avOrders['position']);
+            }
+            
+            $avOrders = array_merge(
+                ['relevance' => 'Relevance'],
+                $avOrders
+            );
+        }
+        
+        return $avOrders;
+    }
+    
     public function setCollection($collection)
     {
         if ($this->helper->isEnabled()) {
