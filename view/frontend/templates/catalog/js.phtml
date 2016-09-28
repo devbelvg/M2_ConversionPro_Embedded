@@ -31,10 +31,6 @@ function ConversionPro(multiselect, collapse, qty) {
                 } else {
                     jQuery(e).removeClass('hided');
                 }   
-                /*
-                if (!jQuery(e).hasClass(here.lessClass)) {
-                    jQuery(e).show();
-                }*/
             });
         } else {
             elmnts.each( function(i, e) {
@@ -46,88 +42,6 @@ function ConversionPro(multiselect, collapse, qty) {
             });
         }
     };
-    /*if (this.isCollapsed) {
-		jQuery('#narrow-by-list dd ol').each( function(filter){
-			here.showed[filter] = [];
-			here.hided[filter] = [];
-			jQuery(this).find('li').each( function(index) {
-				if (index < here.maxQty) {
-					here.showed[filter].push(jQuery(this));
-				} else {
-					here.hided[filter].push(jQuery(this));
-				}
-			});
-			if (here.hided[filter].length) {
-				jQuery(this).find('li').last().after(here.moreButton).after(here.lessButton);
-				jQuery(this).find('.filters_less_button').hide();
-				here.hided[filter].each( function(el){
-					el.hide();
-				});
-				jQuery(this).find('.filters_less_button').click( function(){
-					jQuery(this).parent().parent().find('.filters_more_button').show();
-					jQuery(this).hide();
-					here.hided[filter].each( function(el){
-						el.hide();
-					});
-                    return false;					
-				});
-				jQuery(this).find('.filters_more_button').click( function(){
-					jQuery(this).parent().parent().find('.filters_less_button').show();
-					jQuery(this).hide();
-					here.hided[filter].each( function(el){
-						el.show();
-					});
-                    return false;					
-				});
-			}
-		});    
-    }*/
 };
-convpro = new ConversionPro(true, true, 2);
-<?php /*
-var Celebros_Filters = {
-    //maxQty : <?php echo (int)$helper->getCollapsedQty(); ?>,
-    moreButton : '<li><a class="filters_more_button" href="#">+ More</a></li>',
-    lessButton : '<li><a class="filters_less_button" href="#">- Less</a></li>',
-    showed : new Object(),
-    hided : new Object(),
-	init : function() {
-	    here = this;
-		jQuery('#narrow-by-list dd ol').each( function(filter){
-			here.showed[filter] = [];
-			here.hided[filter] = [];
-			jQuery(this).find('li').each( function(index) {
-				if (index < here.maxQty) {
-					here.showed[filter].push(jQuery(this));
-				} else {
-					here.hided[filter].push(jQuery(this));
-				}
-			});
-			if (here.hided[filter].length) {
-				jQuery(this).find('li').last().after(here.moreButton).after(here.lessButton);
-				jQuery(this).find('.filters_less_button').hide();
-				here.hided[filter].each( function(el){
-					el.hide();
-				});
-				jQuery(this).find('.filters_less_button').click( function(){
-					jQuery(this).parent().parent().find('.filters_more_button').show();
-					jQuery(this).hide();
-					here.hided[filter].each( function(el){
-						el.hide();
-					});
-                    return false;					
-				});
-				jQuery(this).find('.filters_more_button').click( function(){
-					jQuery(this).parent().parent().find('.filters_less_button').show();
-					jQuery(this).hide();
-					here.hided[filter].each( function(el){
-						el.show();
-					});
-                    return false;					
-				});
-			}
-		});
-	}
-};
-//Celebros_Filters.init();*/ ?>
+convpro = new ConversionPro(true, true, <?php echo $helper->collapseQty() ?>);
 </script>

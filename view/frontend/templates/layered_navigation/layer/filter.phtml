@@ -17,8 +17,8 @@
 </style>
 <ol class="items">
     <?php foreach ($filterItems as $key => $filterItem): ?>
-    <?php if ($helper->isCollapsed() && ($helper->collapseQty() < $filterItem->getCount())): ?>
-    <li class="item<?php if ($key >= (int)$helper->collapseQty()) echo ' hided' ?>">
+    <?php if ($helper->isCollapsed() && ($helper->collapseQty() <= $key)): ?>
+    <li class="item<?php if ($key >= (int)$helper->collapseQty()) echo ' hided' ?><?php if ($filterItem->isSelected()): ?> selected<?php endif; ?>">
     <?php else: ?>
     <li class="item<?php if ($filterItem->isSelected()): ?> selected<?php endif; ?>">
     <?php endif; ?>
@@ -50,8 +50,8 @@
     <?php endif; ?>
     </li>
     <?php endforeach ?>
-    <?php if ($helper->isCollapsed() && ($helper->collapseQty() < $filterItem->getCount())): ?>
+    <?php if ($helper->isCollapsed() && ($helper->collapseQty() < sizeof($filterItems))): ?>
     <li class="item more-button" data-collapse="more" onclick="convpro.collapse(this, true)">+ <?php echo __('More') ?></li>
-    <li class="item less-button hided" data-collapse="less" onclick="convpro.collapse(this, false)">+ <?php echo __('Less') ?></li>
+    <li class="item less-button hided" data-collapse="less" onclick="convpro.collapse(this, false)">- <?php echo __('Less') ?></li>
     <?php endif; ?>
 </ol>
