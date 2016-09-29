@@ -65,20 +65,28 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $postDataHelper,
             $data
         );
-
-        // set block module name required to use same template as original
-        $this->setModuleName('Magento_Catalog');
-        // set current page, limit, order to search helper instead of collection
-        $this->searchHelper->setCurrentPage($this->getCurrentPage());
-        $this->searchHelper->setPageSize($this->getLimit());
-        $this->searchHelper->setOrder(
-            $this->getCurrentOrder(),
-            $this->getCurrentDirection()
-        );
         
-        $blockData = $this->searchHelper->getToolbarData();
-        foreach ($blockData->getData() as $key=>$param) {
-            $this->setData($key, $param);
+        if ($this->helper->isActiveEngine()) {
+            // set block module name required to use same template as original
+            $this->setModuleName('Magento_Catalog');
+            // set current page, limit, order to search helper instead of collection
+            $this->searchHelper->setCurrentPage($this->getCurrentPage());
+            $this->searchHelper->setPageSize($this->getLimit());
+            $this->setDefaultDirection('asc');
+            if ((!$this->_getData('_current_grid_order') && !$this->_toolbarModel->getOrder()) 
+            || in_array($this->getCurrentOrder(), ['relevance','position'])) {
+                $this->setDefaultDirection('desc');
+            }
+            
+            $this->searchHelper->setOrder(
+                $this->getCurrentOrder(),
+                $this->getCurrentDirection()
+            );
+            
+            $blockData = $this->searchHelper->getToolbarData();
+            foreach ($blockData->getData() as $key=>$param) {
+                $this->setData($key, $param);
+            }
         }
     }
     
