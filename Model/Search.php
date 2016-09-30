@@ -310,9 +310,7 @@ class Search
     protected function _request($request)
     {
         $requestUrl = $this->_requestUrl($request);
-        if ($this->helper->isRequestDebug()) {
-            $this->messageManager->addWarning(__('Celebros Search Engine:') . '<br>' . $requestUrl);
-        }
+        $startTime = round(microtime(true) * 1000);
         $cacheId = $this->cache->getId(__METHOD__, array($request));
         if ($response = $this->cache->load($cacheId)) {
             return $this->_parseResponse($response);
@@ -330,6 +328,11 @@ class Search
             curl_close($ch);
             
             $this->cache->save($response, $cacheId);
+            
+            if ($this->helper->isRequestDebug()) {
+                $stime = round(microtime(true) * 1000) - $startTime;
+                $this->messageManager->addWarning(__('Celebros Search Engine:') . '<br>' . $requestUrl . ' <br>(' . $stime . 'ms)');
+            }
             
             return $this->_parseResponse($response);
         }

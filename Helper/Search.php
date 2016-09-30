@@ -150,6 +150,17 @@ class Search extends Helper\AbstractHelper
         return $this->questionAnswers[$questionId];
     }
     
+    public function getQuestionAnswersAsArray($questionId, $keyAttribute = 'Id', $valueAttribute = 'Text')
+    {
+        $options = [];
+        $answers = $this->getQuestionAnswers($questionId);
+        foreach ($answers->Answers->Answer as $answer) {
+            $options[$answer->getAttribute('Id')] = $answer->getAttribute('Text');
+        };
+        
+        return $options;
+    }
+    
     public function getCategoryQueryTerm(Category $category, $store = null)
     {
         $queryType = $this->helper->getCategoryQueryType($store);
