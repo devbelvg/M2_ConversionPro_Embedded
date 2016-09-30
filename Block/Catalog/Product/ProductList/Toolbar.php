@@ -66,7 +66,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $data
         );
         
-        if ($this->helper->isActiveEngine()) {
+        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             // set block module name required to use same template as original
             $this->setModuleName('Magento_Catalog');
             // set current page, limit, order to search helper instead of collection
@@ -93,7 +93,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     public function getAvailableOrders()
     {
         $avOrders = parent::getAvailableOrders();
-        if ($this->helper->isRelevanceNav2Search()) {
+        if ($this->helper->isRelevanceNav2Search() && $this->helper->isPermittedHandle()) {
             if (isset($avOrders['position'])) {
                 unset($avOrders['position']);
             }
@@ -109,7 +109,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     
     public function setCollection($collection)
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             $this->_collection = $collection;
             // setting current page, limit, order removed, see constructor
             return $this;
@@ -120,7 +120,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 
     public function getTotalNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return (int)$this->getData('total_num');
         } else {
             return parent::getTotalNum();
@@ -129,7 +129,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 
     public function getFirstNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return ($this->getCurrentPage()  - 1) * $this->getLimit() + 1;
         } else {
             return parent::getFirstNum();
@@ -138,7 +138,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 
     public function getLastNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             $collection = $this->getCollection();
             return ($this->getFirstNum() - 1) + $collection->count();
         } else {
@@ -148,7 +148,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 
     public function getLastPageNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return (int)$this->getData('last_page_num');
         } else {
             return parent::getLastPageNum();

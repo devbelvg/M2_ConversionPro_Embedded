@@ -49,6 +49,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     
     const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
     
+    protected $_permittedHandles = [
+        'catalog_category',
+        'catalogsearch_result'
+    ];
+    
     /**
      * @var Registry
      */
@@ -85,20 +90,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isActiveEngine()
     {
-        //In case the Conversionpro Disabler is on, always return false (We're not using the disabler right now).
-        /*$status = Mage::getSingleton('conversionpro/session')->getConversionproDisabler();
-        if (isset($status) && $status == TRUE) {
-            return FALSE;
-        }*/
-        
         //In case we're disabled conversionpro manually in the administrative menu, always return false.
         if ($this->isEnabled()) {
-            return TRUE;
+            return true;
         }
         
-        return FALSE;
+        return false;
     }
 
+    public function isPermittedHandle()
+    {
+        $currentHandle = $this->_request->getModuleName() . '_' . $this->_request->getControllerName();
+        return in_array($currentHandle, $this->_permittedHandles);
+    }
+    
     public function getPort($store = null)
     {
         return $this->scopeConfig->getValue(
