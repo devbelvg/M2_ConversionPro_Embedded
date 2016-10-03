@@ -11,7 +11,7 @@ function ConversionPro(multiselect, collapse, qty) {
     this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
     here = this;
     this.clickCheckbox = function (el) {
-        href = jQuery(el).next().attr('href');
+        href = jQuery(el).data('href');
         window.location.href = href;
     };
     this.clickHLink = function (el) {
@@ -24,7 +24,7 @@ function ConversionPro(multiselect, collapse, qty) {
     };
     this.collapse = function(el) {
         elmnts = jQuery(el).parent().find(here.itemSelector);
-        if (jQuery(el).data('collapse') == 'more') { console.log(elmnts);
+        if (jQuery(el).data('collapse') == 'more') {
             elmnts.each( function(i, e) {
                 if (jQuery(e).hasClass(here.moreClass)) {
                     jQuery(e).addClass('hided');

@@ -24,7 +24,7 @@
     <?php endif; ?>
     <?php if ($filterItem->getCount() > 0): ?>
         <?php if ($helper->isMultiselectEnabled()): ?>
-        <input type="checkbox" onclick="convpro.clickCheckbox(this)"<?php if ($filterItem->isSelected()): ?> checked="checked"<?php endif; ?>>
+        <input type="checkbox" data-href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>" onclick="convpro.clickCheckbox(this)"<?php if ($filterItem->isSelected()): ?> checked="checked"<?php endif; ?>>
         <?php endif; ?>
         <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>" onclick="convpro.clickHLink(this)">
             <?php echo $filterItem->getLabel() ?>
