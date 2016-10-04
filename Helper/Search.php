@@ -42,6 +42,7 @@ class Search extends Helper\AbstractHelper
     protected $cache;
     protected $cacheState;
     protected $category;
+    protected $productAttributes = [];
     
     /**
      * @var \Celebros\ConversionPro\Model\Search
@@ -315,6 +316,45 @@ class Search extends Helper\AbstractHelper
         }
         
         return FALSE;
+    }
+    
+    /**
+     * Return product attribute value by another attribute value
+     *
+     * @param string $resultField
+     * @param string $value
+     * @param string $searchField
+     * @return string
+     */
+    public function getProductAttributeValue($resultField, $value, $searchField = 'mag_id')
+    {
+        $cResult = null;
+        $cProduct = false;
+        $products = $this->getCustomResults()->QwiserSearchResults->Products;
+        foreach ($products->children() as $product) {
+            foreach ($product->Fields->children() as $field) {
+                switch ($field->getAttribute('name')) {
+                    case $resultField:
+                        $cResult = $field->getAttribute('value');
+                        if ($cProduct) {
+                            return $cResult;
+                        }
+                        break;
+                    case $searchField:
+                        if ($field->getAttribute('value') == $value) {
+                            if ($cResult == true) {
+                                return $cResult;
+                            } else {
+                                $cProduct = true;
+                            }
+                        }
+                        break;
+                    default;
+                }
+            }
+        }
+    
+        return false;
     }
     
     public function getCacheId($method, $vars = array())
