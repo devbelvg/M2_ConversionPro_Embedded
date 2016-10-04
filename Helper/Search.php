@@ -18,6 +18,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Category;
 use Celebros\ConversionPro\Model\Config\Source\CategoryQueryType;
+use Magento\Framework\Controller\ResultFactory;
 
 class Search extends Helper\AbstractHelper
 {
@@ -26,6 +27,7 @@ class Search extends Helper\AbstractHelper
     const CACHE_TAG = 'CONVERSIONPRO';
     const CACHE_ID = 'conversionpro';
     const CACHE_LIFETIME = 13600;
+    const REDIRECT_DYNAMIC_PROPERTY_NAME = 'redirection url';
     
     /**
      * @var Data
@@ -55,13 +57,15 @@ class Search extends Helper\AbstractHelper
         \Magento\Framework\App\Cache $cache,
         \Magento\Framework\App\Cache\State $cacheState,
         \Celebros\ConversionPro\Model\Search $search,
-        \Magento\Catalog\Model\Category $category
+        \Magento\Catalog\Model\Category $category,
+        \Magento\Framework\App\ResponseFactory $response
     ) {
         $this->helper = $helper;
         $this->search = $search;
         $this->cache = $cache;
         $this->cacheState = $cacheState;
         $this->category = $category;
+        $this->response = $response;
         parent::__construct($context);
     }
     
@@ -121,10 +125,29 @@ class Search extends Helper\AbstractHelper
         
         $searchHandle = $this->search->createSearchHandle($params);
         if (!isset($this->customResultsCache[$searchHandle])) {
-            $this->customResultsCache[$searchHandle] = 
-                $this->search->getCustomResults($searchHandle, true, '');
+            $this->customResultsCache[$searchHandle] = $this->search->getCustomResults($searchHandle, true, '');
+            if ($this->helper->isCampaignsEnabled()) {
+                $this->checkRedirects($this->customResultsCache[$searchHandle]);
+            }
         }
         return $this->customResultsCache[$searchHandle];
+    }
+    
+    public function checkRedirects($customResults)
+    {
+        $currentConcepts = $customResults->QwiserSearchResults->QueryConcepts->children();
+        foreach ($currentConcepts as $concept) {
+            if (!isset($concept->DynamicProperties)) continue;
+            foreach ($concept->DynamicProperties->children() as $property) {
+                if ($property->getAttribute('name') == self::REDIRECT_DYNAMIC_PROPERTY_NAME) {
+                    $this->response
+                        ->create()
+                        ->setRedirect($property->getAttribute('value'))
+                        ->sendResponse();
+                    die;
+                }
+            }
+        }
     }
     
     public function getAllQuestions()
