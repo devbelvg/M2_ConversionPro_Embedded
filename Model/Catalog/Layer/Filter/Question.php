@@ -135,6 +135,14 @@ class Question extends Layer\Filter\AbstractFilter
                 $answer->getAttribute('Id'),
                 $answer->getAttribute('ProductCount'));
         }
+        
+        foreach ($this->getEanswers()->children() as $answer) {
+            $items[] = $this->_createItem(
+                $this->_prepareAnswerText($answer),
+                $answer->getAttribute('Id'),
+                $answer->getAttribute('ProductCount'));
+        }
+        
         return $items;
     }
 

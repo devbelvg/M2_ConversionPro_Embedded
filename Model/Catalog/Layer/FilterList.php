@@ -66,6 +66,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
     {
         // get answers
         $answers = $question->Answers;
+        $extraAnswers = $question->ExtraAnswers;
 
         // create filter object
         $filterClassName = $this->filterTypes[self::QUESTION_FILTER];
@@ -73,7 +74,8 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             $filterClassName, [
                 'data' => [
                     'question' => $question,
-                    'answers' => $answers],
+                    'answers' => $answers,
+                    'eanswers' => $extraAnswers],
                 'layer' => $layer]);
 
         return $filter;
