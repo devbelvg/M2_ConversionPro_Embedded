@@ -48,7 +48,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function setCollection($collection)
     {
-        if (!$this->helper->isEnabled()) {
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return parent::setCollection($collection);
         }
        
@@ -59,7 +59,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getCurrentPage()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return (int)$this->getData('current_page') + 1;
         } else {
             return parent::getCurrentPage();
@@ -68,7 +68,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getTotalNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return (int)$this->getData('total_num');
         } else {
             return parent::getTotalNum();
@@ -77,7 +77,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getFirstNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return ($this->getCurrentPage()  - 1) * $this->getLimit() + 1;
         } else {
             return parent::getFirstNum();
@@ -86,7 +86,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getLastNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             $collection = $this->getCollection();
             return ($this->getFirstNum() - 1) + $collection->count();
         } else {
@@ -96,7 +96,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getLastPageNum()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return (int)$this->getData('last_page_num');
         } else {
             return parent::getLastPageNum();
@@ -105,7 +105,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function isLastPage()
     {
-        if (!$this->helper->isEnabled()) {
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle()) {
             return parent::isLastPage();
         }
         
@@ -114,7 +114,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getPages()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle())
             return parent::getPages();
 
         if ($this->getLastPageNum() <= $this->_displayPages) {
@@ -141,28 +141,28 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getPreviousPageUrl()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle())
             return parent::getPreviousPageUrl();
         return $this->getPageUrl(max($this->getCurrentPage() - 1, 1));
     }
 
     public function getNextPageUrl()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle())
             return parent::getNextPageUrl();
         return $this->getPageUrl(min($this->getCurrentPage() + 1, $this->getLastPageNum()));
     }
 
     public function getLastPageUrl()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle())
             return parent::getLastPageUrl();
         return $this->getPageUrl($this->getLastPageNum());
     }
 
     protected function _initFrame()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isEnabled() && $this->helper->isPermittedHandle())
             return parent::_initFrame();
 
         if (!$this->isFrameInitialized()) {
