@@ -302,6 +302,18 @@ class Search extends Helper\AbstractHelper
         return reset($this->customResultsCache);    
     }
     
+    public function getQuestionByField($value, $field)
+    {
+        $allQuestions = $this->getAllQuestions()->Questions->Question;
+        foreach ($allQuestions as $question) {
+            if ($question->getAttribute($field) == $value) {
+                return $question;
+            }
+        }
+        
+        return false;
+    }
+    
     public function getAnswerIdByCategoryId($category)
     {
         $cacheId = $this->getCacheId(__METHOD__, array($category->getId()));

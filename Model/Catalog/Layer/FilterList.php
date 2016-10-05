@@ -28,6 +28,8 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
      * @var Magento\Framework\Simplexml\Element
      */
     protected $response;
+    
+    public $appliedFilters = [];
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -55,10 +57,24 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             // $response = $this->_getResponse($layer);
             $response = $this->searchHelper->getCustomResults();
             $questions = $response->QwiserSearchResults->Questions;
-            foreach ($questions->children() as $question)
+            $aaa = '';
+            foreach ($questions->children() as $question) {
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
+                $this->appliedFilters[] = $question->getAttribute('Text');
+            }
         }
 
+        $remFilters = array_diff($this->searchHelper->getFilterRequestVars(), $this->appliedFilters); 
+        foreach ($this->request->getParams() as $var => $value) {
+            if (in_array($var, $remFilters)) {
+                $question = $this->searchHelper->getQuestionByField($var, 'Text');
+                if ($question) {
+                    $this->createQuestionFilter($question, $layer)->apply($this->request);
+                    $this->appliedFilters[] = $var;    
+                }
+            }
+        }
+        
         return $this->filters;
     }
 

@@ -47,7 +47,9 @@ class Question extends Layer\Filter\AbstractFilter
         $filter = $this->searchHelper->getFilterValue($this->getRequestVar());
         if (!empty($filter)) {
             $this->getLayer()->getProductCollection()->addFieldToFilter(
-                $this->getRequestVar(), $filter);
+                $this->getRequestVar(),
+                $filter
+            );
             $values = $this->searchHelper->filterValueToArray($filter);
             foreach ($values as $value) {
                 $text = $this->getOptionText($value);
@@ -79,18 +81,32 @@ class Question extends Layer\Filter\AbstractFilter
 
     public function getName()
     {
-        if (!$this->hasQuestion())
+        if ($this->hasQuestionName()) {
+            return $this->getQuestionName();
+        }
+        
+        if (!$this->hasQuestion()) {
             return __('Unknown');
+        }
+        
         return $this->getQuestion()->getAttribute('Text');
     }
 
     public function getRequestVar()
     {
-        if ($this->_isPrice())
+        if ($this->hasRequestVar()) {
+            return $this->getRequestVar();
+        }
+        
+        if ($this->_isPrice()) {
             return 'price';
-        if (!$this->hasQuestion())
-            return '';
-        return $this->getQuestion()->getAttribute('Text');
+        }
+        
+        if ($this->hasQuestion()) {
+            return $this->getQuestion()->getAttribute('Text');
+        }
+        
+        return false;
     }
 
     public function getCurrencySymbol()
