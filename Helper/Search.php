@@ -45,6 +45,7 @@ class Search extends Helper\AbstractHelper
     protected $cacheState;
     protected $category;
     protected $productAttributes = [];
+    protected $currentSearchParams;
     
     /**
      * @var \Celebros\ConversionPro\Model\Search
@@ -71,43 +72,48 @@ class Search extends Helper\AbstractHelper
     
     public function getSearchParams()
     {
-        $request = $this->_getRequest();
-        $params = new DataObject();
-        
-        $queryText = '';
-        
-        // search query text
-        if ($request->getParam('q'))
-            $queryText = $request->getParam('q');
+        if (!$this->currentSearchParams) {
+            $request = $this->_getRequest();
+            $params = new DataObject();
             
-        // category query text
-        $category = $this->helper->getCurrentCategory();
-        if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId())
-        {
-            if (!$this->helper->isTextualNav2Search()) {
-                $queryText = '';
-            } else {
-                $queryText = $this->getCategoryQueryTerm($category);
+            $queryText = '';
+            
+            // search query text
+            if ($request->getParam('q'))
+                $queryText = $request->getParam('q');
+                
+            // category query text
+            $category = $this->helper->getCurrentCategory();
+            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId())
+            {
+                if (!$this->helper->isTextualNav2Search()) {
+                    $queryText = '';
+                } else {
+                    $queryText = $this->getCategoryQueryTerm($category);
+                }
             }
+          
+            $params->setQuery($queryText);
+            
+            // filters
+            $filters = [];
+            foreach ($this->getFilterRequestVars() as $requestVar) {
+                $value = $this->getFilterValueAsArray($requestVar);
+                if (!empty($value))
+                    $filters[$requestVar] = $value;
+            }
+            
+            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId() && !$this->helper->isTextualNav2Search()) {
+                $filters[self::CATEGORY_QUESTION_TEXT][] = $this->getAnswerIdByCategoryId($category);
+            }
+            
+            $params->setFilters($filters);
+            
+            $this->currentSearchParams = $params;
+            return $params;
         }
-      
-        $params->setQuery($queryText);
         
-        // filters
-        $filters = [];
-        foreach ($this->getFilterRequestVars() as $requestVar) {
-            $value = $this->getFilterValueAsArray($requestVar);
-            if (!empty($value))
-                $filters[$requestVar] = $value;
-        }
-        
-        if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId() && !$this->helper->isTextualNav2Search()) {
-            $filters[self::CATEGORY_QUESTION_TEXT][] = $this->getAnswerIdByCategoryId($category);
-        }
-        
-        $params->setFilters($filters);
-        
-        return $params;
+        return $this->currentSearchParams;
     }
     
     public function getCustomResults(DataObject $params = null)
