@@ -27,6 +27,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_FILTER_MULTISELECT_ENABLED = 'conversionpro/display_settings/filter_multiselect_enabled';
     const XML_PATH_CAMPAIGNS_ENABLED          = 'conversionpro/display_settings/campaigns_enabled';
     const XML_PATH_PROFILE_NAME               = 'conversionpro/display_settings/profile_name';
+    const XML_PATH_PRICE_FILTER_TYPE          = 'conversionpro/display_settings/filter_price_type';
 
     const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
     const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
@@ -49,6 +50,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     
     const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
     
+    const PRICE_RANGE_TEMPLATE = 'PRICE_RANGE';
+    
     protected $_permittedHandles = [
         'catalog_category',
         'catalogsearch_result'
@@ -67,9 +70,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    ) {
         $this->registry = $registry;
+        $this->_url = $url;
         $this->storeManager = $storeManager;
         parent::__construct($context);
     }
@@ -90,17 +95,38 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isActiveEngine()
     {
-        //In case we're disabled conversionpro manually in the administrative menu, always return false.
+        $engineStatus = false;
         if ($this->isEnabled()) {
-            return true;
+            if ($this->getCurrentWorkHanlde() == 'catalog_category'
+            && $this->isNavToSearchEnabled()) {
+                if ($this->isNavToSearchBlacklistEnabled()) {
+                    $categoryId = (int)$this->_request->getParam('id', FALSE);
+                    if ($categoryId) {
+                        $blacklist = $this->getNavToSearchBlacklist();
+                        if (!in_array($categoryId, explode(',', $blacklist))) {
+                            $engineStatus = true;
+                        }
+                    }
+                } else {
+                    $engineStatus = true;
+                }
+            } elseif ($this->getCurrentWorkHanlde() == 'catalogsearch_result') { 
+                $engineStatus = true;
+            }
+            
         }
         
-        return false;
+        return $engineStatus;
+    }
+    
+    public function getCurrentWorkHanlde()
+    {
+        return $this->_request->getModuleName() . '_' . $this->_request->getControllerName();
     }
 
     public function isPermittedHandle()
     {
-        $currentHandle = $this->_request->getModuleName() . '_' . $this->_request->getControllerName();
+        $currentHandle = $this->getCurrentWorkHanlde();
         return in_array($currentHandle, $this->_permittedHandles);
     }
     
@@ -259,4 +285,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );    
     }
     
+    public function getFilterType($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_PRICE_FILTER_TYPE,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );    
+    }
+    
+    public function getPriceUrlTemplate()
+    {
+        $query = [
+            'price' => self::PRICE_RANGE_TEMPLATE];
+        return $this->_url->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);    
+    }
 }

@@ -46,7 +46,7 @@ class RecommendedMessage extends Template
 
     public function getRecommendedMessage()
     {
-        if ($this->helper->isEnabled()) {
+        if ($this->helper->isActiveEngine()) {
             $response = $this->_getResponse();
             $message = $response->QwiserSearchResults->getAttribute('RecommendedMessage');
             return $message;

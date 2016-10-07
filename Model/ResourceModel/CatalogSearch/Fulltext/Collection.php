@@ -22,7 +22,7 @@ class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Col
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
         
-        if (!$this->helper->isEnabled()) {
+        if (!$this->helper->isActiveEngine()) {
             return parent::addCategoryFilter($category);
         }
         

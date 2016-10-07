@@ -30,7 +30,7 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
 
     public function generate()
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isActiveEngine())
             return parent::generate();
 
         $requests['quick_search_container'] = $this->generateQuickSearchRequest();

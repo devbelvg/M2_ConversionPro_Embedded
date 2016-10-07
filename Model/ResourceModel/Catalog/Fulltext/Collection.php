@@ -22,7 +22,7 @@ class Collection extends \Magento\CatalogStaging\Model\ResourceModel\Fulltext\Co
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->helper = $objectManager->get('\Celebros\ConversionPro\Helper\Data');
 
-        if (!$this->helper->isEnabled()) {
+        if (!$this->helper->isActiveEngine()) {
             return parent::addCategoryFilter($category);
         }
         

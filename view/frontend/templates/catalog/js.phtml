@@ -7,6 +7,8 @@ function ConversionPro(multiselect, collapse, qty) {
     this.itemSelector = 'li.item';
     this.moreClass = 'more-button';
     this.lessClass = 'less-button';
+    this.priceMin = '#input-price-min';
+    this.priceMax = '#input-price-max';
     this.moreButton = '<li><a class="filters_more_button" href="#">+ <?php echo __('More') ?></a></li>';
     this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
     here = this;
@@ -40,6 +42,17 @@ function ConversionPro(multiselect, collapse, qty) {
                     jQuery(e).removeClass('hided');
                 }
             });
+        }
+    };
+    this.applyPrice = function(el) {
+        min = parseInt(jQuery(this.priceMin).val());
+        min = isNaN(min) ? 0 : min;
+        max = parseInt(jQuery(this.priceMax).val());
+        max = isNaN(max) ? 0 : max;
+        url = jQuery(el).data('url');
+        if (min < max) {
+            price_value = '_P' + min + '_' + max;
+            window.location = url.replace("PRICE_RANGE", price_value);
         }
     };
 };

@@ -49,7 +49,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
 
     public function getFilters(Layer $layer)
     {
-        if (!$this->helper->isEnabled())
+        if (!$this->helper->isActiveEngine())
             return parent::getFilters($layer);
 
         if (!count($this->filters)) {
