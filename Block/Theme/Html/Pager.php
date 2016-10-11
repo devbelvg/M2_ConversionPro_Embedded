@@ -40,15 +40,17 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     protected function _construct()
     {
         parent::_construct();
-        $blockData = $this->searchHelper->getToolbarData();
-        foreach ($blockData->getData() as $key=>$param) {
-            $this->setData($key, $param);
+        if ($this->helper->isActiveEngine()) {
+            $blockData = $this->searchHelper->getToolbarData();
+            foreach ($blockData->getData() as $key=>$param) {
+                $this->setData($key, $param);
+            }
         }
     }
     
     public function setCollection($collection)
     {
-        if (!$this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if (!$this->helper->isActiveEngine()) {
             return parent::setCollection($collection);
         }
        
@@ -59,7 +61,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getCurrentPage()
     {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()) {
             return (int)$this->getData('current_page') + 1;
         } else {
             return parent::getCurrentPage();
@@ -68,7 +70,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getTotalNum()
     {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()) {
             return (int)$this->getData('total_num');
         } else {
             return parent::getTotalNum();
@@ -77,7 +79,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getFirstNum()
     {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()) {
             return ($this->getCurrentPage()  - 1) * $this->getLimit() + 1;
         } else {
             return parent::getFirstNum();
@@ -86,7 +88,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getLastNum()
     {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()) {
             $collection = $this->getCollection();
             return ($this->getFirstNum() - 1) + $collection->count();
         } else {
@@ -96,7 +98,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     
     public function getLastPageNum()
     {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()) {
             return (int)$this->getData('last_page_num');
         } else {
             return parent::getLastPageNum();
@@ -105,7 +107,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function isLastPage()
     {
-        if (!$this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if (!$this->helper->isActiveEngine()) {
             return parent::isLastPage();
         }
         
@@ -114,9 +116,10 @@ class Pager extends \Magento\Theme\Block\Html\Pager
 
     public function getPages()
     {
-        if (!$this->helper->isActiveEngine() && $this->helper->isPermittedHandle())
+        if (!$this->helper->isActiveEngine()) {
             return parent::getPages();
-
+        }
+        
         if ($this->getLastPageNum() <= $this->_displayPages) {
             return range(1, $this->getLastPageNum());
         } else {

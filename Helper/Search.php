@@ -245,7 +245,7 @@ class Search extends Helper\AbstractHelper
         
         if (!is_null($value) && !$this->helper->isMultiselectEnabled()) {
             $values = $this->filterValueToArray($value);
-            $value = $values[0];
+            $value = reset($values);
         }
         return $value;
     }
@@ -258,7 +258,11 @@ class Search extends Helper\AbstractHelper
     
     public function filterValueToArray($value)
     {
-        return explode(',', $value);
+        if (is_string($value)) {
+            return explode(',', $value);
+        }
+        
+        return $value;
     }
     
     public function getFilterRequestVars()

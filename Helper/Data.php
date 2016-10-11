@@ -23,12 +23,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_HOST     = 'conversionpro/general_settings/host';
     const XML_PATH_PORT     = 'conversionpro/general_settings/port';
     const XML_PATH_SITE_KEY = 'conversionpro/general_settings/sitekey';
-
+    
     const XML_PATH_FILTER_MULTISELECT_ENABLED = 'conversionpro/display_settings/filter_multiselect_enabled';
     const XML_PATH_CAMPAIGNS_ENABLED          = 'conversionpro/display_settings/campaigns_enabled';
     const XML_PATH_PROFILE_NAME               = 'conversionpro/display_settings/profile_name';
     const XML_PATH_PRICE_FILTER_TYPE          = 'conversionpro/display_settings/filter_price_type';
-
+    
     const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
     const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
     
@@ -38,7 +38,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CATEGORY_QUERY_TYPE             = 'conversionpro/nav_to_search/category_query_type';
     const XML_PATH_NAV2SEARCH_BY                   = 'conversionpro/nav_to_search/nav_to_search_search_by';
     const XML_PATH_NAV2SEARCH_RELEVANCE            = 'conversionpro/nav_to_search/relevance_rename';
-
+    
     const XML_PATH_ANALYTICS_CUST_ID = 'conversionpro/anlx_settings/cid';
     const XML_PATH_ANALYTICS_HOST    = 'conversionpro/anlx_settings/host';
     
@@ -61,24 +61,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var Registry
      */
     protected $registry;
-
+    
     /**
       * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
-
+    
     public function __construct(
         Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\UrlInterface $url,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->registry = $registry;
-        $this->_url = $url;
         $this->storeManager = $storeManager;
         parent::__construct($context);
     }
-
+    
     public function isEnabled($store = null)
     {
         $isEnabled = $this->scopeConfig->isSetFlag(
@@ -123,7 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_request->getModuleName() . '_' . $this->_request->getControllerName();
     }
-
+    
     public function isPermittedHandle()
     {
         $currentHandle = $this->getCurrentWorkHanlde();
@@ -135,50 +133,50 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->getValue(
             self::XML_PATH_PORT, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function getHost($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_HOST, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function getSiteKey($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_SITE_KEY, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function isMultiselectEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FILTER_MULTISELECT_ENABLED, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function getProfileName($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_PROFILE_NAME, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function isCampaignsEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAMPAIGNS_ENABLED, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function isNavToSearchEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_NAV_TO_SEARCH_ENABLED, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function isNavToSearchBlacklistEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_NAV_TO_SEARCH_BLACKLIST_ENABLED,
             ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function getNavToSearchBlacklist($store = null)
     {
         $value = $this->scopeConfig->getValue(
@@ -187,30 +185,30 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $value = empty($value) ? [] : explode(',', $value);
         return $value;
     }
-
+    
     public function getCategoryQueryType($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CATEGORY_QUERY_TYPE, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function isEnabledForCategory(Category $category, $store = null)
     {
         return $this->isNavToSearchEnabled($store)
             && (!$this->isNavToSearchBlacklistEnabled()
                 || !in_array($category->getId(), $this->getNavToSearchBlacklist($store)));
     }
-
+    
     public function getCurrentCategory()
     {
         return $this->registry->registry('current_category');
     }
-
+    
     public function getCurrentStore()
     {
         return $this->storeManager->getStore();
     }
-
+    
     public function getAnalyticsCustId($store = null)
     {
         return $this->scopeConfig->getValue(
@@ -222,7 +220,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->getValue(
             self::XML_PATH_ANALYTICS_HOST, ScopeInterface::SCOPE_STORE, $store);
     }
-
+    
     public function getNav2SearchBy($store = null)
     {
         return $this->scopeConfig->getValue(
@@ -298,6 +296,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $query = [
             'price' => self::PRICE_RANGE_TEMPLATE];
-        return $this->_url->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);    
+        return $this->_urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);    
     }
 }
