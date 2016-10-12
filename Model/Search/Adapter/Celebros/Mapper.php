@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Celebros
  *
  * DISCLAIMER

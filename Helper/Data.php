@@ -57,10 +57,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'catalogsearch_result'
     ];
     
+    protected $engineStatus = null;
+    
     /**
      * @var Registry
      */
     protected $registry;
+    
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
     
     /**
       * @var \Magento\Store\Model\StoreManagerInterface
@@ -70,9 +77,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->registry = $registry;
+        $this->messageManager = $messageManager;
         $this->storeManager = $storeManager;
         parent::__construct($context);
     }
@@ -93,28 +102,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isActiveEngine()
     {
-        $engineStatus = false;
-        if ($this->isEnabled()) {
-            if ($this->getCurrentWorkHanlde() == 'catalog_category'
-            && $this->isNavToSearchEnabled()) {
-                if ($this->isNavToSearchBlacklistEnabled()) {
-                    $categoryId = (int)$this->_request->getParam('id', FALSE);
-                    if ($categoryId) {
-                        $blacklist = $this->getNavToSearchBlacklist();
-                        if (!in_array($categoryId, explode(',', $blacklist))) {
-                            $engineStatus = true;
+        if ($this->engineStatus === null) {
+            $engineStatus = false;
+            if ($this->isEnabled()) {
+                if ($this->getCurrentWorkHanlde() == 'catalog_category'
+                && $this->isNavToSearchEnabled()) {
+                    if ($this->isNavToSearchBlacklistEnabled()) {
+                        $categoryId = (int)$this->_request->getParam('id', FALSE);
+                        if ($categoryId) {
+                            $blacklist = $this->getNavToSearchBlacklist();
+                            if (!in_array($categoryId, explode(',', $blacklist))) {
+                                $engineStatus = true;
+                            }
                         }
+                    } else {
+                        $engineStatus = true;
                     }
-                } else {
+                } elseif ($this->getCurrentWorkHanlde() == 'catalogsearch_result') { 
                     $engineStatus = true;
                 }
-            } elseif ($this->getCurrentWorkHanlde() == 'catalogsearch_result') { 
-                $engineStatus = true;
+                
             }
             
+            if ($this->isRequestDebug()) {
+                $this->messageManager->addWarning(__('Celebros Search Engine') . ($engineStatus ? ' Enabled' : ' Disabled'));
+            }
+            $this->engineStatus = $engineStatus;
         }
         
-        return $engineStatus;
+        return $this->engineStatus;
     }
     
     public function getCurrentWorkHanlde()

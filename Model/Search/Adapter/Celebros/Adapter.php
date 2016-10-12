@@ -40,7 +40,6 @@ class Adapter implements AdapterInterface
     {
         $params = $this->mapper->buildQuery($request);
         $documents = $this->executeQuery($params);
-        // TODO: aggregations ??
         $response = [
             'documents' => $documents,
             'aggregations' => []];

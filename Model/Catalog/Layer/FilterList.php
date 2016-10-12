@@ -2,7 +2,7 @@
 namespace Celebros\ConversionPro\Model\Catalog\Layer;
 
 use \Magento\Catalog\Model\Layer;
-use \Magento\Framework\Object;
+use \Magento\Framework\DataObject;
 use \Magento\Framework\Simplexml\Element as XmlElement;
 
 class FilterList extends \Magento\Catalog\Model\Layer\FilterList
@@ -49,8 +49,9 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
 
     public function getFilters(Layer $layer)
     {
-        if (!$this->helper->isActiveEngine())
+        if (!$this->helper->isActiveEngine()) {
             return parent::getFilters($layer);
+        }
 
         if (!count($this->filters)) {
             $this->filters = [];
