@@ -111,7 +111,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                         $categoryId = (int)$this->_request->getParam('id', FALSE);
                         if ($categoryId) {
                             $blacklist = $this->getNavToSearchBlacklist();
-                            if (!in_array($categoryId, explode(',', $blacklist))) {
+                            if (!in_array($categoryId, $blacklist)) {
                                 $engineStatus = true;
                             }
                         }
