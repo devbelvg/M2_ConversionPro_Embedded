@@ -11,7 +11,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="content">
             <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalog_product_celebros_analytics" template="analytics/tracking.product.click.phtml" cacheable="false" />
