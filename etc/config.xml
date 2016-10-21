@@ -22,6 +22,7 @@
             </general_settings>
             <display_settings>
                 <campaigns_enabled>0</campaigns_enabled>
+                <campaigns_type>catalogsearch_result_index:recommended_messages,catalogsearch_result_index:banners</campaigns_type>
                 <filter_multiselect_enabled>1</filter_multiselect_enabled>
                 <collapse>0</collapse>
                 <collapse_qty>4</collapse_qty>

@@ -18,6 +18,8 @@ use Magento\Framework\Simplexml\Element as XmlElement;
 
 class RecommendedMessage extends Template
 {
+    const CAMPAIGN_NAME = 'recommended_messages';
+    
     /**
      * @var \Celebros\ConversionPro\Helper\Data
      */
@@ -46,7 +48,7 @@ class RecommendedMessage extends Template
 
     public function getRecommendedMessage()
     {
-        if ($this->helper->isActiveEngine()) {
+        if ($this->helper->isActiveEngine() && $this->helper->isCampaignsEnabled(self::CAMPAIGN_NAME)) {
             $response = $this->_getResponse();
             $message = $response->QwiserSearchResults->getAttribute('RecommendedMessage');
             return $message;

@@ -26,6 +26,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     
     const XML_PATH_FILTER_MULTISELECT_ENABLED = 'conversionpro/display_settings/filter_multiselect_enabled';
     const XML_PATH_CAMPAIGNS_ENABLED          = 'conversionpro/display_settings/campaigns_enabled';
+    const XML_PATH_CAMPAIGNS_TYPE             = 'conversionpro/display_settings/campaigns_type';
     const XML_PATH_PROFILE_NAME               = 'conversionpro/display_settings/profile_name';
     const XML_PATH_PRICE_FILTER_TYPE          = 'conversionpro/display_settings/filter_price_type';
     
@@ -58,6 +59,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     ];
     
     protected $engineStatus = null;
+    
+    protected $campaignsStatus = [];
     
     /**
      * @var Registry
@@ -165,39 +168,90 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isMultiselectEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_FILTER_MULTISELECT_ENABLED, ScopeInterface::SCOPE_STORE, $store);
+            self::XML_PATH_FILTER_MULTISELECT_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
     
     public function getProfileName($store = null)
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_PROFILE_NAME, ScopeInterface::SCOPE_STORE, $store);
+            self::XML_PATH_PROFILE_NAME,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
     
-    public function isCampaignsEnabled($store = null)
+    public function isCampaignsEnabled($type = null, $store = null)
     {
-        return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_CAMPAIGNS_ENABLED, ScopeInterface::SCOPE_STORE, $store);
+        $campaignsEnabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_CAMPAIGNS_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        
+        if (!$type) {
+            return  $campaignsEnabled;
+        }
+        
+        $campaingState = false;
+        $currentHandle = $this->getFullActionName();
+        $currentCampaignType = $currentHandle . ':' .$type;
+
+        if (isset($this->campaignsStatus[$currentCampaignType])) {
+            return $this->campaignsStatus[$currentCampaignType];
+        }
+        
+        $campaignsEnabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_CAMPAIGNS_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        $campaignsTypes = explode(',', $this->scopeConfig->getValue(
+            self::XML_PATH_CAMPAIGNS_TYPE,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        ));
+        
+        $campaingState = ($campaignsEnabled && in_array($currentCampaignType, $campaignsTypes));
+        if ($this->isRequestDebug()) {
+            $this->messageManager->addWarning(__('Celebros Campaign') . ' "' . $type . '"' . ($campaingState ? ' Enabled' : ' Disabled'));
+        }
+        
+        $this->campaignsStatus[$currentCampaignType] = $campaingState;
+        
+        return $campaingState;
+    }
+    
+    public function getFullActionName()
+    {
+        return $this->_request->getModuleName() . '_' . $this->_request->getControllerName() . '_' . $this->_request->getActionName();
     }
     
     public function isNavToSearchEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_NAV_TO_SEARCH_ENABLED, ScopeInterface::SCOPE_STORE, $store);
+            self::XML_PATH_NAV_TO_SEARCH_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
     
     public function isNavToSearchBlacklistEnabled($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_NAV_TO_SEARCH_BLACKLIST_ENABLED,
-            ScopeInterface::SCOPE_STORE, $store);
+            ScopeInterface::SCOPE_STORE, $store
+        );
     }
     
     public function getNavToSearchBlacklist($store = null)
     {
         $value = $this->scopeConfig->getValue(
             self::XML_PATH_NAV_TO_SEARCH_BLACKLIST,
-            ScopeInterface::SCOPE_STORE, $store);
+            ScopeInterface::SCOPE_STORE, $store
+        );
         $value = empty($value) ? [] : explode(',', $value);
         return $value;
     }

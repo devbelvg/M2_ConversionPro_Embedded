@@ -19,6 +19,8 @@ use Magento\Framework\Simplexml\Element as XmlElement;
 
 class Banner extends Template
 {
+    const BANNER_CAMPAIGN_NAME = 'banners';
+    
     /**
      * @var \Celebros\ConversionPro\Helper\Data
      */
@@ -96,6 +98,10 @@ class Banner extends Template
 
     protected function _parseResponse()
     {
+        if (!$this->helper->isCampaignsEnabled(self::BANNER_CAMPAIGN_NAME)) {
+            return;
+        }
+        
         if ($this->isResponseParsed) {
             return;
         }
