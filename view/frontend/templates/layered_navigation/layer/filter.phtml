@@ -19,7 +19,7 @@
     width: 30% !important;
 }
 </style>
-<?php if ($filterType != 'price' || !$helper->getFilterType()): ?>
+<?php if ($filterType != 'price' || in_array('default', $helper->getFilterType())): ?>
 <ol class="items">
     <?php foreach ($filterItems as $key => $filterItem): ?>
     <?php if ($helper->isCollapsed() && ($helper->collapseQty() <= $key)): ?>
@@ -60,7 +60,8 @@
     <li class="item less-button hided" data-collapse="less" onclick="convpro.collapse(this, false)">- <?php echo __('Less') ?></li>
     <?php endif; ?>
 </ol>
-<?php elseif ($helper->getFilterType() == 'inputs'): ?>
+<?php endif; ?>
+<?php if ($filterType == 'price' && in_array('inputs', $helper->getFilterType())): ?>
     <input id="input-price-min" placeholder="min" class="input-text celebros-price-min" maxlength="4" type="number"><span> - </span>
     <input id="input-price-max" placeholder="max" class="input-text celebros-price-max" maxlength="4" type="number">
     <button data-url="<?php echo $helper->getPriceUrlTemplate() ?>" class="action search" type="submit" title="<?php echo __('Search') ?>" onclick="convpro.applyPrice(this)">

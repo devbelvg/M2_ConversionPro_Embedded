@@ -355,11 +355,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     
     public function getFilterType($store = null)
     {
-        return $this->scopeConfig->getValue(
+        return explode(',', $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_FILTER_TYPE,
             ScopeInterface::SCOPE_STORE,
             $store
-        );    
+        ));    
     }
     
     public function getPriceUrlTemplate()

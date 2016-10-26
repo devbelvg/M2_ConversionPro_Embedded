@@ -15,12 +15,13 @@ namespace Celebros\ConversionPro\Model\Config\Source;
 
 class PriceFilterTypes
 {
+    const DEF = 'default';
     const INPUTS = 'inputs';
 
     public function toArray()
     {
         return [
-            0 => __('Default'),
+            self::DEF    => __('Default'),
             self::INPUTS => __('Inputs')];
     }
 
