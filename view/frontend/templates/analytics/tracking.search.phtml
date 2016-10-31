@@ -1,7 +1,8 @@
-<?php if($this->getCustomerId() && $this->getHost()): ?>
+<?php if ($this->getCustomerId() && $this->getHost()): ?>
 <!-- BEGIN: Analytics.Celebros.Search-->
-<script src="http://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>" type="text/javascript"></script>
+<?php $protocol = ($this->getRequest()->isSecure())?'https':'http'; ?>
 <script type="text/javascript">
+require(["<?php echo $protocol ?>://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>"], function() {
     anlxCallback = function() {
         var x = '';
     };
@@ -13,6 +14,7 @@
     CelebrosAnalytics.qwisersearchloghandle = '<?php echo $qwisersearchloghandle ?>';
 <?php endif; ?>
     CelebrosAnalytics.AI_LogSearchResult();
+});
 </script>
 <!-- END: Analytics.Search -->
 <?php endif; ?>

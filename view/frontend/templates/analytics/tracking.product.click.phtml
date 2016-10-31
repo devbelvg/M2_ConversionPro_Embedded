@@ -1,7 +1,8 @@
 <?php if ($this->getCustomerId() && $this->getHost()): ?>
 <!-- BEGIN: Analytics.Celebros.Product.Click-->
-<script src="http://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>" type="text/javascript"></script>
+<?php $protocol = ($this->getRequest()->isSecure())?'https':'http'; ?>
 <script type="text/javascript">
+require(["<?php echo $protocol ?>://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>"], function() {
     anlxCallback = function() {
         var x = '';
     };
@@ -11,6 +12,7 @@
     CelebrosAnalytics.productprice = '<?php echo $this->getProductPrice(); ?>';
     CelebrosAnalytics.websessionid = '<?php echo $this->getWebsessionId(); ?>';
     CelebrosAnalytics.AI_LogProduct();
+});
 </script>
 <!-- END: Analytics.Celebros.Product.Click-->
 <?php endif?>

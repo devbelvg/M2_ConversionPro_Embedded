@@ -58,7 +58,6 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             // $response = $this->_getResponse($layer);
             $response = $this->searchHelper->getCustomResults();
             $questions = $response->QwiserSearchResults->Questions;
-            $aaa = '';
             foreach ($questions->children() as $question) {
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
                 $this->appliedFilters[] = $question->getAttribute('Text');
@@ -75,7 +74,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
                 }
             }
         }
-        
+
         return $this->filters;
     }
 
