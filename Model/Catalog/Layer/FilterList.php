@@ -64,7 +64,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             }
         }
 
-        $remFilters = array_diff($this->searchHelper->getFilterRequestVars(), $this->appliedFilters); 
+        $remFilters = array_diff($this->searchHelper->getFilterRequestVars(), $this->appliedFilters);
         foreach ($this->request->getParams() as $var => $value) {
             if (in_array($var, $remFilters)) {
                 $question = $this->searchHelper->getQuestionByField($var, 'Text');

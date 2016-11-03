@@ -9,6 +9,7 @@ function ConversionPro(multiselect, collapse, qty) {
     this.lessClass = 'less-button';
     this.priceMin = '#input-price-min';
     this.priceMax = '#input-price-max';
+    this.priceApplyButton = '#price-apply-button';
     this.moreButton = '<li><a class="filters_more_button" href="#">+ <?php echo __('More') ?></a></li>';
     this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
     here = this;
@@ -45,16 +46,35 @@ function ConversionPro(multiselect, collapse, qty) {
         }
     };
     this.applyPrice = function(el) {
-        min = parseInt(jQuery(this.priceMin).val());
-        min = isNaN(min) ? 0 : min;
-        max = parseInt(jQuery(this.priceMax).val());
-        max = isNaN(max) ? 0 : max;
+        prices = this.minMaxCheck();
         url = jQuery(el).data('url');
-        if (min < max) {
-            price_value = '_P' + min + '_' + max;
+        if (prices[0] < prices[1]) {
+            price_value = '_P' + prices[0] + '_' + prices[1];
             window.location = url.replace("PRICE_RANGE", price_value);
         }
     };
+    this.minMaxCheck = function() {
+        min = jQuery(this.priceMin).val() ? parseInt(jQuery(this.priceMin).val()) : parseInt(jQuery(this.priceMin).data('min-price'));
+        min = isNaN(min) ? 0 : min;
+        max = jQuery(this.priceMax).val() ? parseInt(jQuery(this.priceMax).val()) : parseInt(jQuery(this.priceMax).data('max-price'));
+        max = isNaN(max) ? 0 : max;
+        if (max > jQuery(this.priceMax).data('max-price')) {
+            max = jQuery(this.priceMax).data('max-price');
+            jQuery(this.priceMax).val(max);
+        }
+        if (min < jQuery(this.priceMin).data('min-price')) {
+            min = jQuery(this.priceMin).data('min-price');
+            jQuery(this.priceMin).val(min);
+        }
+        
+        this.applyButtonState(1);
+        return [min, max];
+    };
+    this.applyButtonState = function(state) {
+        if (state) {
+            jQuery(this.priceApplyButton).prop("disabled", false);
+        }
+    }
 };
 convpro = new ConversionPro(true, true, <?php echo $helper->collapseQty() ?>);
 </script>

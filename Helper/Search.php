@@ -223,12 +223,13 @@ class Search extends Helper\AbstractHelper
     
     public function getValueFromRequest($requestVar)
     {
+        $requestVar = str_replace('.', '_', $requestVar);
         $vars = [
             $requestVar,
             str_replace(' ', '_', $requestVar),
             str_replace(' ', '+', $requestVar)
         ];
-        
+
         foreach ($vars as $var) {
             if ($value = $this->_getRequest()->getParam($var)) {
                 return $value;
@@ -452,5 +453,33 @@ class Search extends Helper\AbstractHelper
         }
         
         return $result;
+    }
+    
+    public function getMinMaxPrices($val = null)
+    {
+        $values = [];
+        $allQuestions = $this->getCustomResults()->QwiserSearchResults->Questions->Question;
+        foreach ($allQuestions as $question) {
+            if ($question->getAttribute('Id') == 'PriceQuestion') {
+                foreach ($question->Answers->Answer as $answer) {
+                    $id = $answer->getAttribute('Id');
+                    if (preg_match('@^_P(\d+)_(\d+)$@', $id, $matches)) {
+                        $values[] = $matches[1];
+                        $values[] = $matches[2];
+                    }
+                }
+            }
+        }
+        
+        if ($val == 'max') {
+            return (int)max($values);
+        } elseif ($val == 'min') {
+            return (int)max($values);
+        }
+        
+        return [
+            'min' => min($values),
+            'max' => max($values)
+        ];
     }
 }
