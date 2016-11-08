@@ -159,9 +159,9 @@ class Search
     {
         $handle = '';
         if (isset($xml->Query) && strlen($xml->Query) > 0)
-            $handle .= 'A=' . $this->_handleEscape($xml->Query) . '~';
+            $handle .= 'A=' . $this->_handleEscape(urlencode($xml->Query)) . '~';
         if (isset($xml->OriginalQuery) && strlen($xml->OriginalQuery) > 0)
-            $handle .= 'B=' . $this->_handleEscape($xml->OriginalQuery) . '~';
+            $handle .= 'B=' . $this->_handleEscape(urlencode($xml->OriginalQuery)) . '~';
         if (!empty($xml->getAttribute('CurrentPage')))
             $handle .= 'C=' . $xml->getAttribute('CurrentPage') . '~';
         if (!empty($xml->getAttribute('IsDefaultPageSize')) && ($xml->getAttribute('IsDefaultPageSize') != 'true'))
