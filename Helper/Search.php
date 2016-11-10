@@ -223,13 +223,7 @@ class Search extends Helper\AbstractHelper
     
     public function getValueFromRequest($requestVar)
     {
-        $requestVar = str_replace('.', '_', $requestVar);
-        $vars = [
-            $requestVar,
-            str_replace(' ', '_', $requestVar),
-            str_replace(' ', '+', $requestVar)
-        ];
-
+        $vars = $this->getAltRequestVars($requestVar);
         foreach ($vars as $var) {
             if ($value = $this->_getRequest()->getParam($var)) {
                 return $value;
@@ -237,6 +231,28 @@ class Search extends Helper\AbstractHelper
         }
         
         return null;
+    }
+    
+    public function checkRequestVar($requestVar)
+    {
+        $vars = $this->getAltRequestVars($requestVar);
+        $params = $this->_getRequest()->getParams();
+        foreach ($vars as $var) {
+            if (isset($params[$var])) {
+                return $var;
+            }
+        }    
+    }
+    
+    public function getAltRequestVars($requestVar)
+    {
+        $requestVar = str_replace('.', '_', $requestVar);
+        
+        return [
+            $requestVar,
+            str_replace(' ', '_', $requestVar),
+            str_replace(' ', '+', $requestVar)
+        ];    
     }
     
     public function getFilterValue($requestVar)

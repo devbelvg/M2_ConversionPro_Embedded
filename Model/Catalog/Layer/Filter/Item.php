@@ -73,23 +73,34 @@ class Item extends \Magento\Catalog\Model\Layer\Filter\Item
     public function getRemoveUrl()
     {
         if ($this->helper->isActiveEngine()) {
-            if (!$this->hasSelectedValues() || empty($this->getSelectedValues()))
+            if (!$this->hasSelectedValues() || empty($this->getSelectedValues())) {
                 return parent::getRemoveUrl();
+            }
                 
             /** @var array $values */
             $values = $this->getSelectedValues();
             $values = array_diff($values, [$this->getValue()]);
-            if (empty($values))
-                return parent::getRemoveUrl();
-            
+            if (empty($values)) {
+                $values = null;
+            }
+
+            $requestVar = $this->searchHelper->checkRequestVar($this->getFilter()->getRequestVar());           
             $query = [
-                $this->getFilter()->getRequestVar() => implode(',', $values),
+                $requestVar => is_array($values) ? implode(',', $values) : $values,
                 // exclude current page from urls
-                $this->_htmlPagerBlock->getPageVarName() => null];
+                $this->_htmlPagerBlock->getPageVarName() => null
+            ];
+            
             return $this->_url->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);
         }
         
         return parent::getRemoveUrl();
+    }
+    
+    public function checkRequestVar()
+    {
+        $requestVar = $this->getFilter()->getRequestVar();
+        
     }
     
     public function isSelected()
