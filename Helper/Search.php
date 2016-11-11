@@ -241,7 +241,9 @@ class Search extends Helper\AbstractHelper
             if (isset($params[$var])) {
                 return $var;
             }
-        }    
+        }  
+
+        return $requestVar;
     }
     
     public function getAltRequestVars($requestVar)

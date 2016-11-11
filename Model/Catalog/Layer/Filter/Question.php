@@ -103,10 +103,10 @@ class Question extends Layer\Filter\AbstractFilter
         }
         
         if ($this->hasQuestion()) {
-            return $this->getQuestion()->getAttribute('Text');
+            $reqVar =  $this->getQuestion()->getAttribute('Text');
         }
         
-        return false;
+        return $this->searchHelper->checkRequestVar($reqVar);
     }
 
     public function getCurrencySymbol()

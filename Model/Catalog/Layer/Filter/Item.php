@@ -60,8 +60,9 @@ class Item extends \Magento\Catalog\Model\Layer\Filter\Item
             /** @var array $values */
             $values =  $this->getSelectedValues();
             $values[] = $this->getValue();
+            $requestVar = $this->searchHelper->checkRequestVar($this->getFilter()->getRequestVar());
             $query = [
-                $this->getFilter()->getRequestVar() => implode(',', $values),
+                $requestVar => implode(',', $values),
                 // exclude current page from urls
                 $this->_htmlPagerBlock->getPageVarName() => null];
             return $this->_url->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);
