@@ -105,6 +105,15 @@ class Pager extends \Magento\Theme\Block\Html\Pager
         }
     }
 
+    public function isFirstPage()
+    {
+        if (!$this->helper->isActiveEngine()) {
+            return parent::isLastPage();
+        }
+        
+        return $this->getCurrentPage() == 1;
+    }
+    
     public function isLastPage()
     {
         if (!$this->helper->isActiveEngine()) {
