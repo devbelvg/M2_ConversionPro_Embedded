@@ -492,7 +492,7 @@ class Search extends Helper\AbstractHelper
         if ($val == 'max') {
             return (int)max($values);
         } elseif ($val == 'min') {
-            return (int)max($values);
+            return (int)min($values);
         }
         
         return [
