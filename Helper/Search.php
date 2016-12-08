@@ -331,16 +331,33 @@ class Search extends Helper\AbstractHelper
         return reset($this->customResultsCache);    
     }
     
+    /*CONST PERC_SIMILARITY = 90;*/
+    
     public function getQuestionByField($value, $field)
     {
         $allQuestions = $this->getAllQuestions()->Questions->Question;
         foreach ($allQuestions as $question) {
-            if ($question->getAttribute($field) == $value) {
+            /*similar_text($question->getAttribute($field), $value, $perc);           
+            if ($perc > self::PERC_SIMILARITY) {*/
+            /*if ($question->getAttribute($field) == $value) {*/
+            if (in_array($value, $this->getAltRequestVars($question->getAttribute($field)))) {
                 return $question;
             }
         }
         
         return false;
+    }
+    
+    public function getPriceQuestionMock()
+    {
+        $allQuestions = $this->getAllQuestions()->Questions->Question;
+        foreach ($allQuestions as $mock) {
+            $mock->setAttribute('Id', 'PriceQuestion');
+            $mock->setAttribute('Text', 'By price range');
+            $mock->setAttribute('SideText', 'Price');
+            $mock->setAttribute('Type', 'Price');
+            return $mock;
+        }  
     }
     
     public function getAnswerIdByCategoryId($category)
