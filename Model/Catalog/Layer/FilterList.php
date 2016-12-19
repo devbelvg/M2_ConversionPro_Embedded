@@ -53,14 +53,13 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             return parent::getFilters($layer);
         }
 
-        $priceQuestion = null;
+        $priceQuestion = $this->searchHelper->getPriceQuestionMock();
         
         if (!count($this->filters)) {
             $this->filters = [];
             // $response = $this->_getResponse($layer);
             $response = $this->searchHelper->getCustomResults();
             $questions = $response->QwiserSearchResults->Questions;
-//print_r($questions);die;
             foreach ($questions->children() as $question) {
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
                 $this->appliedFilters[] = $question->getAttribute('Text');
@@ -71,26 +70,21 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         foreach ($remFilters as $fltr) {
             $remFilters = array_merge($this->searchHelper->getAltRequestVars($fltr), $remFilters);
         }
+        
         $remFilters = array_unique($remFilters);
         foreach ($this->request->getParams() as $var => $value) {
             if (in_array($var, $remFilters)) {
                 $question = $this->searchHelper->getQuestionByField($var, 'Text');
                 if ($question) {
-                    if (!$priceQuestion) {
-                        $priceQuestion = $question;
-                    }
                     $var = $question->getAttribute('Text');
                     $this->createQuestionFilter($question, $layer)->apply($this->request);
                     $this->appliedFilters[] = $var;    
                 }
             }
             
-            if ($var == 'price' && !in_array($var, $this->appliedFilters)) {
-                $priceQuestion = $this->searchHelper->getPriceQuestionMock();
-//print_r($priceQuestion);die;
-                //print_r($priceQuestion);die;
+            if ($var == 'price' && !in_array($priceQuestion->getAttribute('Text'), $this->appliedFilters)) {
                 $this->createQuestionFilter($priceQuestion, $layer)->apply($this->request);
-                $this->appliedFilters[] = $var; 
+                $this->appliedFilters[] = $priceQuestion->getAttribute('Text');
             }
         }
 
