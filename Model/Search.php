@@ -98,20 +98,19 @@ class Search
             // create answer container element
             $answersXml = $searchInfoXml->addChild('QwiserAnsweredAnswers');
             $answerCount = 0;
-//print_r($params->getFilters());
             foreach ($params->getFilters() as $name => $optionIds) {
                 if (!in_array($name, $this->systemFilters)) {
                     is_array($optionIds) or $optionIds = array($optionIds);
                     foreach ($optionIds as $optionId) {
-$optionId = explode(',', urldecode($optionId));
-foreach ($optionId as $id) {
-                        // create answer element
-                        $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');
-                        $answerXml->setAttribute('AnswerId', $id);
-                        $answerXml->setAttribute('EffectOnSearchPath', '0');
-                        // add answer element
-                        ++$answerCount;
-}
+                        $optionId = explode(',', urldecode($optionId));
+                        foreach ($optionId as $id) {
+                            // create answer element
+                            $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');
+                            $answerXml->setAttribute('AnswerId', $id);
+                            $answerXml->setAttribute('EffectOnSearchPath', '0');
+                            // add answer element
+                            ++$answerCount;
+                        }
                     }
                 }
             }
