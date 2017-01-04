@@ -16,6 +16,7 @@ namespace Celebros\ConversionPro\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Message\MessageInterface as MessageInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -103,7 +104,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isActiveEngine()
+    public function isActiveEngine($source = null)
     {
         if ($this->engineStatus === null) {
             $engineStatus = false;
@@ -128,12 +129,53 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
             
             if ($this->isRequestDebug()) {
-                $this->messageManager->addWarning(__('Celebros Search Engine') . ($engineStatus ? ' Enabled' : ' Disabled'));
+                $message = [
+                    'title' => __('Celebros Search Engine'),
+                    'status' => ($engineStatus ? 'Enabled' : 'Disabled')
+                ];
+                
+                if ($source) {
+                    $message['source'] =  $source;
+                }
+
+                $this->messageManager->getMessages()->deleteMessageByIdentifier('celebros_engine_status');
+                
+                if ($engineStatus) {
+                    $statusMessage = $this->messageManager->createMessage(
+                        MessageInterface::TYPE_SUCCESS,
+                        'celebros_engine_status'
+                    )->setText($this->prepareDebugMessage($message));
+                } else {
+                    $statusMessage = $this->messageManager->createMessage(
+                        MessageInterface::TYPE_NOTICE,
+                        'celebros_engine_status'
+                    )->setText($this->prepareDebugMessage($message));
+                }
+                
+                $this->messageManager->addMessage($statusMessage);
             }
+            
             $this->engineStatus = $engineStatus;
         }
         
         return $this->engineStatus;
+    }
+    
+    public function prepareDebugMessage(Array $data)
+    {
+        if (isset($data['title'])) {
+            $str = __($data['title']);
+            unset($data['title']);
+            foreach ($data as $key => $val) {
+                if ($val) {
+                    $str .= '<br>' . ucfirst(__($key)) . ': ' . $val;
+                }
+            }
+            
+            return $str;
+        }
+        
+        return false;
     }
     
     public function getCurrentWorkHanlde()
@@ -216,7 +258,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         
         $campaingState = ($campaignsEnabled && in_array($currentCampaignType, $campaignsTypes));
         if ($this->isRequestDebug()) {
-            $this->messageManager->addWarning(__('Celebros Campaign') . ' "' . $type . '"' . ($campaingState ? ' Enabled' : ' Disabled'));
+            $message = [
+                'title' => __('Celebros Campaign'),
+                'type' => $type,
+                'status' => ($campaingState ? ' Enabled' : ' Disabled')
+            ];    
+            
+            if ($campaingState) {
+                $this->messageManager->addSuccess($this->prepareDebugMessage($message));
+            } else {
+                $this->messageManager->addNotice($this->prepareDebugMessage($message));
+            }
         }
         
         $this->campaignsStatus[$currentCampaignType] = $campaingState;

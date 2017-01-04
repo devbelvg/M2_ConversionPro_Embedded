@@ -35,7 +35,7 @@ class Cache extends Helper\AbstractHelper
     
     public function getId($method, $vars = array())
     {
-        return /*base64_encode(*/'conversionpro_'. $method . implode('', $vars);//);
+        return sha1($method . '::' . implode('', $vars));
     }
     
     public function load($cacheId)

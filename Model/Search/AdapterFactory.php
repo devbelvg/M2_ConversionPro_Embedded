@@ -41,7 +41,7 @@ class AdapterFactory extends \Magento\Search\Model\AdapterFactory
 
     public function create(array $data = [])
     {
-        if ($this->helper->isActiveEngine()) {
+        if ($this->helper->isActiveEngine(get_class($this))) {
             $adapter = $this->objectManager->create(
                 'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter');
             return $adapter;

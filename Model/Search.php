@@ -98,16 +98,20 @@ class Search
             // create answer container element
             $answersXml = $searchInfoXml->addChild('QwiserAnsweredAnswers');
             $answerCount = 0;
+//print_r($params->getFilters());
             foreach ($params->getFilters() as $name => $optionIds) {
                 if (!in_array($name, $this->systemFilters)) {
                     is_array($optionIds) or $optionIds = array($optionIds);
                     foreach ($optionIds as $optionId) {
+$optionId = explode(',', urldecode($optionId));
+foreach ($optionId as $id) {
                         // create answer element
                         $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');
-                        $answerXml->setAttribute('AnswerId', $optionId);
+                        $answerXml->setAttribute('AnswerId', $id);
                         $answerXml->setAttribute('EffectOnSearchPath', '0');
                         // add answer element
                         ++$answerCount;
+}
                     }
                 }
             }
@@ -151,7 +155,7 @@ class Search
         // some mandatory arguments
         $searchInfoXml->setAttribute('PriceFieldName', 'Price');
         $searchInfoXml->setAttribute('NumberOfPages', 9999999);
-   
+        
         return $searchInfoXml;
     }
     
@@ -307,12 +311,22 @@ class Search
         return $this->_request($request);
     }
     
-    protected function _request($request)
+    protected function _request($request, $source = null)
     {
+  
         $requestUrl = $this->_requestUrl($request);
         $startTime = round(microtime(true) * 1000);
         $cacheId = $this->cache->getId(__METHOD__, array($request));
         if ($response = $this->cache->load($cacheId)) {
+            if ($this->helper->isRequestDebug()) {
+                $stime = round(microtime(true) * 1000) - $startTime;
+                $message = [
+                    'title' => __('Celebros Search Engine'),
+                    'request' => $requestUrl,
+                    'cached' => 'TRUE'
+                ];
+                $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
+            }
             return $this->_parseResponse($response);
         } else {
             $ch = curl_init();
@@ -331,7 +345,13 @@ class Search
             
             if ($this->helper->isRequestDebug()) {
                 $stime = round(microtime(true) * 1000) - $startTime;
-                $this->messageManager->addWarning(__('Celebros Search Engine:') . '<br>' . $requestUrl . ' <br>(' . $stime . 'ms)');
+                $message = [
+                    'title' => __('Celebros Search Engine'),
+                    'request' => $requestUrl,
+                    'cached' => 'FALSE',
+                    'duration' => $stime . 'ms'
+                ];  
+                $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
             }
             
             return $this->_parseResponse($response);

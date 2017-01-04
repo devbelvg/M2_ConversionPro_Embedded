@@ -47,7 +47,7 @@ class LayoutLoadBefore implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $currentHandle = $observer->getEvent()->getFullActionName();
-        if ($this->_helper->isActiveEngine()) {
+        if ($this->_helper->isActiveEngine(get_class($this))) {
             if (isset($this->handles[$currentHandle])) {
                 return $this->_addHandleToLayout($observer, $this->handles[$currentHandle]);
             }
