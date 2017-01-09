@@ -8,6 +8,8 @@ use \Magento\Framework\Simplexml\Element as XmlElement;
 class FilterList extends \Magento\Catalog\Model\Layer\FilterList
 {
     const QUESTION_FILTER = 'question';
+    
+    const APPLIED_FILTERS_ATTRIBUTE = 'SideText';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -62,7 +64,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             $questions = $response->QwiserSearchResults->Questions;
             foreach ($questions->children() as $question) {
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
-                $this->appliedFilters[] = $question->getAttribute('Text');
+                $this->appliedFilters[] = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
             }
         }
 
@@ -74,20 +76,20 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         $remFilters = array_unique($remFilters);
         foreach ($this->request->getParams() as $var => $value) {
             if (in_array($var, $remFilters)) {
-                $question = $this->searchHelper->getQuestionByField($var, 'Text');
+                $question = $this->searchHelper->getQuestionByField($var, self::APPLIED_FILTERS_ATTRIBUTE);
                 if ($question) {
-                    $var = $question->getAttribute('Text');
+                    $var = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
                     $this->createQuestionFilter($question, $layer)->apply($this->request);
                     $this->appliedFilters[] = $var;    
                 }
             }
-            
-            if ($var == 'price' && !in_array($priceQuestion->getAttribute('Text'), $this->appliedFilters)) {
+           
+            if ($var == 'price' && !in_array($priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE), $this->appliedFilters)) {
                 $this->createQuestionFilter($priceQuestion, $layer)->apply($this->request);
-                $this->appliedFilters[] = $priceQuestion->getAttribute('Text');
+                $this->appliedFilters[] = $priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
             }
         }
-
+        
         return $this->filters;
     }
 
