@@ -63,6 +63,7 @@ class Search
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Cache $cache,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\App\Action\Context $context,
         \Psr\Log\LoggerInterface $logger)
     {
         $this->session = $session;
@@ -70,6 +71,7 @@ class Search
         $this->helper = $helper;
         $this->cache = $cache;
         $this->logger = $logger;
+        $this->context = $context;
         $this->messageManager = $messageManager;
     }
     
@@ -291,11 +293,33 @@ class Search
             $searchHandle, ($isNewSearch ? '1' : '0'), $previousSearchHandle);
         $response = $this->_request($request);
         
+        $this->isFallbackRedirect($response);
+        
         // save previous search handle
         $previousSearchHandle = $response->QwiserSearchResults->getAttribute('SearchHandle');
         $this->session->setPreviousSearchHandle($previousSearchHandle);
         
         return $response;
+    }
+    
+    public function isFallbackRedirect($results)
+    {
+        $maxMatchClassFound = $results->QwiserSearchResults->getAttribute("MaxMatchClassFound");
+        $minMatchClassFound = $results->QwiserSearchResults->getAttribute("MinMatchClassFound");
+        $searchInfo = $results->QwiserSearchResults->SearchInformation;
+        $redirect = FALSE;
+        if ($param = $searchInfo->SpecialCasesDetectedInThisSession->asArray()) {
+            if (isset($param['Value']) && $param['Value'] == 'NoResultsFallbackEmptyQuery') {
+                $redirect = ($this->helper->isFallbackRedirectEnabled() && $this->helper->fallbackRedirectUrl()) ? TRUE : FALSE;
+            }
+        }
+        
+        if ($maxMatchClassFound == 'None' && $minMatchClassFound == 'None' && $redirect) {
+            $this->context->getRedirect()->redirect(
+                $this->context->getResponse(),
+                $this->helper->fallbackRedirectUrl()
+            );
+        }
     }
     
     public function getAllQuestions()

@@ -34,6 +34,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
     const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
     
+    const XML_PATH_FALLBACK_REDIRECT = 'conversionpro/display_settings/fallback_redirect';
+    const XML_PATH_FALLBACK_REDIRECT_URL = 'conversionpro/display_settings/fallback_redirect_url';
+    
     const XML_PATH_NAV_TO_SEARCH_ENABLED           = 'conversionpro/nav_to_search/enabled';
     const XML_PATH_NAV_TO_SEARCH_BLACKLIST_ENABLED = 'conversionpro/nav_to_search/blacklist_enabled';
     const XML_PATH_NAV_TO_SEARCH_BLACKLIST         = 'conversionpro/nav_to_search/blacklist';
@@ -419,5 +422,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $query = [
             'price' => self::PRICE_RANGE_TEMPLATE];
         return $this->_urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);    
+    }
+    
+    public function isFallbackRedirectEnabled($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_FALLBACK_REDIRECT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );    
+    }
+    
+    public function fallbackRedirectUrl($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_FALLBACK_REDIRECT_URL,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );    
     }
 }
