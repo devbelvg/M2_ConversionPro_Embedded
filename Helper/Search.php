@@ -218,7 +218,7 @@ class Search extends Helper\AbstractHelper
             $parentIds);
         $names[] = $category->getName();
         
-        return implode(' ', $names);
+        return str_replace(',', ' ', implode(' ', $names));
     }
     
     public function getValueFromRequest($requestVar)
