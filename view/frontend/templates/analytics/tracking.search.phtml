@@ -13,6 +13,7 @@ require(["<?php echo $protocol ?>://<?php echo $this->getHost(); ?><?php echo $t
 <?php if ($qwisersearchloghandle = $this->getQwiserSearchLogHandle()): ?>
     CelebrosAnalytics.qwisersearchloghandle = '<?php echo $qwisersearchloghandle ?>';
 <?php endif; ?>
+    CelebrosAnalytics.issecured = <?php echo ($this->getRequest()->isSecure()) ? 'true' : 'false' ?>;
     CelebrosAnalytics.AI_LogSearchResult();
 });
 </script>
