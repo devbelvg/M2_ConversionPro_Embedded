@@ -62,7 +62,6 @@ class Search
         Session $session,
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Cache $cache,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Action\Context $context,
         \Psr\Log\LoggerInterface $logger)
     {
@@ -72,7 +71,6 @@ class Search
         $this->cache = $cache;
         $this->logger = $logger;
         $this->context = $context;
-        $this->messageManager = $messageManager;
     }
     
     public function createSearchHandle($query, Object $params = null)
