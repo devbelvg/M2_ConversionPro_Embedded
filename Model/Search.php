@@ -71,6 +71,7 @@ class Search
         $this->cache = $cache;
         $this->logger = $logger;
         $this->context = $context;
+        $this->messageManager = $context->getMessageManager();
     }
     
     public function createSearchHandle($query, Object $params = null)
