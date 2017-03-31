@@ -470,7 +470,7 @@ class Search extends Helper\AbstractHelper
         $data->setTotalNum($searchResults->getAttribute('RelevantProductsCount'));
         $data->setLastPageNum($searchResults->getAttribute('NumberOfPages'));
         $data->setData('_current_grid_order', $this->sortOrderMap($searchResults->SearchInformation->SortingOptions->getAttribute('FieldName')));
-        $data->setData('_current_grid_direction', ($searchResults->SearchInformation->SortingOptions->getAttribute('FieldName') == 'true') ? 'asc' : 'desc');
+        $data->setData('_current_grid_direction', ($searchResults->SearchInformation->SortingOptions->getAttribute('Ascending') == 'true') ? 'asc' : 'desc');
         return $data;
     }
     

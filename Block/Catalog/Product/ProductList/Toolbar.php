@@ -22,22 +22,22 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
      * @var \Magento\Framework\Registry
      */
     protected $registry;
-
+    
     /**
      * @var \Celebros\ConversionPro\Helper\Data
      */
     protected $helper;
-
+    
     /**
      * @var \Celebros\ConversionPro\Helper\Search
      */
     protected $searchHelper;
-
+    
     /**
      * @var XmlElement
      */
     protected $response;
-
+    
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Session $catalogSession,
@@ -54,7 +54,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         $this->registry = $registry;
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
-
+        
         parent::__construct(
             $context,
             $catalogSession,
@@ -117,7 +117,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             return parent::setCollection($collection);
         }
     }
-
+    
     public function getTotalNum()
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
@@ -126,7 +126,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             return parent::getTotalNum();
         }
     }
-
+    
     public function getFirstNum()
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
@@ -135,7 +135,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             return parent::getFirstNum();
         }
     }
-
+    
     public function getLastNum()
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
@@ -145,7 +145,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             return parent::getLastNum();
         }
     }
-
+    
     public function getLastPageNum()
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
@@ -155,4 +155,8 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         }
     }
     
+    public function getWidgetOptionsJson(array $customOptions = [])
+    {
+        return parent::getWidgetOptionsJson(['directionDefault' => (in_array($this->getCurrentOrder(), ['relevance','position']) ? 'desc' : 'asc')]);
+    }
 }
