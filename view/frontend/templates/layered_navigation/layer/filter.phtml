@@ -63,9 +63,11 @@
 <?php endif; ?>
 <?php if ($filterType == 'price' && in_array('inputs', $helper->getFilterType())): ?>
     <?php $sHelper = $this->helper('\Celebros\ConversionPro\Helper\Search'); ?>
+    <?php if ($sHelper->getMinMaxPrices('min')): ?>
     <input onchange="convpro.minMaxCheck(this)" data-min-price="<?php echo $sHelper->getMinMaxPrices('min') ?>" id="input-price-min" placeholder="<?php echo $sHelper->getMinMaxPrices('min') ?>" class="input-text celebros-price-min" maxlength="4" type="number"><span> <?php echo __('to') ?> </span>
     <input onchange="convpro.minMaxCheck(this)" data-max-price="<?php echo $sHelper->getMinMaxPrices('max') ?>" id="input-price-max" placeholder="<?php echo $sHelper->getMinMaxPrices('max') ?>" class="input-text celebros-price-max" maxlength="4" type="number">
     <button id="price-apply-button" data-url="<?php echo $helper->getPriceUrlTemplate() ?>" class="action search" type="submit" title="<?php echo __('Search') ?>" onclick="convpro.applyPrice(this)" disabled>
         <span><?php echo __('Filter') ?></span>
     </button>
+    <?php endif; ?>
 <?php endif; ?>

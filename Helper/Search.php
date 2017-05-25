@@ -506,15 +506,20 @@ class Search extends Helper\AbstractHelper
             }
         }
         
-        if ($val == 'max') {
-            return (int)max($values);
-        } elseif ($val == 'min') {
-            return (int)min($values);
+        if (count($values) != 0) {
+            if ($val == 'max') {
+                return (int)max($values);
+            } elseif ($val == 'min') {
+                return (int)min($values);
+            }
+            
+            return [
+                'min' => min($values),
+                'max' => max($values)
+            ];
+        } else {
+            $return = $val ? false : ['min' => false, 'max' => false];
+            return $return;
         }
-        
-        return [
-            'min' => min($values),
-            'max' => max($values)
-        ];
     }
 }
