@@ -291,14 +291,31 @@ class Search
             $this->helper->getSiteKey(),
             $searchHandle, ($isNewSearch ? '1' : '0'), $previousSearchHandle);
         $response = $this->_request($request);
-        
+
         $this->isFallbackRedirect($response);
+        
+        $this->isSingleProductsRedirect($response);
         
         // save previous search handle
         $previousSearchHandle = $response->QwiserSearchResults->getAttribute('SearchHandle');
         $this->session->setPreviousSearchHandle($previousSearchHandle);
         
         return $response;
+    }
+    
+    public function isSingleProductsRedirect($results)
+    {
+        $products = $results->QwiserSearchResults->Products;
+        if ((count($products->Product) == 1) && $this->helper->isRedirectToProductEnabled()) {
+            foreach ($products->Product->Fields->Field as $field) {
+                if ($field->getAttribute('name') == \Celebros\ConversionPro\Helper\Data::RESPONSE_XML_LINK_ATTRIBUTE_NAME) {
+                    $this->context->getRedirect()->redirect(
+                        $this->context->getResponse(),
+                        $field->getAttribute('value')
+                    );    
+                }
+            }
+        }
     }
     
     public function isFallbackRedirect($results)
