@@ -311,11 +311,24 @@ class Search
                 if ($field->getAttribute('name') == \Celebros\ConversionPro\Helper\Data::RESPONSE_XML_LINK_ATTRIBUTE_NAME) {
                     $this->context->getRedirect()->redirect(
                         $this->context->getResponse(),
-                        $field->getAttribute('value')
+                        $this->prepareUrlForRedirect(str_replace('http:', '', $field->getAttribute('value')))
                     );    
                 }
             }
         }
+    }
+    
+    public function prepareUrlForRedirect($rawUrl)
+    {
+        if (strpos($rawUrl, "//") !== false && strpos($rawUrl, "//") == 0) {
+            $rawUrl = substr_replace($rawUrl, null, 0, 2);
+        }
+        
+        if (!preg_match("~^(?:f|ht)tps?://~i", $rawUrl)) {
+            $rawUrl = "http://" . $rawUrl;
+        }
+        
+        return $rawUrl;
     }
     
     public function isFallbackRedirect($results)
