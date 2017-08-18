@@ -37,7 +37,7 @@ class LayoutLoadBefore implements ObserverInterface
         $this->_request = $context->getRequest();
         $this->_helper = $helper;
         
-        $this->addCelHandle('catalog_category_view', 'celebros_layered_catalog');
+        $this->addCelHandle('catalog_category_view', 'catalog_layered_celebros');
     }
     
     /**
@@ -48,6 +48,7 @@ class LayoutLoadBefore implements ObserverInterface
     {
         $currentHandle = $observer->getEvent()->getFullActionName();
         if ($this->_helper->isActiveEngine(get_class($this))) {
+            $this->_addHandleToLayout($observer, $currentHandle . '_celebros');
             if (isset($this->handles[$currentHandle])) {
                 return $this->_addHandleToLayout($observer, $this->handles[$currentHandle]);
             }
