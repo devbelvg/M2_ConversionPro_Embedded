@@ -305,8 +305,9 @@ class Search
     
     public function isSingleProductsRedirect($results)
     {
+        $relevantProductsCount = $results->QwiserSearchResults->getAttribute('RelevantProductsCount');
         $products = $results->QwiserSearchResults->Products;
-        if ((count($products->Product) == 1) && $this->helper->isRedirectToProductEnabled()) {
+        if ($relevantProductsCount == 1 && $this->helper->isRedirectToProductEnabled()) {
             foreach ($products->Product->Fields->Field as $field) {
                 if ($field->getAttribute('name') == \Celebros\ConversionPro\Helper\Data::RESPONSE_XML_LINK_ATTRIBUTE_NAME) {
                     $this->context->getRedirect()->redirect(
