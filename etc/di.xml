@@ -33,4 +33,5 @@
     <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
     <preference for="Magento\Checkout\Block\Cart\Crosssell" type="Celebros\ConversionPro\Block\Checkout\Cart\Crosssell" />
     <preference for="Magento\Catalog\Block\Product\ProductList\Upsell" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Upsell" />
+    <preference for="Magento\TargetRule\Block\Catalog\Product\ProductList\Upsell" type="Celebros\ConversionPro\Block\TargetRule\Catalog\Product\ProductList\Upsell" />
 </config>

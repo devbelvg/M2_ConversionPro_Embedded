@@ -52,17 +52,33 @@ class CrossSell extends \Magento\Framework\App\Helper\AbstractHelper
             $url = "http://{$this->_serverAddress}/JsonEndPoint/ProductsRecommendation.aspx?siteKey={$this->_siteKey}&RequestHandle={$this->_requestHandle}&RequestType=1&SKU={$id}&Encoding=utf-8";
             $jsonData =  $this->_get_data($url);
             $obj = json_decode($jsonData);
-            for($i=0; isset($obj->Items) && $i < count($obj->Items); $i++) {
-                $arrIds[] = (int) $obj->Items[$i]->Fields->SKU;
+            for ($i=0; isset($obj->Items) && $i < count($obj->Items); $i++) {
+                $arrIds[] = $obj->Items[$i]->Fields->SKU;
             }
         }
-        
+       
         return $arrIds; 
     }
     
+    public function getRecommendationsSkus($sku)
+    {
+        $arrSkus = array();
+        if ($this->_serverAddress) {
+            $url = "http://{$this->_serverAddress}/JsonEndPoint/ProductsRecommendation.aspx?siteKey={$this->_siteKey}&RequestHandle={$this->_requestHandle}&RequestType=1&SKU={$sku}&Encoding=utf-8";
+            $jsonData =  $this->_get_data($url);
+            $obj = json_decode($jsonData);
+            for ($i=0; isset($obj->Items) && $i < count($obj->Items); $i++) {
+                $arrSkus[] = $obj->Items[$i]->Fields->SKU;
+            }
+        }
+      
+        return $arrSkus; 
+    }
+    
+    
+    
     protected function _get_data($url)
     {
-//var_dump($url);
         $data = null;
 
         $timeout = 400;
