@@ -60,6 +60,7 @@ class Upsell extends \Magento\TargetRule\Block\Catalog\Product\ProductList\Upsel
     {
         $recSkus = $this->_upsellHelper->getRecommendationsSkus($this->getProduct()->getSku());
         if ($recSkus) {
+            $recSkus = array_slice($recSkus, 0, $this->_celHelper->getCrosssellLimit());          
             $collection = $this->_productCollectionFactory->create();
             $collection->addFieldToFilter('sku', $recSkus)->addAttributeToSelect('*');
             $this->_addProductAttributesAndPrices($collection);
