@@ -141,6 +141,12 @@ class Search
             }
         }
         
+        //Profile Name
+        if ($profileName = $this->helper->getProfileName()) {
+            $searchInfoXml->setAttribute('IsDefaultSearchProfileName', 'false');
+            $searchInfoXml->setAttribute('SearchProfileName', urlencode($profileName));
+        }
+        
         // Page size
         if ($params->hasPageSize()) {
             $searchInfoXml->setAttribute('IsDefaultPageSize', 'false');
@@ -356,7 +362,7 @@ class Search
     {
         $request = sprintf(
             'GetAllQuestions?Sitekey=%s&Searchprofile=%s',
-            $this->helper->getSiteKey(), $this->helper->getProfileName());
+            $this->helper->getSiteKey(), urlencode($this->helper->getProfileName()));
         return $this->_request($request);
     }
     
@@ -370,7 +376,6 @@ class Search
     
     protected function _request($request, $source = null)
     {
-  
         $requestUrl = $this->_requestUrl($request);
         $startTime = round(microtime(true) * 1000);
         $cacheId = $this->cache->getId(__METHOD__, array($request));
