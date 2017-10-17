@@ -36,7 +36,7 @@ class LayoutLoadBefore implements ObserverInterface
         $this->_layout = $context->getLayout();
         $this->_request = $context->getRequest();
         $this->_helper = $helper;
-        
+       
         $this->addCelHandle('catalog_product_view', 'catalog_product_view_celebros');
     }
     
@@ -47,8 +47,12 @@ class LayoutLoadBefore implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $currentHandle = $observer->getEvent()->getFullActionName();
+        $allHandles =  $this->_layout->getUpdate()->getHandles();
         if ($this->_helper->isActiveEngine(get_class($this))) {
             $this->_addHandleToLayout($observer, $currentHandle . '_celebros');
+            if (in_array('catalog_category_view_type_layered', $allHandles)) {
+                $this->_addHandleToLayout($observer, 'catalog_layered_celebros');
+            }
         }
         
         if (isset($this->handles[$currentHandle])) {
