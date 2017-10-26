@@ -5,4 +5,4 @@ Celebros ConversionPro Embedded
 1.1.1 - 1.1.5 - technical fixes
 1.1.6 - fix for upsell on EE
 1.1.7 - profiles fixed
-1.1.8 - 1.1.9 - tech fix
+1.1.8 - 1.1.10 - tech fix

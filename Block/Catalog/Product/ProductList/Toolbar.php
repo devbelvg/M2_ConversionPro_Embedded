@@ -93,7 +93,9 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     public function getAvailableOrders()
     {
         $avOrders = parent::getAvailableOrders();
-        if ($this->helper->isRelevanceNav2Search() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isRelevanceNav2Search() 
+        && $this->helper->isPermittedHandle()
+        && $this->helper->isActiveEngine()) {
             if (isset($avOrders['position'])) {
                 unset($avOrders['position']);
             }
