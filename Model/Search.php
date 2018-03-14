@@ -48,6 +48,8 @@ class Search
      */
     protected $logger;
 
+    protected $newSearch = true;
+    
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
@@ -83,6 +85,7 @@ class Search
     // see Magento 1 version: Celebros/Conversionpro/Model/Mysql4/Fulltext/Engine.php:100
     public function createSearchInfoXml(DataObject $params = null)
     {
+        $this->newSearch = true;
         !is_null($params) or $params = new DataObject();
         
         // Search string
@@ -100,6 +103,7 @@ class Search
             $answersXml = $searchInfoXml->addChild('QwiserAnsweredAnswers');
             $answerCount = 0;
             foreach ($params->getFilters() as $name => $optionIds) {
+            $this->newSearch = false;
                 if (!in_array($name, $this->systemFilters)) {
                     is_array($optionIds) or $optionIds = array($optionIds);
                     foreach ($optionIds as $optionId) {
@@ -116,9 +120,10 @@ class Search
                 }
             }
             
+           
             $answersXml->setAttribute('Count', $answerCount);
         }
-        
+     
         // Sorting
         if ($params->hasSortBy() && is_array($params->getSortBy())) {
             // [<field-name>, <order>]
@@ -295,7 +300,11 @@ class Search
         $request = sprintf(
             'GetCustomResults?Sitekey=%s&SearchHandle=%s&NewSearch=%s&PreviousSearchHandle=%s',
             $this->helper->getSiteKey(),
-            $searchHandle, ($isNewSearch ? '1' : '0'), $previousSearchHandle);
+            $searchHandle,
+            ($this->newSearch ? '1' : '0'),
+            (!$this->newSearch ? $previousSearchHandle : '')
+        );
+        
         $response = $this->_request($request);
 
         $this->isFallbackRedirect($response);
