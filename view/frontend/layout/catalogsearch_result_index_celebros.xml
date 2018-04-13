@@ -15,7 +15,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\RecommendedMessage" before="search_result_list.celebros_custom_message" name="search_result_list.celebros_recommended" template="catalog/product/list/recommended_message.phtml"/>
-            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\CustomMessage" before="catalog_list.celebros_banner" name="search_result_list.celebros_custom_message" template="catalog/product/list/custom_message.phtml"/>
+            <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\CustomMessage" before="search_result_list.celebros_banner" name="search_result_list.celebros_custom_message" template="catalog/product/list/custom_message.phtml"/>
             <block class="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Banner" before="search.result" name="search_result_list.celebros_banner" template="catalog/product/list/banner.phtml"/>
             <block class="Celebros\ConversionPro\Block\Analytics\View" name="catalogsearch_celebros_analytics" after="-" template="analytics/tracking.search.phtml"/>
             <block class="Magento\Framework\View\Element\Template" name="conversionpro.js" after="-" template="Celebros_ConversionPro::catalog/js.phtml" />
