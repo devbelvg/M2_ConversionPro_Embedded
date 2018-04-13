@@ -17,7 +17,8 @@ class CampaignTypes
 {
     public $campaignTypes = [
         'Banners' => 'banners',
-        'Recommended Messages' => 'recommended_messages'
+        'Recommended Messages' => 'recommended_messages',
+        'Custom Message' => 'custom_message'
     ];
     
     public $handles = [

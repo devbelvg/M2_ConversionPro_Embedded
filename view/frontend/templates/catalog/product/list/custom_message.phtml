@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var Celebros\ConversionPro\Block\Catalog\Product\ProductList\CustomMessage $block
+ */
+?>
+<?php if ($this->helper('Celebros\ConversionPro\Helper\Data')->isCampaignsEnabled()) : ?>
+    <?php if ($block->hasCustomMessage()) : ?>
+        <?php $message = $block->getCustomMessage() ?>
+        <?php echo $message->getHtml(); ?>
+    <?php endif ?>
+<?php endif ?>
