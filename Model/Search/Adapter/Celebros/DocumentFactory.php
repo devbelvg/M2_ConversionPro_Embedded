@@ -25,7 +25,7 @@ class DocumentFactory
         $this->objectManager = $objectManager;
     }
 
-    public function create(XmlElement $rawDocument)
+    public function create(XmlElement $rawDocument, $score = 0)
     {
         $documentId = null;
         $entityId = 'mag_id';
@@ -33,7 +33,7 @@ class DocumentFactory
             $name = $rawField->getAttribute('name');
             $value = $rawField->getAttribute('value');
             if ($name == $entityId) {
-                $documentId = $value;
+                $documentId = $rawDocument->getAttribute('EntityId');
             } else {
                 $fields[$name] = $this->objectManager->create(
                     'Magento\Framework\Search\AbstractKeyValuePair',
@@ -43,7 +43,7 @@ class DocumentFactory
         
         $fields['score'] = $this->objectManager->create(
             'Magento\Framework\Search\AbstractKeyValuePair',
-            ['name' => 'score', 'value' => 0]
+            ['name' => 'score', 'value' => $score]
         );
       
         return $this->objectManager->create(

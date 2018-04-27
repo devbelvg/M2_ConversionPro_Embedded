@@ -113,7 +113,8 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             $this->_collection = $collection;
-            // setting current page, limit, order removed, see constructor
+            $this->_collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
+            $this->_collection->getSelect()->columns('search_result.score')->order('score ASC');
             return $this;
         } else {
             return parent::setCollection($collection);
