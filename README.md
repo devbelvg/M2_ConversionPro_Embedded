@@ -8,3 +8,4 @@ Celebros ConversionPro Embedded
 1.1.8 - 1.1.12 - tech fix
 1.1.13 - 'custom message' campaign added
 1.1.14 - sorting fix for magento 2.2.3
+1.1.15 - magefan/module-conflict-detector added to dependencies
