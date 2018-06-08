@@ -35,10 +35,12 @@ class ResponseFactory
         $entityMapping = $this->prepareEntityRowIdMapping($products);
         $score = 0;
         foreach ($products->children() as $rawDocument) {
-            $entityId = isset($entityMapping[$rawDocument->getAttribute('MagId')]) ? $entityMapping[$rawDocument->getAttribute('MagId')] : $rawDocument->getAttribute('MagId');
-            $rawDocument->setAttribute('EntityId', $entityId);
-            /** @var \Magento\Framework\Search\Document[] $documents */
-            $documents[] = $this->documentFactory->create($rawDocument, $score++);
+            $entityId = isset($entityMapping[$rawDocument->getAttribute('MagId')]) ? $entityMapping[$rawDocument->getAttribute('MagId')] : false;
+            if ($entityId) {
+                $rawDocument->setAttribute('EntityId', $entityId);
+                /** @var \Magento\Framework\Search\Document[] $documents */
+                $documents[] = $this->documentFactory->create($rawDocument, $score++);
+            }
         }
 
         $aggregations = $this->objectManager->create(

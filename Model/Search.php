@@ -57,7 +57,7 @@ class Search
     
     protected $attributeCollection;
     
-    protected $systemFilters = ['category_ids'];
+    protected $systemFilters = ['category_ids', 'visibility'];
     
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
