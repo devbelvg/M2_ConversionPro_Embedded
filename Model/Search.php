@@ -39,6 +39,11 @@ class Search
     protected $helper;
     
     /**
+     * @var Celebros\ConversionPro\Helper\Analytics
+     */
+    protected $analytics;
+    
+    /**
      * @var Celebros\ConversionPro\Helper\Search
      */
     protected $cache;
@@ -63,6 +68,7 @@ class Search
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         Session $session,
         \Celebros\ConversionPro\Helper\Data $helper,
+        \Celebros\ConversionPro\Helper\Analytics $analytics,
         \Celebros\ConversionPro\Helper\Cache $cache,
         \Magento\Framework\App\Action\Context $context,
         \Psr\Log\LoggerInterface $logger)
@@ -70,6 +76,7 @@ class Search
         $this->session = $session;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->helper = $helper;
+        $this->analytics = $analytics;
         $this->cache = $cache;
         $this->logger = $logger;
         $this->context = $context;
@@ -360,6 +367,7 @@ class Search
         }
         
         if ($maxMatchClassFound == 'None' && $minMatchClassFound == 'None' && $redirect) {
+            $this->analytics->sendAnalyticsRequest($results);
             $this->context->getRedirect()->redirect(
                 $this->context->getResponse(),
                 $this->helper->fallbackRedirectUrl()
