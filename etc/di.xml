@@ -13,7 +13,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Model\Layer\Search" type="Celebros\ConversionPro\Model\Catalog\Layer\Search" />
-    <virtualType name="searchFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\Search\FilterList">
+    <!--<virtualType name="searchFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\Search\FilterList">
         <arguments>
             <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Search\FilterableAttributeList</argument>
         </arguments>
@@ -22,7 +22,7 @@
         <arguments>
             <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Category\FilterableAttributeList</argument>
         </arguments>
-    </virtualType>
+    </virtualType>-->
     <preference for="Magento\CatalogSearch\Model\Search\RequestGenerator" type="Celebros\ConversionPro\Model\CatalogSearch\Search\RequestGenerator" />
     <preference for="Magento\Search\Model\AdapterFactory" type="Celebros\ConversionPro\Model\Search\AdapterFactory" />
     <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
@@ -34,4 +34,24 @@
     <preference for="Magento\Checkout\Block\Cart\Crosssell" type="Celebros\ConversionPro\Block\Checkout\Cart\Crosssell" />
     <preference for="Magento\Catalog\Block\Product\ProductList\Upsell" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Upsell" />
     <preference for="Magento\TargetRule\Block\Catalog\Product\ProductList\Upsell" type="Celebros\ConversionPro\Block\TargetRule\Catalog\Product\ProductList\Upsell" />
+    <virtualType name="Magento\LayeredNavigation\Block\Navigation\CelebrosCategory" type="Magento\LayeredNavigation\Block\Navigation">
+        <arguments>
+            <argument name="filterList" xsi:type="object">celebrosCategoryFilterList</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\LayeredNavigation\Block\Navigation\CelebrosSearch" type="Magento\LayeredNavigation\Block\Navigation">
+        <arguments>
+            <argument name="filterList" xsi:type="object">celebrosSearchFilterList</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="celebrosSearchFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\Search\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Search\FilterableAttributeList</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="celebrosCategoryFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Category\FilterableAttributeList</argument>
+        </arguments>
+    </virtualType>
 </config>

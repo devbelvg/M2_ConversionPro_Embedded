@@ -15,7 +15,7 @@
     <body>
         <referenceBlock name="catalog.leftnav" remove="true"/>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\LayeredNavigation\Block\Navigation\Category" name="celebros.catalog.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
+            <block class="Magento\LayeredNavigation\Block\Navigation\CelebrosCategory" name="celebros.catalog.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
                 <block class="Magento\LayeredNavigation\Block\Navigation\State" name="celebros.catalog.navigation.state" as="state"/>
                 <block class="Celebros\ConversionPro\Block\LayeredNavigation\Navigation\FilterRenderer" name="celebros.catalog.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
             </block>

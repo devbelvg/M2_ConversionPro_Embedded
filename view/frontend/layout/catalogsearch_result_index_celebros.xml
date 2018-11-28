@@ -22,7 +22,7 @@
         </referenceContainer>
         <referenceBlock name="catalogsearch.leftnav" remove="true"/>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\LayeredNavigation\Block\Navigation\Search" name="celebros.catalogsearch.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
+            <block class="Magento\LayeredNavigation\Block\Navigation\CelebrosSearch" name="celebros.catalogsearch.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
                 <block class="Magento\LayeredNavigation\Block\Navigation\State" name="celebros.catalogsearch.navigation.state" as="state"/>
                 <block class="Celebros\ConversionPro\Block\LayeredNavigation\Navigation\FilterRenderer" name="celebros.catalogsearch.navigation.renderer" as="renderer" template="Celebros_ConversionPro::layered_navigation/layer/filter.phtml"/>
             </block>
