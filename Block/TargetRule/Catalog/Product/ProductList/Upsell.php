@@ -13,6 +13,7 @@
  */
 namespace Celebros\ConversionPro\Block\TargetRule\Catalog\Product\ProductList;
 
+if (class_exists('\Magento\TargetRule\Block\Catalog\Product\ProductList\Upsell')) {
 class Upsell extends \Magento\TargetRule\Block\Catalog\Product\ProductList\Upsell
 {
     /**
@@ -72,4 +73,7 @@ class Upsell extends \Magento\TargetRule\Block\Catalog\Product\ProductList\Upsel
 
         return [];    
     }
+}
+} else {
+   class Upsell {}
 }
