@@ -27,3 +27,5 @@ Celebros ConversionPro Embedded
 1.1.18 - php require version changed
 
 1.1.19 - adaptation to magento 2.3.0
+
+1.1.20 - tech fix

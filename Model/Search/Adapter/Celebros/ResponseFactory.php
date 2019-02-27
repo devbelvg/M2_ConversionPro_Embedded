@@ -67,10 +67,10 @@ class ResponseFactory
         }
 
         $productMetadata = $this->objectManager->get('Magento\Framework\App\ProductMetadataInterface');
-        if ($productMetadata->getEdition() != 'Enterprise') {
+        if ($productMetadata->getEdition() == 'Community') {
             return $ids; 
         }
-        
+
         $products = $this->objectManager->create('Magento\Catalog\Model\Product');
         $collection = $products->getCollection()
             ->addFieldToFilter('row_id', $ids);
