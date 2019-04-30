@@ -414,7 +414,6 @@ class Search
             curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
             curl_setopt($ch, CURLOPT_TIMEOUT, 400);
-            curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
             curl_setopt($ch, CURLOPT_POST, 1);
             
             $response = curl_exec($ch);
