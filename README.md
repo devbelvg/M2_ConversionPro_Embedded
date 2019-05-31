@@ -28,4 +28,4 @@ Celebros ConversionPro Embedded
 
 1.1.19 - adaptation to magento 2.3.0
 
-1.1.20 - 1.1.21 - tech fixes
+1.1.20 - 1.1.22 - tech fixes

@@ -13,7 +13,6 @@
  */
 namespace Celebros\ConversionPro\Block\Catalog\Product\ProductList;
 
-use Magento\Framework\Object;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Simplexml\Element as XmlElement;
 
