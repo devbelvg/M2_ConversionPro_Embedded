@@ -83,13 +83,12 @@ class Search
         $this->messageManager = $context->getMessageManager();
     }
     
-    public function createSearchHandle($query, Object $params = null)
+    public function createSearchHandle($query, DataObject $params = null)
     {
         $searchInfoXml = $this->createSearchInfoXml($query, $params);
         return $this->searchInfoXmlToHandle($searchInfoXml);
     }
     
-    // see Magento 1 version: Celebros/Conversionpro/Model/Mysql4/Fulltext/Engine.php:100
     public function createSearchInfoXml(DataObject $params = null)
     {
         $this->newSearch = true;

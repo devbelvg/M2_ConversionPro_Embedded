@@ -37,7 +37,7 @@ class CustomMessage extends Template
     protected $response;
 
     /**
-     * @var Object
+     * @var DataObject
      */
     protected $customMessage;
 

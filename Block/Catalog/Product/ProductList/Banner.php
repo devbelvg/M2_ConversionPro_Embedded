@@ -13,7 +13,6 @@
  */
 namespace Celebros\ConversionPro\Block\Catalog\Product\ProductList;
 
-use Magento\Framework\Object;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Simplexml\Element as XmlElement;
 
@@ -37,12 +36,12 @@ class Banner extends Template
     protected $response;
 
     /**
-     * @var Object
+     * @var DataObject
      */
     protected $bannerImage;
 
     /**
-     * @var Object
+     * @var DataObject
      */
     protected $bannerFlash;
 

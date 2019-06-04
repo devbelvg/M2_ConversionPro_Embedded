@@ -33,7 +33,6 @@ class Mapper
 
     public function buildQuery(RequestInterface $request)
     {
-        // $params = new Object();
         $params = $this->searchHelper->getSearchParams();
         $this->processQuery(
             $request->getQuery(),
