@@ -15,7 +15,13 @@ namespace Celebros\ConversionPro\Model\ResourceModel\Catalog\Fulltext;
 
 use Magento\Framework\DB\Select;
 
-class Collection extends \Magento\CatalogStaging\Model\ResourceModel\Fulltext\Collection
+if (class_exists('\Magento\CatalogStaging\Model\ResourceModel\Fulltext\Collection')) {
+    class CelCollection extends \Magento\CatalogStaging\Model\ResourceModel\Fulltext\Collection { }
+} else {
+    class CelCollection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection { }
+}
+
+class Collection extends CelCollection   
 {
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
