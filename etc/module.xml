@@ -12,9 +12,10 @@
  * @package     Celebros_ConversionPro
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Celebros_ConversionPro" setup_version="1.1.24">
+    <module name="Celebros_ConversionPro" setup_version="1.1.25">
         <sequence>
             <module name="Magento_LayeredNavigation"/>
+            <module name="Celebros_Main"/>
         </sequence>
     </module>
 </config>

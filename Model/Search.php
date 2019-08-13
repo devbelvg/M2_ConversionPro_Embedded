@@ -23,6 +23,9 @@ class SearchResponseErrorException extends SearchException {}
 
 class Search
 {
+    const CURLOPT_CONNECTTIMEOUT = 100;
+    const CURLOPT_TIMEOUT = 400;
+    
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
@@ -411,13 +414,13 @@ class Search
             curl_setopt($ch, CURLOPT_URL, $this->_requestUrl($request));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 400);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::CURLOPT_CONNECTTIMEOUT);
+            curl_setopt($ch, CURLOPT_TIMEOUT, self::CURLOPT_TIMEOUT);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: text/xml'));
+            curl_setopt($ch, CURLOPT_POST, false);
             $response = curl_exec($ch);
             curl_close($ch);
-            
+      
             $this->cache->save($response, $cacheId);
             
             if ($this->helper->isRequestDebug()) {
