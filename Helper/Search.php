@@ -351,11 +351,13 @@ class Search extends Helper\AbstractHelper
     public function getPriceQuestionMock()
     {
         $allQuestions = $this->getAllQuestions()->Questions->Question;
-        foreach ($allQuestions as $mock) {
+        foreach ($allQuestions as $question) {
+            $mock = clone $question;
             $mock->setAttribute('Id', 'PriceQuestion');
             $mock->setAttribute('Text', 'By price range');
             $mock->setAttribute('SideText', 'Price');
             $mock->setAttribute('Type', 'Price');
+            
             return $mock;
         }  
     }

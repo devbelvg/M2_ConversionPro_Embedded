@@ -14,6 +14,11 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
     protected $helper;
 
     /**
+     * @var array
+     */
+    protected $qNames = [];
+    
+    /**
      * @var \Celebros\ConversionPro\Helper\Search
      */
     protected $searchHelper;
@@ -46,29 +51,40 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
         if (!empty($response->Questions)) {
             foreach ($response->Questions->children() as $question) {
                 $name = $question->getAttribute('Text');
-                $queryName = $name . '_query';
-                $request['queries']['quick_search_container']['queryReference'][] = [
-                    'clause' => 'should',
-                    'ref' => $queryName];
-                $filterName = $name . self::FILTER_SUFFIX;
-                $request['queries'][$queryName] = [
-                    'name' => $queryName,
-                    'type' => QueryInterface::TYPE_FILTER,
-                    'filterReference' => [['ref' => $filterName]]];
-                $bucketName = $name . self::BUCKET_SUFFIX;
-                $request['filters'][$filterName] = [
-                    'type' => FilterInterface::TYPE_TERM,
-                    'name' => $filterName,
-                    'field' => $name,
-                    'value' => '$' . $name . '$'];
-                $request['aggregations'][$bucketName] = [
-                    'type' => BucketInterface::TYPE_TERM,
-                    'name' => $bucketName,
-                    'field' => $name,
-                    'metric' => [["type" => "count"]]];
+                if (!in_array($name, $this->qNames)) {
+                    $queryName = $name . '_query';
+                    $request['queries']['quick_search_container']['queryReference'][] = [
+                        'clause' => 'should',
+                        'ref' => $queryName
+                    ];
+                    $filterName = $name . self::FILTER_SUFFIX;
+                    $request['queries'][$queryName] = [
+                        'name' => $queryName,
+                        'type' => QueryInterface::TYPE_FILTER,
+                        'filterReference' => [
+                            ['ref' => $filterName]
+                        ]
+                    ];
+                    $bucketName = $name . self::BUCKET_SUFFIX;
+                    $request['filters'][$filterName] = [
+                        'type' => FilterInterface::TYPE_TERM,
+                        'name' => $filterName,
+                        'field' => $name,
+                        'value' => '$' . $name . '$'
+                    ];
+                    $request['aggregations'][$bucketName] = [
+                        'type' => BucketInterface::TYPE_TERM,
+                        'name' => $bucketName,
+                        'field' => $name,
+                        'metric' => [
+                            ["type" => "count"]
+                        ]
+                    ];
+                    $this->qNames[] = $name;
+                }
             }
         }
-        
+      
         return $request;
     }
 
