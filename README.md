@@ -31,3 +31,5 @@ Celebros ConversionPro Embedded
 1.1.20 - 1.1.27 - tech fixes
 
 1.1.28 - issue with duplicate attributes fixed
+
+1.1.29 - tech fixes
