@@ -50,6 +50,7 @@ class Question extends Layer\Filter\AbstractFilter
                 $this->getRequestVar(),
                 $filter
             );
+
             $values = $this->searchHelper->filterValueToArray($filter);
             foreach ($values as $value) {
                 $text = $this->getOptionText($value);
@@ -57,6 +58,7 @@ class Question extends Layer\Filter\AbstractFilter
                 $item->setSelectedValues($values);
                 $this->getLayer()->getState()->addFilter($item);
             }
+
             $this->_updateItems($values);
         }
     }
@@ -103,7 +105,7 @@ class Question extends Layer\Filter\AbstractFilter
         }
         
         if ($this->hasQuestion()) {
-            $reqVar =  $this->getQuestion()->getAttribute('Text');
+            $reqVar = $this->getQuestion()->getAttribute('SideText');
         }
         
         return $this->searchHelper->checkRequestVar($reqVar);

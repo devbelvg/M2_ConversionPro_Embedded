@@ -75,7 +75,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         
         $remFilters = array_unique($remFilters);
         foreach ($this->request->getParams() as $var => $value) {
-            if (in_array($var, $remFilters)) {
+            if (in_array($var, $remFilters) && !in_array($var, $this->appliedFilters)) {
                 $question = $this->searchHelper->getQuestionByField($var, self::APPLIED_FILTERS_ATTRIBUTE);
                 if ($question) {
                     $var = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
