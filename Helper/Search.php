@@ -119,16 +119,22 @@ class Search extends Helper\AbstractHelper
     public function getCustomResults(DataObject $params = null)
     {
         $params = is_null($params) ? $this->getSearchParams() : clone $params;
-        // order
-        if (!is_null($this->order) && !$params->hasSortBy())
-            $params->setSortBy($this->order);
-        // page size
-        if (!is_null($this->pageSize) && !$params->hasPageSize())
-            $params->setPageSize($this->pageSize);
-        // current page
-        if (!is_null($this->currentPage) && !$params->hasCurrentPage())
-            $params->setCurrentPage($this->currentPage - 1);
         
+        // order
+        if (!is_null($this->order) && !$params->hasSortBy()) {
+            $params->setSortBy($this->order);
+        }    
+        
+        // page size
+        if (!is_null($this->pageSize) && !$params->hasPageSize()) {
+            $params->setPageSize($this->pageSize);
+        }    
+            
+        // current page
+        if (!is_null($this->currentPage) && !$params->hasCurrentPage()) {
+            $params->setCurrentPage($this->currentPage - 1);
+        }
+       
         $searchHandle = $this->search->createSearchHandle($params);
         if (!isset($this->customResultsCache[$searchHandle])) {
             $this->customResultsCache[$searchHandle] = $this->search->getCustomResults($searchHandle, true, '');

@@ -66,7 +66,11 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             $data
         );
         
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) { 
+            if (!$this->getDefaultOrder()) {
+                $this->searchHelper->setOrder('relevance','desc');
+            }
+            
             // set block module name required to use same template as original
             $this->setModuleName('Magento_Catalog');
             // set current page, limit, order to search helper instead of collection
@@ -77,7 +81,7 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
             || in_array($this->getCurrentOrder(), ['relevance','position'])) {
                 $this->setDefaultDirection('desc');
             }
-            
+ 
             $this->searchHelper->setOrder(
                 $this->getCurrentOrder(),
                 $this->getCurrentDirection()
@@ -165,5 +169,18 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     public function getWidgetOptionsJson(array $customOptions = [])
     {
         return parent::getWidgetOptionsJson(['directionDefault' => (in_array($this->getCurrentOrder(), ['relevance','position']) ? 'desc' : 'asc')]);
+    }
+    
+    protected function getOrderField()
+    {
+        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+            if ($this->_orderField === null) {
+                $this->_orderField = 'relevance';
+            }
+        
+            return $this->_orderField;
+        }
+        
+        return parent::getOrderField();
     }
 }

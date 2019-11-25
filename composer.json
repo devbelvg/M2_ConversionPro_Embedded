@@ -2,16 +2,16 @@
     "name": "celebros/module-conversionpro-embedded",
     "description": "Celebros ConversionPro Embedded",
     "type": "magento2-module",
-    "version": "1.1.30",
+    "version": "1.1.31",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
         "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|7.1.*|7.2.*|7.3.*",
-        "celebros/module-celexport": ">=1.0.0",
-        "celebros/module-autocomplete": ">=1.0.0",
-        "celebros/module-main": ">=0.9.0",
+        "celebros/module-celexport": ">=1.4.7",
+        "celebros/module-autocomplete": ">=1.2.3",
+        "celebros/module-main": ">=0.9.6",
         "magefan/module-conflict-detector": ">=2.0.4"
     },
     "autoload": {

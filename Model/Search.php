@@ -86,9 +86,9 @@ class Search
         $this->messageManager = $context->getMessageManager();
     }
     
-    public function createSearchHandle($query, DataObject $params = null)
+    public function createSearchHandle(DataObject $params = null)
     {
-        $searchInfoXml = $this->createSearchInfoXml($query, $params);
+        $searchInfoXml = $this->createSearchInfoXml($params);
         return $this->searchInfoXmlToHandle($searchInfoXml);
     }
     
@@ -96,10 +96,9 @@ class Search
     {
         $this->newSearch = true;
         !is_null($params) or $params = new DataObject();
-        
+       
         // Search string
         $searchInfoXml = new XmlElement('<SearchInformation/>');
-        
         if ($params->hasQuery()) {
             $query = $this->_escapeQueryString($params->getQuery());
             $searchInfoXml->addChild('Query', $query);
