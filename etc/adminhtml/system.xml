@@ -13,9 +13,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="celebros" translate="label" sortOrder="200000" class="celebros-tab">
-            <label></label>
-        </tab>
         <section id="conversionpro" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
             <label>Conversion Pro Embedded</label>
             <class>separator-top conversionpro-tab</class>
@@ -133,43 +130,6 @@
                 <field id="relevance_rename" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Add Relevance Sort Order</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-            </group>
-            <group id="crosssell_settings" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
-                <label>CrossSell and Upsell Settings</label>
-                <field id="crosssell_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Enable Cart Crosssell</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="crosssell_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>No. of Crosssell Items in Cart</label>
-                    <validate>validate-number validate-greater-than-zero</validate>
-                    <depends>
-                        <field id="crosssell_enabled">1</field>
-                    </depends>
-                </field>
-                <field id="upsell_enabled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Enable Product Page Upsell</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>   
-                <field id="upsell_limit" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>No. of Upsell Items in Product Page</label>
-                    <validate>validate-number validate-greater-than-zero</validate>
-                    <depends>
-                        <field id="upsell_enabled">1</field>
-                    </depends>
-                </field>
-                <field id="crosssell_customer_name" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Cross-Sell Customer Name</label>
-                    <comment>Cross-Sell customer name as defined by Celebros</comment>
-                </field>
-                <field id="crosssell_request_handle" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Cross-Sell Request Handle</label>
-                    <comment>Cross-Sell request handle name as defined by Celebros</comment>
-                </field>
-                <field id="crosssell_address" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Cross-Sell Server</label>
-                    <comment>Host name / ip of the server on which the Cross-Sell resides</comment>
                 </field>
             </group>
             <group id="anlx_settings" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">

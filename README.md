@@ -33,3 +33,5 @@ Celebros ConversionPro Embedded
 1.1.28 - issue with duplicate attributes fixed
 
 1.1.29 - 1.1.31 - tech fixes
+
+1.2.0 - crossells/upsells has removed from module

@@ -37,15 +37,6 @@
                 <category_query_type>name</category_query_type>
                 <relevance_rename>0</relevance_rename>
             </nav_to_search>
-            <crosssell_settings>
-                <crosssell_enabled>0</crosssell_enabled>
-                <crosssell_limit>4</crosssell_limit>
-                <upsell_enabled>0</upsell_enabled>
-                <upsell_limit>4</upsell_limit>
-                <crosssell_customer_name></crosssell_customer_name>
-                <crosssell_request_handle></crosssell_request_handle>
-                <crosssell_address></crosssell_address>
-            </crosssell_settings>
             <anlx_settings>
                 <host></host>
                 <cid></cid>

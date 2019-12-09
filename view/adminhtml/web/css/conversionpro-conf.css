@@ -1,12 +1,3 @@
-.config-nav-block.celebros-tab strong::before {
-    background: url(../images/celebros-tab-logo.png) no-repeat;
-    width: 366px;
-    height: 20px;
-    content: '';
-    display: inline-block;
-    margin-right: 12px;
-    vertical-align: bottom;
-}
 .config-nav-block .conversionpro-tab span {
     background: url(../images/celebros-conversionpro-tab-logo.png) no-repeat;
     padding-left: 28px;
