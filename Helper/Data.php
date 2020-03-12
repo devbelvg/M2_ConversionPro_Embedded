@@ -453,4 +453,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );    
     }
+    
+    public function filterValueToArray($value)
+    {
+        if (!is_array($value)) {
+            return array_map('intval', explode(',', $value));
+        }
+      
+        return (array)$value;
+    }
 }

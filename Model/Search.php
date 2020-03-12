@@ -115,7 +115,7 @@ class Search
                 if (!in_array($name, $this->systemFilters)) {
                     is_array($optionIds) or $optionIds = array($optionIds);
                     foreach ($optionIds as $optionId) {
-                        $optionId = explode(',', urldecode($optionId));
+                        $optionId = $this->helper->filterValueToArray($optionId);
                         foreach ($optionId as $id) {
                             // create answer element
                             $answerXml = $answersXml->addChild('QwiserAnsweredAnswer');

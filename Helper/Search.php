@@ -283,11 +283,7 @@ class Search extends Helper\AbstractHelper
     
     public function filterValueToArray($value)
     {
-        if (is_string($value)) {
-            return explode(',', $value);
-        }
-        
-        return $value;
+        return $this->helper->filterValueToArray($value);
     }
     
     public function getFilterRequestVars()
