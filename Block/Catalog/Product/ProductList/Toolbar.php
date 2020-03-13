@@ -113,22 +113,6 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         return $avOrders;
     }
     
-    public function setCollection($collection)
-    {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
-            $this->_collection = $collection;
-            $fromPart = $this->_collection->getSelect()->getPart('from');
-            if (is_array($fromPart) && array_key_exists('search_result', $fromPart)) {
-                $this->_collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-                $this->_collection->getSelect()->columns('search_result.score')->order('score ASC');    
-            };
-            
-            return $this;
-        } else {
-            return parent::setCollection($collection);
-        }
-    }
-    
     public function getTotalNum()
     {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
