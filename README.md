@@ -35,3 +35,5 @@ Celebros ConversionPro Embedded
 1.1.29 - 1.1.31 - tech fixes
 
 1.2.0 - crossells/upsells has removed from module
+
+1.2.1 - sorting on search and category pages has been fixed

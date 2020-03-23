@@ -10,6 +10,8 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
     const QUESTION_FILTER = 'question';
     
     const APPLIED_FILTERS_ATTRIBUTE = 'SideText';
+    
+    const PRICE_FILTER_NAME = 'Price';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -49,6 +51,28 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         parent::__construct($objectManager, $filterableAttributes, $filters);
     }
 
+    public function sortFilters($questions) : array
+    {
+        $priceSortOrder = $this->helper->getPriceFilterPosition();
+        $questionsList = [];
+        $sort = 1;
+        foreach ($questions->children() as $question) {
+            if ($priceSortOrder == $sort) {
+                $sort++;
+            }
+            
+            if ($question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE) == self::PRICE_FILTER_NAME) {
+                $questionsList[$priceSortOrder] = $question;
+            } else {
+                $questionsList[$sort++] = $question;
+            }
+        }
+        
+        ksort($questionsList);
+
+        return $questionsList;
+    }
+
     public function getFilters(Layer $layer)
     {
         if (!$this->helper->isActiveEngine()) {
@@ -62,7 +86,8 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             // $response = $this->_getResponse($layer);
             $response = $this->searchHelper->getCustomResults();
             $questions = $response->QwiserSearchResults->Questions;
-            foreach ($questions->children() as $question) {
+            $questionsList = $this->sortFilters($questions);
+            foreach ($questionsList as $question) {
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
                 $this->appliedFilters[] = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
             }

@@ -64,7 +64,10 @@
                     <label>Price Filter Type</label>
                     <source_model>Celebros\ConversionPro\Model\Config\Source\PriceFilterTypes</source_model>
                 </field>
-                
+                <field id="filter_price_position" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Price Filter Position</label>
+                    <validate>required-entry validate-digits validate-zero-or-greater</validate>
+                </field>
                 <field id="collapse" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Collapse Answers</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
