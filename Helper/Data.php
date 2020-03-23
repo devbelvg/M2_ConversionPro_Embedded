@@ -30,6 +30,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CAMPAIGNS_TYPE              = 'conversionpro/display_settings/campaigns_type';
     const XML_PATH_PROFILE_NAME                = 'conversionpro/display_settings/profile_name';
     const XML_PATH_PRICE_FILTER_TYPE           = 'conversionpro/display_settings/filter_price_type';
+    const XML_PATH_PRIC_FILTER_POSITION        = 'conversionpro/display_settings/filter_price_position';
     const XML_PATH_GO_TO_PRODUCT_ON_ONE_RESULT = 'conversionpro/display_settings/go_to_product_on_one_result';
     
     const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
@@ -432,7 +433,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getPriceUrlTemplate()
     {
         $query = [
-            'price' => self::PRICE_RANGE_TEMPLATE];
+            'price' => self::PRICE_RANGE_TEMPLATE
+        ];
+        
         return $this->_urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);    
     }
     
@@ -453,4 +456,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );    
     }
+    
+    public function getPriceFilterPosition($store = null) : int
+    {
+        $position = $this->scopeConfig->getValue(
+            self::XML_PATH_PRIC_FILTER_POSITION,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        ); 
+        
+        return (int)$position;
+    }    
 }

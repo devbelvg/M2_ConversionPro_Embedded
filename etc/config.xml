@@ -28,6 +28,7 @@
                 <collapse_qty>4</collapse_qty>
                 <go_to_product_on_one_result>0</go_to_product_on_one_result>
                 <filter_price_type>default</filter_price_type>
+                <filter_price_position>1</filter_price_position>
                 <fallback_redirect>0</fallback_redirect>
                 <fallback_redirect_url></fallback_redirect_url>
             </display_settings>
