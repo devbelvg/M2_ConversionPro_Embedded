@@ -457,6 +457,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );    
     }
     
+
+    public function filterValueToArray($value)
+    {
+        if (!is_array($value)) {
+            return array_map('intval', explode(',', $value));
+        }
+      
+        return (array)$value;
+    }
+
     public function getPriceFilterPosition($store = null) : int
     {
         $position = $this->scopeConfig->getValue(
