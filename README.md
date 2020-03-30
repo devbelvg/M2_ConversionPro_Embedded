@@ -37,3 +37,5 @@ Celebros ConversionPro Embedded
 1.2.0 - crossells/upsells has removed from module
 
 1.2.1 - sorting on search and category pages has been fixed
+
+1.2.2 - price filter sorting and filter search have been added
