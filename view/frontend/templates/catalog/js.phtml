@@ -1,80 +1,106 @@
 <?php $helper = $this->helper('\Celebros\ConversionPro\Helper\Data'); ?>
 <script>
-function ConversionPro(multiselect, collapse, qty) {
-    this.isMultiselect = multiselect;
-    this.isCollapsed = collapse;
-    this.collapsedQty = qty;
-    this.itemSelector = 'li.item';
-    this.moreClass = 'more-button';
-    this.lessClass = 'less-button';
-    this.priceMin = '#input-price-min';
-    this.priceMax = '#input-price-max';
-    this.priceApplyButton = '#price-apply-button';
-    this.moreButton = '<li><a class="filters_more_button" href="#">+ <?php echo __('More') ?></a></li>';
-    this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
-    here = this;
-    this.clickCheckbox = function (el) {
-        href = jQuery(el).data('href');
-        window.location.href = href;
-    };
-    this.clickHLink = function (el) {
-        checkbox = jQuery(el).prev();
-        if (checkbox.prop("checked")) {
-            checkbox.prop("checked", false);
-        } else {
-            checkbox.prop("checked", true);
+require(["jquery"], function (jQuery) {
+    function ConversionPro(multiselect, collapse, qty, filterSearch) {
+        this.isMultiselect = multiselect;
+        this.isCollapsed = collapse;
+        this.collapsedQty = qty;
+        this.isFilterSearch = filterSearch;
+        this.itemSelector = 'li.item';
+        this.moreClass = 'more-button';
+        this.lessClass = 'less-button';
+        this.priceMin = '#input-price-min';
+        this.priceMax = '#input-price-max';
+        this.priceApplyButton = '#price-apply-button';
+        this.moreButton = '<li><a class="filters_more_button" href="#">+ <?php echo __('More') ?></a></li>';
+        this.lessButton = '<li><a class="filters_less_button" href="#">- <?php echo __('Less') ?></a></li>';
+        here = this;
+        this.clickCheckbox = function (el) {
+            href = jQuery(el).data('href');
+            window.location.href = href;
+        };
+        this.clickHLink = function (el) {
+            checkbox = jQuery(el).prev();
+            if (checkbox.prop("checked")) {
+                checkbox.prop("checked", false);
+            } else {
+                checkbox.prop("checked", true);
+            }
+        };
+        this.collapse = function(el) {
+            elmnts = jQuery(el).parent().find(here.itemSelector);
+            if (jQuery(el).data('collapse') == 'more') {
+                elmnts.each( function(i, e) {
+                    if (jQuery(e).hasClass(here.moreClass)) {
+                        jQuery(e).addClass('hided');
+                    } else {
+                        jQuery(e).removeClass('hided');
+                    }   
+                });
+            } else {
+                elmnts.each( function(i, e) {
+                    if (i >= here.collapsedQty && !jQuery(e).hasClass(here.moreClass)) {
+                        jQuery(e).addClass('hided');
+                    } else {
+                        jQuery(e).removeClass('hided');
+                    }
+                });
+            }
+        };
+        this.addFilter = function() {
+            if (here.isFilterSearch) {
+                jQuery('#narrow-by-list .filter-options-content').each( function(list){
+                    filter_name = jQuery(this).prev().text();
+                    jQuery(this).prepend('<input type="text" id="attr-filter" placeholder="Search '+filter_name+'..." /></li>');
+                    jQuery(this).on('keyup', function() {
+                        console.log(jQuery(this).find('#attr-filter').val());
+                        var filter = jQuery(this).find('#attr-filter').val().toUpperCase();
+                        var lis = jQuery(this).find('li');
+                        for (var i = 0; i < lis.length; i++) {
+                            var name = jQuery.trim(jQuery(lis[i]).find('a').text()); console.log(name); console.log(filter);
+                            if (name.toUpperCase().indexOf(filter) != -1) 
+                                jQuery(lis[i]).css('display', 'list-item');
+                            else
+                                jQuery(lis[i]).css('display', 'none');
+                        }
+                    });
+                });
+            }
+        };
+        this.applyPrice = function(el) {
+            prices = this.minMaxCheck();
+            url = jQuery(el).data('url');
+            if (prices[0] < prices[1]) {
+                price_value = '_P' + prices[0] + '_' + prices[1];
+                window.location = url.replace("PRICE_RANGE", price_value);
+            }
+        };
+        this.minMaxCheck = function() {
+            min = jQuery(this.priceMin).val() ? parseInt(jQuery(this.priceMin).val()) : parseInt(jQuery(this.priceMin).data('min-price'));
+            min = isNaN(min) ? 0 : min;
+            max = jQuery(this.priceMax).val() ? parseInt(jQuery(this.priceMax).val()) : parseInt(jQuery(this.priceMax).data('max-price'));
+            max = isNaN(max) ? 0 : max;
+            if (max > jQuery(this.priceMax).data('max-price')) {
+                max = jQuery(this.priceMax).data('max-price');
+                jQuery(this.priceMax).val(max);
+            }
+            if (min < jQuery(this.priceMin).data('min-price')) {
+                min = jQuery(this.priceMin).data('min-price');
+                jQuery(this.priceMin).val(min);
+            }
+            
+            this.applyButtonState(1);
+            return [min, max];
+        };
+        this.applyButtonState = function(state) {
+            if (state) {
+                jQuery(this.priceApplyButton).prop("disabled", false);
+            }
         }
     };
-    this.collapse = function(el) {
-        elmnts = jQuery(el).parent().find(here.itemSelector);
-        if (jQuery(el).data('collapse') == 'more') {
-            elmnts.each( function(i, e) {
-                if (jQuery(e).hasClass(here.moreClass)) {
-                    jQuery(e).addClass('hided');
-                } else {
-                    jQuery(e).removeClass('hided');
-                }   
-            });
-        } else {
-            elmnts.each( function(i, e) {
-                if (i >= here.collapsedQty && !jQuery(e).hasClass(here.moreClass)) {
-                    jQuery(e).addClass('hided');
-                } else {
-                    jQuery(e).removeClass('hided');
-                }
-            });
-        }
-    };
-    this.applyPrice = function(el) {
-        prices = this.minMaxCheck();
-        url = jQuery(el).data('url');
-        if (prices[0] < prices[1]) {
-            price_value = '_P' + prices[0] + '_' + prices[1];
-            window.location = url.replace("PRICE_RANGE", price_value);
-        }
-    };
-    this.minMaxCheck = function() {
-        min = jQuery(this.priceMin).val() ? parseInt(jQuery(this.priceMin).val()) : parseInt(jQuery(this.priceMin).data('min-price'));
-        min = isNaN(min) ? 0 : min;
-        max = jQuery(this.priceMax).val() ? parseInt(jQuery(this.priceMax).val()) : parseInt(jQuery(this.priceMax).data('max-price'));
-        max = isNaN(max) ? 0 : max;
-        if (max > jQuery(this.priceMax).data('max-price')) {
-            max = jQuery(this.priceMax).data('max-price');
-            jQuery(this.priceMax).val(max);
-        }
-        if (min < jQuery(this.priceMin).data('min-price')) {
-            min = jQuery(this.priceMin).data('min-price');
-            jQuery(this.priceMin).val(min);
-        }
-        
-        this.applyButtonState(1);
-        return [min, max];
-    };
-    this.applyButtonState = function(state) {
-        if (state) {
-            jQuery(this.priceApplyButton).prop("disabled", false);
-        }
-    }
-};
-convpro = new ConversionPro(true, true, <?php echo $helper->collapseQty() ?>);
+    jQuery(document).ready(function() {
+        convpro = new ConversionPro(true, true, <?php echo $helper->collapseQty() ?>, <?php echo $helper->isFilterSearchEnabled() ?>);
+        convpro.addFilter();
+    });
+});
 </script>

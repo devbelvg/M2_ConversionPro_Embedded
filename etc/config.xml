@@ -26,6 +26,7 @@
                 <filter_multiselect_enabled>1</filter_multiselect_enabled>
                 <collapse>0</collapse>
                 <collapse_qty>4</collapse_qty>
+                <filter_search>0</filter_search>
                 <go_to_product_on_one_result>0</go_to_product_on_one_result>
                 <filter_price_type>default</filter_price_type>
                 <filter_price_position>1</filter_price_position>

@@ -36,6 +36,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
     const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
     
+    const XML_PATH_FILTER_SEARCH = 'conversionpro/display_settings/filter_search';
+    
     const XML_PATH_FALLBACK_REDIRECT = 'conversionpro/display_settings/fallback_redirect';
     const XML_PATH_FALLBACK_REDIRECT_URL = 'conversionpro/display_settings/fallback_redirect_url';
     
@@ -476,5 +478,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         ); 
         
         return (int)$position;
-    }    
+    }
+
+    public function isFilterSearchEnabled($store = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_FILTER_SEARCH,
+            ScopeInterface::SCOPE_STORE, $store
+        );
+    }
 }
