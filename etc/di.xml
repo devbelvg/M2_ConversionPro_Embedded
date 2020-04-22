@@ -12,7 +12,6 @@
  * @package     Celebros_ConversionPro
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Model\Layer\Search" type="Celebros\ConversionPro\Model\Catalog\Layer\Search" />
     <virtualType name="searchFilterList" type="Celebros\ConversionPro\Model\Catalog\Layer\Search\FilterList">
         <arguments>
             <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Search\FilterableAttributeList</argument>
@@ -27,11 +26,11 @@
     <preference for="Magento\Search\Model\AdapterFactory" type="Celebros\ConversionPro\Model\Search\AdapterFactory" />
     <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
     <preference for="Magento\Theme\Block\Html\Pager" type="Celebros\ConversionPro\Block\Theme\Html\Pager" />
-    <!--<preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection" type="Celebros\ConversionPro\Model\ResourceModel\CatalogSearch\Fulltext\Collection" />
-    <preference for="Magento\Catalog\Model\ResourceModel\Fulltext\Collection" type="Celebros\ConversionPro\Model\ResourceModel\Catalog\Fulltext\Collection" />
-    <preference for="Magento\CatalogStaging\Model\ResourceModel\Fulltext\Collection" type="Celebros\ConversionPro\Model\ResourceModel\Catalog\Fulltext\Collection" />-->
     <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
     <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
         <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Magento\Search\Model\EngineResolver">
+        <plugin name="Celebros_ConversionPro_Search_EngineResolver" type="Celebros\ConversionPro\Plugin\Search\EngineResolver" sortOrder="10000" disabled="false"/>
     </type>
 </config>

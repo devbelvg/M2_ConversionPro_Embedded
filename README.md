@@ -39,3 +39,5 @@ Celebros ConversionPro Embedded
 1.2.1 - sorting on search and category pages has been fixed
 
 1.2.2 - price filter sorting and filter search have been added
+
+1.2.3 - conflict with elasticsearch has been fixed
