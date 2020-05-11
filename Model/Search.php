@@ -315,6 +315,13 @@ class Search
         
         $response = $this->_request($request);
 
+        if ($this->helper->isRequestDebug()) {
+            $message = [];
+            $message['title'] = __('Celebros Search Engine');
+            $message['products_sequence'] = $this->_extractProductSequenceFromResponse($response); 
+            $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
+        }
+
         $this->isFallbackRedirect($response);
         
         $this->isSingleProductsRedirect($response);
@@ -324,6 +331,27 @@ class Search
         $this->session->setPreviousSearchHandle($previousSearchHandle);
         
         return $response;
+    }
+    
+    protected function _extractProductSequenceFromResponse(XmlElement $response) : string
+    {
+        $productSequence = [];
+        $products = $response->QwiserSearchResults->Products;
+        
+        foreach ($products->children() as $rawDocument) {
+            foreach ($rawDocument->Fields->children() as $field) {
+                if ($field->getAttribute('name') == \Celebros\ConversionPro\Helper\Data::RESPONSE_XML_TITLE_ATTRIBUTE_NAME) {
+                    $name = $field->getAttribute('value');
+                }
+                if ($field->getAttribute('name') == \Celebros\ConversionPro\Helper\Data::RESPONSE_XML_PRICE_ATTRIBUTE_NAME) {
+                    $price = $field->getAttribute('value');
+                }                
+            }
+
+            $productSequence[] = $name . '(' . $price. ')';    
+        }
+
+        return implode(", ", $productSequence);
     }
     
     public function isSingleProductsRedirect($results)

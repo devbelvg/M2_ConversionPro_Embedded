@@ -60,6 +60,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
     
     const RESPONSE_XML_LINK_ATTRIBUTE_NAME = 'Link';
+    const RESPONSE_XML_TITLE_ATTRIBUTE_NAME = 'Title';
+    const RESPONSE_XML_PRICE_ATTRIBUTE_NAME = 'Price';
     
     const PRICE_RANGE_TEMPLATE = 'PRICE_RANGE';
     
@@ -173,11 +175,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function prepareDebugMessage(Array $data)
     {
         if (isset($data['title'])) {
-            $str = __($data['title']);
+            $str = strtoupper(__($data['title']));
             unset($data['title']);
             foreach ($data as $key => $val) {
                 if ($val) {
-                    $str .= '<br>' . ucfirst(__($key)) . ': ' . $val;
+                    $str .= ' >>> ' . ucfirst(__($key)) . ': ' . $val;
                 }
             }
             
@@ -458,15 +460,30 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );    
     }
-    
 
     public function filterValueToArray($value)
     {
         if (!is_array($value)) {
+            if ($priceValue = $this->validateAndPreparePriceAnswer($value)) {
+                return $priceValue;
+            }
+            
             return array_map('intval', explode(',', $value));
         }
       
         return (array)$value;
+    }
+    
+    public function validateAndPreparePriceAnswer($value)
+    {
+        $array = explode("_", $value);
+        if (count($array) == 3
+        && (bool)$array[0] == false
+        && strpos($array[1], "P") !== false) {
+            return [implode("_", $array)];
+        }
+        
+        return false;
     }
 
     public function getPriceFilterPosition($store = null) : int
