@@ -15,6 +15,7 @@ namespace Celebros\ConversionPro\Model;
 
 use \Magento\Framework\DataObject;
 use \Magento\Framework\Simplexml\Element as XmlElement;
+use Celebros\ConversionPro\Model\Logger;
 
 class SearchException extends \Exception {}
 class SearchCurlErrorException extends SearchException {}
@@ -23,9 +24,6 @@ class SearchResponseErrorException extends SearchException {}
 
 class Search
 {
-    const CURLOPT_CONNECTTIMEOUT = 100;
-    const CURLOPT_TIMEOUT = 400;
-    
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
@@ -56,6 +54,11 @@ class Search
      */
     protected $logger;
 
+    /**
+     * @var \Magento\Framework\HTTP\Client\Curl
+     */
+    public $curl;
+
     protected $newSearch = true;
     
     /**
@@ -74,14 +77,16 @@ class Search
         \Celebros\ConversionPro\Helper\Analytics $analytics,
         \Celebros\ConversionPro\Helper\Cache $cache,
         \Magento\Framework\App\Action\Context $context,
-        \Psr\Log\LoggerInterface $logger)
-    {
+        Logger $logger,
+        \Celebros\ConversionPro\Client\Curl $curl
+    ) {
         $this->session = $session;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->helper = $helper;
         $this->analytics = $analytics;
         $this->cache = $cache;
         $this->logger = $logger;
+        $this->curl = $curl;
         $this->context = $context;
         $this->messageManager = $context->getMessageManager();
     }
@@ -435,19 +440,11 @@ class Search
                 ];
                 $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
             }
-            return $this->_parseResponse($response);
         } else {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->_requestUrl($request));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::CURLOPT_CONNECTTIMEOUT);
-            curl_setopt($ch, CURLOPT_TIMEOUT, self::CURLOPT_TIMEOUT);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: text/xml'));
-            curl_setopt($ch, CURLOPT_POST, false);
-            $response = curl_exec($ch);
-            curl_close($ch);
-      
+            $this->curl->addHeader('Accept', 'text/xml');
+            $this->curl->get($requestUrl);
+            $response = $this->curl->getBody();
+            
             $this->cache->save($response, $cacheId);
             
             if ($this->helper->isRequestDebug()) {
@@ -460,9 +457,9 @@ class Search
                 ];  
                 $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
             }
-            
-            return $this->_parseResponse($response);
         }
+        
+        return $this->_parseResponse($response);
     }
     
     protected function _getHostUrl()
@@ -481,32 +478,89 @@ class Search
         return $this->_getHostUrl() . '/' . ltrim($request, '/');
     }
     
-    protected function _parseResponse($response)
+    public function parseXmlResponse($response)
     {
-        $xml = simplexml_load_string($response, '\Magento\Framework\Simplexml\Element');
-        if ($xml === false)
-            throw new SearchServiceErrorException(__('Failed to parse service response'));
-            
-        // check if error is indicated in response
-        if ($xml->getAttribute('ErrorOccured') == 'true') {
-            if (isset($xml->QwiserError)) {
-                $errorMessage = '';
-                if (isset($xml->QwiserError->MethodName))
-                    $errorMessage .= __(
-                        'Error occured in method \'%s\': ',
-                        $xml->QwiserError->MethodName);
-                $errorMessage .= isset($xml->QwiserError->ErrorMessage)
-                    ? $xml->QwiserError->ErrorMessage
-                    : __('Unknown error');
-            }
-            throw new SearchResponseErrorException($errorMessage);
+        return $this->_parseResponse($response);
+    }
+    
+    protected function _parseResponse($response)
+    { 
+        try {
+            $xml = simplexml_load_string($response, '\Magento\Framework\Simplexml\Element');
+        } catch (\Exception $message) {
+            $this->_logException(
+                $message,
+                $response,
+                new SearchServiceErrorException($message)
+            );
         }
         
-        // check if result value is present
-        if (!isset($xml->ReturnValue))
-            throw new SearchServiceErrorException(__('No return value in response'));
+        if ($xml === false) {
+            $message = __('Service response is empty');
+            $this->_logException(
+                $message,
+                $response,
+                new SearchServiceErrorException($message)
+            );
+        }    
             
-        return $xml->ReturnValue;
+        // check if error is indicated in response
+        if ($xml->getAttribute('ErrorOccurred') == 'true') {
+            if (isset($xml->QwiserError)) {
+                $message = '';
+                if (null !== $xml->QwiserError->getAttribute('MethodName')) {
+                    $message .= sprintf(
+                        'Error occured in method %s: ',
+                        $xml->QwiserError->getAttribute('MethodName'));
+                }
+                
+                $message .= (null !== $xml->QwiserError->getAttribute('ErrorMessage'))
+                    ? $xml->QwiserError->getAttribute('ErrorMessage')
+                    : __('Unknown error');
+            }
+            
+            $this->_logException(
+                $message,
+                $response,
+                new SearchResponseErrorException($message)
+            );
+        }
+
+        if (isset($xml->ReturnValue) 
+        && $xml->ReturnValue instanceof \Magento\Framework\Simplexml\Element
+        && !empty($xml->ReturnValue)) {
+            return $xml->ReturnValue;
+        } else {
+            $message = __('No return value in response');
+            $this->_logException(
+                $message,
+                $response,
+                new SearchServiceErrorException($message)
+            );   
+        }
+        
+        return false;
+    }
+    
+    /**
+     * @param  string           $message
+     * @param  string           $response
+     * @param  \Exception|null  $exception
+     * @return void
+     */
+    protected function _logException(
+        string $message,
+        $response = null,
+        $exception = null)
+    {
+        $this->logger->warning($message);
+        if ($response) {
+            $this->logger->warning('Response: ' . $response);
+        }
+        
+        if ($exception) {
+            throw $exception;
+        }
     }
     
     protected function _escapeQueryString($query)

@@ -42,6 +42,14 @@
                         <field id="*/*/enabled">1</field>
                     </depends>
                 </field>
+                <field id="test_connection" translate="button_label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label/>
+                    <button_label>Test Connection</button_label>
+                    <frontend_model>Celebros\ConversionPro\Block\System\Config\Form\Field\TestButton</frontend_model>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="display_settings" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>Result Display Settings</label>
@@ -156,6 +164,10 @@
                 </field>
                 <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Show Current Requests (Debug)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_log" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Enable Logs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
