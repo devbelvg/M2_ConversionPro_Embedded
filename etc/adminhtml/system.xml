@@ -170,6 +170,13 @@
                     <label>Enable Logs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="upload_logs" translate="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label/>
+                    <frontend_model>Celebros\ConversionPro\Block\System\Config\Form\Field\Logs</frontend_model>
+                    <depends>
+                        <field id="*/*/enable_log">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="about" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>About</label>
