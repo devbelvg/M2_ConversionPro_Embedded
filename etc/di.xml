@@ -27,8 +27,8 @@
     <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
     <preference for="Magento\Theme\Block\Html\Pager" type="Celebros\ConversionPro\Block\Theme\Html\Pager" />
     <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
-    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
-        <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="1" disabled="false"/>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="10000" disabled="false"/>
     </type>
     <type name="Magento\Search\Model\EngineResolver">
         <plugin name="Celebros_ConversionPro_Search_EngineResolver" type="Celebros\ConversionPro\Plugin\Search\EngineResolver" sortOrder="10000" disabled="false"/>
