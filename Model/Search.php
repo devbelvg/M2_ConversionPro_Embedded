@@ -68,6 +68,8 @@ class Search
     
     protected $attributeCollection;
     
+    protected $allQuestions;
+    
     protected $systemFilters = ['category_ids', 'visibility'];
     
     public function __construct(
@@ -117,7 +119,7 @@ class Search
             $answerCount = 0;
             foreach ($params->getFilters() as $name => $optionIds) {
             $this->newSearch = false;
-                if (!in_array($name, $this->systemFilters)) {
+                if (!in_array($name, $this->systemFilters) && $this->validateRequestVar($name)) {
                     is_array($optionIds) or $optionIds = array($optionIds);
                     foreach ($optionIds as $optionId) {
                         $optionId = $this->helper->filterValueToArray($optionId);
@@ -181,6 +183,30 @@ class Search
         $searchInfoXml->setAttribute('NumberOfPages', 9999999);
         
         return $searchInfoXml;
+    }
+    
+    public function validateRequestVar(string $varName) : bool
+    {
+        $questions = $this->getAllQuestions();
+        $names = ['price'];
+        if (!empty($questions->Questions)) {
+            foreach ($questions->Questions->children() as $question) {
+                $names = array_merge($names, $this->getAltRequestVars($question->getAttribute('Text')));
+            }
+        }
+
+        return in_array($varName, $names);
+    }
+    
+    public function getAltRequestVars(string $requestVar) : array
+    {
+        $requestVar = str_replace('.', '_', $requestVar);
+        
+        return [
+            $requestVar,
+            str_replace(' ', '_', $requestVar),
+            str_replace(' ', '+', $requestVar)
+        ];    
     }
     
     public function searchInfoXmlToHandle(XmlElement $xml)
@@ -411,10 +437,15 @@ class Search
     
     public function getAllQuestions()
     {
-        $request = sprintf(
-            'GetAllQuestions?Sitekey=%s&Searchprofile=%s',
-            $this->helper->getSiteKey(), urlencode($this->helper->getProfileName()));
-        return $this->_request($request);
+        if (!$this->allQuestions) {
+            $request = sprintf(
+                'GetAllQuestions?Sitekey=%s&Searchprofile=%s',
+                $this->helper->getSiteKey(), urlencode($this->helper->getProfileName())
+            );
+            $this->allQuestions = $this->_request($request);
+        }
+        
+        return $this->allQuestions;
     }
     
     public function getQuestionAnswers($questionId)
