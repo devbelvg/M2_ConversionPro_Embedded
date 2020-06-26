@@ -17,6 +17,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Message\MessageInterface as MessageInterface;
+use Celebros\ConversionPro\Model\Config\Source\PriceFilterTypes;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -37,6 +38,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
     
     const XML_PATH_FILTER_SEARCH = 'conversionpro/display_settings/filter_search';
+    const XML_PATH_FILTER_SEARCH_QTY = 'conversionpro/display_settings/filter_search_min_qty';
     
     const XML_PATH_FALLBACK_REDIRECT = 'conversionpro/display_settings/fallback_redirect';
     const XML_PATH_FALLBACK_REDIRECT_URL = 'conversionpro/display_settings/fallback_redirect_url';
@@ -94,11 +96,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Pricing\Helper\Data $priceHelper
     ) {
         $this->registry = $registry;
         $this->messageManager = $messageManager;
         $this->storeManager = $storeManager;
+        $this->priceHelper = $priceHelper;
         parent::__construct($context);
     }
     
@@ -433,13 +437,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );    
     }
     
-    public function getFilterType($store = null)
+    public function getFilterType($store = null) : array
     {
         return explode(',', $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_FILTER_TYPE,
             ScopeInterface::SCOPE_STORE,
             $store
         ));    
+    }
+    
+    public function isPriceDefault($store = null) : bool
+    {
+        return in_array(PriceFilterTypes::DEF, $this->getFilterType($store));
+    }
+    
+    public function isPriceSlider($store = null) : bool
+    {
+        return in_array(PriceFilterTypes::SLIDER, $this->getFilterType($store));
+    }
+    
+    public function isPriceInputs($store = null) : bool
+    {
+        return in_array(PriceFilterTypes::INPUTS, $this->getFilterType($store));
     }
     
     public function getPriceUrlTemplate()
@@ -505,11 +524,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return (int)$position;
     }
 
-    public function isFilterSearchEnabled($store = null)
+    public function isFilterSearchEnabled($store = null) : bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FILTER_SEARCH,
             ScopeInterface::SCOPE_STORE, $store
         );
+    }
+    
+    public function getMinQtyForFilterSearch($store = null) : int
+    {
+        return (int) $this->scopeConfig->getValue(
+            self::XML_PATH_FILTER_SEARCH_QTY,
+            ScopeInterface::SCOPE_STORE, $store
+        );
+    }
+    
+    /**
+     *  @return string 
+     */
+    public function toJsBool($value) : string
+    {
+        return ((bool)$value) ? 'true' : 'false';
+    }
+    
+    public function getPriceTemplate() : string
+    {
+        return $this->priceHelper->currency("{price}", true, false);
     }
 }

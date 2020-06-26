@@ -55,6 +55,7 @@
                 <label>Result Display Settings</label>
                 <field id="campaigns_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Campaigns</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="campaigns_type" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="1">
@@ -66,6 +67,7 @@
                 </field>
                 <field id="filter_multiselect_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Filter Multiselect</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="filter_price_type" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
@@ -78,20 +80,31 @@
                 </field>
                 <field id="collapse" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Collapse Answers</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="collapse_qty" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Qty Of Answers</label>
+                    <validate>required-entry validate-digits validate-not-negative-number</validate>
                     <depends>
                         <field id="*/*/collapse">1</field>
                     </depends>
                 </field>
                 <field id="filter_search" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Filter Search</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="go_to_product_on_one_result" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="filter_search_min_qty" translate="label" type="text" sortOrder="95" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Min Qty Of Answers For Filter Search</label>
+                    <validate>required-entry validate-digits validate-not-negative-number</validate>
+                    <depends>
+                        <field id="*/*/filter_search">1</field>
+                    </depends>
+                </field>
+                <field id="go_to_product_on_one_result" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Go To Product Page On One Result</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="profile_name" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="1">
@@ -99,6 +112,7 @@
                 </field>
                 <field id="fallback_redirect" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Fallback Redirect</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="fallback_redirect_url" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="0" showInStore="1">
@@ -112,14 +126,17 @@
                 <label>Navigation to Search Settings</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Navigation to Search</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="nav_to_search_search_by" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Navigation to Search by</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Celebros\ConversionPro\Model\Config\Source\Nav2Search</source_model>
                 </field>
                 <field id="category_query_type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Textual Search by</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Celebros\ConversionPro\Model\Config\Source\CategoryQueryType</source_model>
                     <depends>
                         <field id="nav_to_search_search_by">textual</field>
@@ -133,6 +150,7 @@
                 </field>
                 <field id="blacklist_enabled" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable Navigation to Search Blacklisting</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="blacklist" translate="label" type="multiselect" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="1">
@@ -144,6 +162,7 @@
                 </field>
                 <field id="relevance_rename" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Add Relevance Sort Order</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -158,16 +177,18 @@
             </group>
             <group id="advanced" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>Advanced Settings</label>
-                <field id="request_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="request_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1" canRestore="1">
                     <label>Request Lifetime</label>
                     <validate>validate-number required-entry validate-greater-than-zero</validate>
                 </field>
-                <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1" canRestore="1">
                     <label>Show Current Requests (Debug)</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_log" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="enable_log" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1" canRestore="1">
                     <label>Enable Logs</label>
+                    <validate>required-entry validate-select</validate>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="upload_logs" translate="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">

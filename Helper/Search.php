@@ -19,6 +19,7 @@ use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Category;
 use Celebros\ConversionPro\Model\Config\Source\CategoryQueryType;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Simplexml\Element as XmlElement;
 
 class Search extends Helper\AbstractHelper
 {
@@ -525,5 +526,32 @@ class Search extends Helper\AbstractHelper
             $return = $val ? false : ['min' => false, 'max' => false];
             return $return;
         }
+    }
+    
+    /**
+     * Extract dynamic property by name from xml element
+     *
+     * @param  XmlElement $element
+     * @param  string $propertyName 
+     * @return XmlElement | null
+     */
+    public function extractDynamicProperty(
+        XmlElement $element,
+        string $propertyName = null
+    ) : ?XmlElement {
+        if (!empty($element->DynamicProperties) 
+        && $element->DynamicProperties instanceof \Magento\Framework\Simplexml\Element) {
+            if (!$propertyName) {
+                return $element->DynamicProperties;
+            }
+            
+            foreach ($element->DynamicProperties->children() as $property) {
+                if ($property->getAttribute('name') == $propertyName) {
+                    return $property;
+                }
+            }
+        }
+        
+        return null;
     }
 }

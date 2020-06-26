@@ -1,0 +1,58 @@
+<?php $helper = $this->helper('\Celebros\ConversionPro\Helper\Data') ?>
+<div class="celebros-price-layered"></div>
+<?php if ($helper->isPriceDefault()): ?>
+<ol class="items">
+    <?php foreach ($filterItems as $key => $filterItem): ?>
+    <li class="item<?php if ($filterItem->isSelected()): ?> selected<?php endif; ?>">
+    <?php if ($filterItem->getCount() > 0): ?>
+        <?php if ($helper->isMultiselectEnabled()): ?>
+        <input type="checkbox" data-href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>" onclick="convpro.clickCheckbox(this)"<?php if ($filterItem->isSelected()): ?> checked="checked"<?php endif; ?>>
+        <?php endif; ?>
+        <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>" onclick="convpro.clickHLink(this)">
+            <?php echo $filterItem->getLabel() ?>
+            <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+            <span class="count"><?php echo $filterItem->getCount()?><span class="filter-count-label">
+            <?php if ($filterItem->getCount() == 1):?>
+                <?php echo __('item') ?>
+            <?php else:?>
+                <?php echo __('items') ?>
+            <?php endif;?>
+            </span></span>
+            <?php endif; ?>
+        </a>
+        <?php else:?>
+        <?php echo $filterItem->getLabel() ?>
+        <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+        <span class="count">(<?php echo $filterItem->getCount()?>)<span class="filter-count-label">
+            <?php if ($filterItem->getCount() == 1):?>
+                <?php echo __('item')?><?php else:?><?php echo __('items') ?>
+            <?php endif;?>
+        </span></span>
+        <?php endif; ?>
+    <?php endif; ?>
+    </li>
+    <?php endforeach ?>
+</ol>
+<?php endif; ?>
+<?php if ($helper->isPriceInputs()): ?>
+<?php $sHelper = $this->helper('\Celebros\ConversionPro\Helper\Search'); ?>
+<?php //if ($sHelper->getMinMaxPrices('min')): ?>
+<div class="celebros-price-layered-inputs">
+    <input data-min-price="<?php echo $sHelper->getMinMaxPrices('min') ?>" id="input-price-min" placeholder="<?php echo $sHelper->getMinMaxPrices('min') ?>" class="input-text celebros-price-min" maxlength="4" type="number"><span> <?php echo __('to') ?> </span>
+    <input data-max-price="<?php echo $sHelper->getMinMaxPrices('max') ?>" id="input-price-max" placeholder="<?php echo $sHelper->getMinMaxPrices('max') ?>" class="input-text celebros-price-max" maxlength="4" type="number">
+    <button id="price-apply-button" data-url="<?php echo $helper->getPriceUrlTemplate() ?>" class="action search" type="submit" title="<?php echo __('Search') ?>" disabled>
+        <span><?php echo __('Filter') ?></span>
+    </button>
+</div>
+<?php //endif; ?>
+<?php endif; ?>
+<?php if ($helper->isPriceSlider()): ?>
+<?php $sHelper = $this->helper('\Celebros\ConversionPro\Helper\Search'); ?>
+<div class="celebros-price-layered-slider">
+    <div id="celebros-price-slider"></div>
+    <div id="celebros-price-slider-amount"></div>
+    <button id="celebros-price-slider-apply-button" data-url="<?php echo $helper->getPriceUrlTemplate() ?>" class="action search" type="submit" title="<?php echo __('Apply') ?>" disabled>
+        <span><?php echo __('Apply') ?></span>
+    </button>
+</div>
+<?php endif; ?>
