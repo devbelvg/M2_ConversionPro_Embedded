@@ -58,6 +58,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_UPSELL_LIMIT = 'conversionpro/crosssell_settings/upsell_limit';
     
     const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
+    const XML_PATH_DEBUG_LOG = 'conversionpro/advanced/enable_log';
     
     const RESPONSE_XML_LINK_ATTRIBUTE_NAME = 'Link';
     const RESPONSE_XML_TITLE_ATTRIBUTE_NAME = 'Title';
@@ -414,6 +415,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEBUG_REQUEST, ScopeInterface::SCOPE_STORE, $store);     
+    }
+    
+    
+    public function isLogEnabled($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEBUG_LOG, ScopeInterface::SCOPE_STORE, $store);     
     }
     
     public function isRelevanceNav2Search($store = null)

@@ -1,0 +1,10 @@
+<div class="scalable" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
+<?php foreach ($this->getLogFilesList() as $logFile): ?>
+    <div class="cel-log-row">
+    <?php foreach ($this->getActions() as $action => $label): ?>
+        <a title="<?= $this->getActionLabel($action) ?>" alt="upload" href="<?php echo $this->getUrlByAction($action, $logFile) ?>"><span class="cel-logs <?= $action ?>"></span></a>
+    <?php endforeach; ?>
+        <span class="cel-log-filename"><?php echo $logFile ?></span>
+    </div>
+<?php endforeach; ?>
+</div>

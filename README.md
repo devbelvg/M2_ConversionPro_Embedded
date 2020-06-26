@@ -44,3 +44,5 @@ Celebros ConversionPro Embedded
 
 1.2.4 - issue with price filter has been fixed
 
+1.3.0 - logs have been added; tech fixes
+

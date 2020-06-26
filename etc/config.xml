@@ -46,6 +46,7 @@
             <advanced>
                 <request_lifetime>13600</request_lifetime>
                 <request_show>0</request_show>
+                <enable_log>0</enable_log>
             </advanced>
         </conversionpro>
     </default>

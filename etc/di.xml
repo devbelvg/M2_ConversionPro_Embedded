@@ -27,10 +27,53 @@
     <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar" type="Celebros\ConversionPro\Block\Catalog\Product\ProductList\Toolbar" />
     <preference for="Magento\Theme\Block\Html\Pager" type="Celebros\ConversionPro\Block\Theme\Html\Pager" />
     <preference for="Magento\Catalog\Model\Layer\Filter\Item" type="Celebros\ConversionPro\Model\Catalog\Layer\Filter\Item" />
-    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
-        <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="1" disabled="false"/>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="10000" disabled="false"/>
     </type>
     <type name="Magento\Search\Model\EngineResolver">
         <plugin name="Celebros_ConversionPro_Search_EngineResolver" type="Celebros\ConversionPro\Plugin\Search\EngineResolver" sortOrder="10000" disabled="false"/>
+    </type>
+    <virtualType name="Celebros\ConversionPro\Model\Logger\Api\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="fileName" xsi:type="string">/var/log/celebros_api.log</argument> 
+        </arguments>
+    </virtualType>
+    <virtualType name="Celebros\ConversionPro\Model\Logger\Exception\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="fileName" xsi:type="string">/var/log/celebros_exception.log</argument> 
+        </arguments>
+    </virtualType>
+    <virtualType name="Celebros\ConversionPro\Model\Logger\Api" type="Celebros\ConversionPro\Model\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">celebrosApiLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Celebros\ConversionPro\Model\Logger\Api\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Celebros\ConversionPro\Model\Logger\Exception" type="Celebros\ConversionPro\Model\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">celebrosExceptionLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Celebros\ConversionPro\Model\Logger\Exception\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Celebros\ConversionPro\Model\Search">
+        <arguments>
+            <argument name="logger" xsi:type="object">Celebros\ConversionPro\Model\Logger\Exception</argument>
+        </arguments>
+    </type>
+    <type name="Celebros\ConversionPro\Client\Curl">
+        <arguments>
+            <argument name="logger" xsi:type="object">Celebros\ConversionPro\Model\Logger\Api</argument>
+        </arguments>
+    </type>
+    <type name="Celebros\ConversionPro\Controller\Adminhtml\Config\TestConnection">
+        <arguments>
+            <argument name="curl" xsi:type="object">Celebros\ConversionPro\Client\Curl</argument>
+        </arguments>
     </type>
 </config>

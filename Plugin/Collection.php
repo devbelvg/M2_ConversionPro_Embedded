@@ -14,7 +14,7 @@
 namespace Celebros\ConversionPro\Plugin;
 
 use Magento\Framework\DB\Select;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Celebros\ConversionPro\Helper\Data as Helper;
 
 class Collection
@@ -33,7 +33,7 @@ class Collection
     }
     
     public function beforeAddCategoryFilter(
-        FulltextCollection $collection,
+        ProductCollection $collection,
         \Magento\Catalog\Model\Category $category
     ) {
         if ($this->helper->isActiveEngine()) {
@@ -46,7 +46,7 @@ class Collection
     }
     
     public function afterAddAttributeToSort(
-        FulltextCollection $collection,
+        ProductCollection $collection,
         $result
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
@@ -60,7 +60,7 @@ class Collection
      * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $collection
      * @return bool
      */
-    public function applyScoreSorting(FulltextCollection $collection) : bool
+    public function applyScoreSorting(ProductCollection $collection) : bool
     {
         $fromPart = $collection->getSelect()->getPart('from');
         if (is_array($fromPart) && array_key_exists('search_result', $fromPart)) {
