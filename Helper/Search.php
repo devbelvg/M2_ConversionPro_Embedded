@@ -19,6 +19,7 @@ use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Category;
 use Celebros\ConversionPro\Model\Config\Source\CategoryQueryType;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Model\ScopeInterface;
 
 class Search extends Helper\AbstractHelper
 {
@@ -26,7 +27,6 @@ class Search extends Helper\AbstractHelper
     const CAT_ID_DYN_PROPERTY = 'MagEntityID';
     const CACHE_TAG = 'CONVERSIONPRO';
     const CACHE_ID = 'conversionpro';
-    const CACHE_LIFETIME = 13600;
     const REDIRECT_DYNAMIC_PROPERTY_NAME = 'redirection url';
     
     /**
@@ -42,7 +42,6 @@ class Search extends Helper\AbstractHelper
     protected $pageSize;
     protected $order;
     protected $cache;
-    protected $cacheState;
     protected $category;
     protected $productAttributes = [];
     protected $currentSearchParams;
@@ -55,8 +54,7 @@ class Search extends Helper\AbstractHelper
     public function __construct(
         Helper\Context $context,
         Data $helper,
-        \Magento\Framework\App\Cache $cache,
-        \Magento\Framework\App\Cache\State $cacheState,
+        \Celebros\ConversionPro\Helper\Cache $cache,
         \Celebros\ConversionPro\Model\Search $search,
         \Magento\Catalog\Model\Category $category,
         \Magento\Framework\App\ResponseFactory $response
@@ -64,7 +62,6 @@ class Search extends Helper\AbstractHelper
         $this->helper = $helper;
         $this->search = $search;
         $this->cache = $cache;
-        $this->cacheState = $cacheState;
         $this->category = $category;
         $this->response = $response;
         parent::__construct($context);
@@ -79,13 +76,13 @@ class Search extends Helper\AbstractHelper
             $queryText = '';
             
             // search query text
-            if ($request->getParam('q'))
+            if ($request->getParam('q')) {
                 $queryText = $request->getParam('q');
+            }
                 
             // category query text
             $category = $this->helper->getCurrentCategory();
-            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId())
-            {
+            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId()) {
                 if (!$this->helper->isTextualNav2Search()) {
                     $queryText = '';
                 } else {
@@ -99,11 +96,13 @@ class Search extends Helper\AbstractHelper
             $filters = [];
             foreach ($this->getFilterRequestVars() as $requestVar) {
                 $value = $this->getFilterValueAsArray($requestVar);
-                if (!empty($value))
+                if (!empty($value)) {
                     $filters[$requestVar] = $value;
+                }
             }
             
-            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId() && !$this->helper->isTextualNav2Search()) {
+            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId()
+            && !$this->helper->isTextualNav2Search()) {
                 $filters[self::CATEGORY_QUESTION_TEXT][] = $this->getAnswerIdByCategoryId($category);
             }
             
@@ -123,13 +122,13 @@ class Search extends Helper\AbstractHelper
         // order
         if (!is_null($this->order) && !$params->hasSortBy()) {
             $params->setSortBy($this->order);
-        }    
+        }
         
         // page size
         if (!is_null($this->pageSize) && !$params->hasPageSize()) {
             $params->setPageSize($this->pageSize);
-        }    
-            
+        }
+        
         // current page
         if (!is_null($this->currentPage) && !$params->hasCurrentPage()) {
             $params->setCurrentPage($this->currentPage - 1);
@@ -149,7 +148,10 @@ class Search extends Helper\AbstractHelper
     {
         $currentConcepts = $customResults->QwiserSearchResults->QueryConcepts->children();
         foreach ($currentConcepts as $concept) {
-            if (!isset($concept->DynamicProperties)) continue;
+            if (!isset($concept->DynamicProperties)) {
+                continue;
+            }
+            
             foreach ($concept->DynamicProperties->children() as $property) {
                 if ($property->getAttribute('name') == self::REDIRECT_DYNAMIC_PROPERTY_NAME) {
                     $this->response
@@ -165,13 +167,7 @@ class Search extends Helper\AbstractHelper
     public function getAllQuestions()
     {
         if (is_null($this->allQuestionsCache)) {
-            //$cacheId = $this->getCacheId(__METHOD__);
-            //if ($allQuestions = $this->loadCache($cacheId)) {
-            //    $this->allQuestionsCache = unserialize($allQuestions);
-            //} else {
-                $this->allQuestionsCache = $this->search->getAllQuestions();
-            //    $this->saveCache(serialize($this->allQuestionsCache), $cacheId);
-            //}
+            $this->allQuestionsCache = $this->search->getAllQuestions();
         }
         
         return $this->allQuestionsCache;
@@ -200,9 +196,10 @@ class Search extends Helper\AbstractHelper
     public function getCategoryQueryTerm(Category $category, $store = null)
     {
         $queryType = $this->helper->getCategoryQueryType($store);
-        if ($queryType == CategoryQueryType::NAME)
+        if ($queryType == CategoryQueryType::NAME) {
             return $category->getName();
-            
+        }
+        
         $parents = $category->getParentCategories();
         $parentIds = array_intersect($category->getParentIds(), array_keys($parents));
         switch ($queryType) {
@@ -221,7 +218,8 @@ class Search extends Helper\AbstractHelper
             function ($id) use ($parents) {
                 return $parents[$id]->getName();
             },
-            $parentIds);
+            $parentIds
+        );
         $names[] = $category->getName();
         
         return str_replace(',', ' ', implode(' ', $names));
@@ -247,8 +245,8 @@ class Search extends Helper\AbstractHelper
             if (isset($params[$var])) {
                 return $var;
             }
-        }  
-
+        }
+        
         return $requestVar;
     }
     
@@ -260,7 +258,7 @@ class Search extends Helper\AbstractHelper
             $requestVar,
             str_replace(' ', '_', $requestVar),
             str_replace(' ', '+', $requestVar)
-        ];    
+        ];
     }
     
     public function getFilterValue($requestVar)
@@ -322,7 +320,7 @@ class Search extends Helper\AbstractHelper
         return $this;
     }
     
-    public function getCurrentCustomResults($handle = NULL)
+    public function getCurrentCustomResults($handle = null)
     {
         if ($handle) {
             if (isset($this->customResultsCache[$hanlde])) {
@@ -330,7 +328,7 @@ class Search extends Helper\AbstractHelper
             }
         }
         
-        return reset($this->customResultsCache);    
+        return reset($this->customResultsCache);
     }
     
     /*CONST PERC_SIMILARITY = 90;*/
@@ -339,7 +337,7 @@ class Search extends Helper\AbstractHelper
     {
         $allQuestions = $this->getAllQuestions()->Questions->Question;
         foreach ($allQuestions as $question) {
-            /*similar_text($question->getAttribute($field), $value, $perc);           
+            /*similar_text($question->getAttribute($field), $value, $perc);
             if ($perc > self::PERC_SIMILARITY) {*/
             /*if ($question->getAttribute($field) == $value) {*/
             if (in_array($value, $this->getAltRequestVars($question->getAttribute($field)))) {
@@ -361,14 +359,14 @@ class Search extends Helper\AbstractHelper
             $mock->setAttribute('Type', 'Price');
             
             return $mock;
-        }  
+        }
     }
     
     public function getAnswerIdByCategoryId($category)
     {
-        $cacheId = $this->getCacheId(__METHOD__, array($category->getId()));
-        if ($answerId = $this->loadCache($cacheId)) {
-            return $answerId;    
+        $cacheId = $this->cache->getId(__METHOD__, [$category->getId()]);
+        if ($answerId = $this->cache->load($cacheId)) {
+            return $answerId;
         }
         
         $allQuestions = $this->getAllQuestions()->Questions->Question;
@@ -386,21 +384,21 @@ class Search extends Helper\AbstractHelper
                 foreach ($answer->DynamicProperties->children() as $property) {
                     if ($property->getAttribute('name') == self::CAT_ID_DYN_PROPERTY) {
                         if ($property->getAttribute('value') == $category->getId()) {
-                            $this->saveCache($answer->getAttribute('Id'), $cacheId);
-                            return (int)$answer->getAttribute('Id'); 
+                            $this->cache->save($answer->getAttribute('Id'), $cacheId);
+                            return (int)$answer->getAttribute('Id');
                         }
                     }
                 }
                 
                 /* try to find category by label */
                 if ($answer->getAttribute('Text') == $catLabel) {
-                    $this->saveCache($answer->getAttribute('Id'), $cacheId);
+                    $this->cache->save($answer->getAttribute('Id'), $cacheId);
                     return (int)$answer->getAttribute('Id');
                 }
             }
         }
         
-        return FALSE;
+        return false;
     }
     
     /**
@@ -434,36 +432,13 @@ class Search extends Helper\AbstractHelper
                             }
                         }
                         break;
-                    default;
+                    default:
+                        break;
                 }
             }
         }
     
         return false;
-    }
-    
-    public function getCacheId($method, $vars = array())
-    {
-        return base64_encode($method . implode('', $vars));
-    }
-    
-    public function loadCache($cacheId)
-    {
-        if ($this->cacheState->isEnabled(self::CACHE_ID)) { 
-            return $this->cache->load($cacheId);
-        }
-        
-        return FALSE;
-    }
-    
-    public function saveCache($data, $cacheId)
-    {
-        if ($this->cacheState->isEnabled(self::CACHE_ID)) { 
-            $this->cache->save($data, $cacheId, array(self::CACHE_TAG), self::CACHE_LIFETIME);
-            return TRUE;
-        }
-        
-        return FALSE;
     }
     
     public function getToolbarData()
@@ -473,8 +448,18 @@ class Search extends Helper\AbstractHelper
         $data->setCurrentPage($searchResults->SearchInformation->getAttribute('CurrentPage'));
         $data->setTotalNum($searchResults->getAttribute('RelevantProductsCount'));
         $data->setLastPageNum($searchResults->getAttribute('NumberOfPages'));
-        $data->setData('_current_grid_order', $this->sortOrderMap($searchResults->SearchInformation->SortingOptions->getAttribute('FieldName')));
-        $data->setData('_current_grid_direction', ($searchResults->SearchInformation->SortingOptions->getAttribute('Ascending') == 'true') ? 'asc' : 'desc');
+        $data->setData(
+            '_current_grid_order',
+            $this->sortOrderMap(
+                $searchResults->SearchInformation
+                    ->SortingOptions
+                    ->getAttribute('FieldName')
+            )
+        );
+        $data->setData(
+            '_current_grid_direction',
+            ($searchResults->SearchInformation->SortingOptions->getAttribute('Ascending') == 'true') ? 'asc' : 'desc'
+        );
         return $data;
     }
     

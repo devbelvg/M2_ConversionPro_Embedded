@@ -121,7 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($this->engineStatus === null) {
             $engineStatus = false;
             if ($this->isEnabled()) {
-                if ($this->getCurrentWorkHanlde() == 'catalog_category'
+                if ($this->getCurrentWorkHandle() == 'catalog_category'
                 && $this->isNavToSearchEnabled()) {
                     if ($this->isNavToSearchBlacklistEnabled()) {
                         $categoryId = (int)$this->_request->getParam('id', FALSE);
@@ -134,7 +134,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     } else {
                         $engineStatus = true;
                     }
-                } elseif ($this->getCurrentWorkHanlde() == 'catalogsearch_result') { 
+                } elseif ($this->getCurrentWorkHandle() == 'catalogsearch_result') { 
                     $engineStatus = true;
                 }
                 
@@ -190,14 +190,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return false;
     }
     
-    public function getCurrentWorkHanlde()
+    public function getCurrentWorkHandle()
     {
         return $this->_request->getModuleName() . '_' . $this->_request->getControllerName();
     }
     
     public function isPermittedHandle()
     {
-        $currentHandle = $this->getCurrentWorkHanlde();
+        $currentHandle = $this->getCurrentWorkHandle();
         return in_array($currentHandle, $this->_permittedHandles);
     }
     

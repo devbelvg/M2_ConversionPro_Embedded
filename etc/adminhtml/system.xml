@@ -160,7 +160,7 @@
                 <label>Advanced Settings</label>
                 <field id="request_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Request Lifetime</label>
-                    <validate>validate-number required-entry validate-greater-than-zero</validate>
+                    <validate>validate-number required-entry</validate>
                 </field>
                 <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Show Current Requests (Debug)</label>
