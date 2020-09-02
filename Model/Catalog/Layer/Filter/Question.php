@@ -27,6 +27,15 @@ class Question extends Layer\Filter\AbstractFilter
      * @var \Celebros\ConversionPro\Helper\Data
      */
     protected $searchHelper;
+    
+    /**
+     * @var string
+     */
+    protected $type;
+    
+    protected $specialTypes = [
+        'swatch' => '_checkSwatch'
+    ];
 
     public function __construct(
         Layer\Filter\ItemFactory $filterItemFactory,
@@ -94,6 +103,54 @@ class Question extends Layer\Filter\AbstractFilter
         return $this->getQuestion()->getAttribute('Text');
     }
 
+    /**
+     * Return question type 
+     *  
+     * @return string Question type
+     */
+    public function getType() : string
+    {
+        if (!$this->type) {
+            if (!$type = $this->_checkSpecialType()) {
+                $type = (string) strtolower($this->getQuestion()->getAttribute('Type'));
+            }
+            
+            $this->type = $type;
+        }
+        
+        return $this->type;
+    }
+    
+    /**
+     * Check if current question corresponds to any special types 
+     *  
+     * @return string|bool
+     */
+    protected function _checkSpecialType() : ?string
+    {
+        foreach ($this->specialTypes as $specialType => $methodName) {
+            if ($this->$methodName()) {
+                return $specialType;
+            }
+        }    
+        
+        return null;
+    }
+    
+    /**
+     * Special type check function 
+     *  
+     * @return bool
+     */
+    protected function _checkSwatch() : bool
+    {
+        if ($swatches = $this->searchHelper->extractDynamicProperty($this->getQuestion(), 'Swatches')) {
+            return (bool) ($swatches instanceof XmlElement) ? $swatches->getAttribute('value') : false;
+        }
+        
+        return false;  
+    }
+
     public function getRequestVar()
     {
         if ($this->hasRequestVar()) {
@@ -141,7 +198,7 @@ class Question extends Layer\Filter\AbstractFilter
         return __('Unknown value');
     }
 
-    protected function _getItemsData()
+    /*protected function _getItemsData()
     {
         if (!$this->hasAnswers())
             return [];
@@ -159,6 +216,31 @@ class Question extends Layer\Filter\AbstractFilter
                 $this->_prepareAnswerText($answer),
                 $answer->getAttribute('Id'),
                 $answer->getAttribute('ProductCount'));
+        }
+        
+        return $items;
+    }*/
+    
+    /**
+     * Collect answers from response data 
+     *
+     * @return array
+     */
+    protected function _getItemsData()
+    {
+        $items = [];
+        if (!$this->hasAnswers()) {
+            return $items;
+        }
+        
+        /* collect all regular answers */
+        foreach ($this->getAnswers()->children() as $answer) {
+            $items[] = $answer;
+        }
+        
+        /* collect all extra answers */
+        foreach ($this->getEanswers()->children() as $answer) {
+            $items[] = $answer;
         }
         
         return $items;
@@ -181,5 +263,50 @@ class Question extends Layer\Filter\AbstractFilter
             }
         }
         return $text;
+    }
+    
+    /**
+     * Create filter item object
+     *
+     * @param   string $label
+     * @param   mixed $value
+     * @param   int $count
+     * @param   string $swatchImage
+     * @return  \Magento\Catalog\Model\Layer\Filter\Item
+     */
+    protected function _createItem(
+        $label,
+        $value,
+        $count = 0,
+        $swatchImage = null
+    ) {
+        return $this->_filterItemFactory->create()
+            ->setFilter($this)
+            ->setLabel($label)
+            ->setValue($value)
+            ->setCount($count)
+            ->setSwatchImage($swatchImage);
+    }
+    
+    /**
+     * Initialize filter items
+     *
+     * @return  \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     */
+    protected function _initItems()
+    {
+        $data = $this->_getItemsData();
+        $items = [];
+        foreach ($data as $itemData) {
+            $items[] = $this->_createItem(
+                $this->_prepareAnswerText($itemData),
+                $itemData->getAttribute('Id'),
+                $itemData->getAttribute('ProductCount'),
+                $itemData->getAttribute('ImageUrl')
+            );
+        }
+        
+        $this->_items = $items;
+        return $this;
     }
 }

@@ -1,0 +1,12 @@
+.sidebar .filter-options .items .item.hidden,
+.sidebar .filter-options .items .item.filtered {
+    display: none;
+}
+.item.more-button,
+.item.less-button {
+    cursor: pointer;
+}
+.celebros-price-min,
+.celebros-price-max {
+    width: 25% !important;
+}

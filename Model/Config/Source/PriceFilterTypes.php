@@ -17,12 +17,15 @@ class PriceFilterTypes
 {
     const DEF = 'default';
     const INPUTS = 'inputs';
+    const SLIDER = 'slider';
 
     public function toArray()
     {
         return [
             self::DEF    => __('Default'),
-            self::INPUTS => __('Inputs')];
+            self::INPUTS => __('Inputs'),
+            self::SLIDER => __('Slider')
+        ];
     }
 
     public function toOptionArray()
