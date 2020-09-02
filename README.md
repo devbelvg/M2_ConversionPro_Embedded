@@ -46,3 +46,5 @@ Celebros ConversionPro Embedded
 
 1.3.0 - logs have been added; tech fixes
 
+1.3.1 - cache lifetime update; popular search terms queries removed for celebros engine
+

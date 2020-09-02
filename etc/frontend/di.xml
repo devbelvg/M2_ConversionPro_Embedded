@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Search\Model\PopularSearchTerms">
+        <plugin name="Celebros_ConversionPro_Search_Model_PopularSearchTerms" type="Celebros\ConversionPro\Plugin\Search\Model\PopularSearchTerms" sortOrder="10000" disabled="false"/>
+    </type>
+    <type name="Magento\Search\Model\ResourceModel\Query">
+        <plugin name="Celebros_ConversionPro_Search_Model_ResourceModel_Query" type="Celebros\ConversionPro\Plugin\Search\Model\ResourceModel\Query" sortOrder="10000" disabled="false"/>
+    </type>
+</config>
