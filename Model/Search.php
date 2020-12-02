@@ -103,7 +103,7 @@ class Search
     {
         $this->newSearch = true;
         !is_null($params) or $params = new DataObject();
-//print_r('9999');die;       
+      
         // Search string
         $searchInfoXml = new XmlElement('<SearchInformation/>');
         if ($params->hasQuery()) {
@@ -181,7 +181,7 @@ class Search
         // some mandatory arguments
         $searchInfoXml->setAttribute('PriceFieldName', 'Price');
         $searchInfoXml->setAttribute('NumberOfPages', 9999999);
-//print_r('lll'); die;       
+       
         return $searchInfoXml;
     }
     
