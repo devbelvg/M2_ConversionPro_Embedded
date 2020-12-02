@@ -43,10 +43,10 @@
                         "sliderAmount": "#celebros-price-slider-amount"
                     },
                     "options": {
-                        "minPrice": <?php echo $sHelper->getMinMaxPrices('min') ?>,
-                        "maxPrice": <?php echo $sHelper->getMinMaxPrices('max') ?>,
-                        "currentMinPrice": <?php echo $sHelper->getMinMaxPrices('min') ?>,
-                        "currentMaxPrice": <?php echo $sHelper->getMinMaxPrices('max') ?>,
+                        "minPrice": <?php echo $sHelper->getMinMaxPrices('min') ? : 0 ?>,
+                        "maxPrice": <?php echo $sHelper->getMinMaxPrices('max') ? : 0?>,
+                        "currentMinPrice": <?php echo $sHelper->getMinMaxPrices('min') ? : 0 ?>,
+                        "currentMaxPrice": <?php echo $sHelper->getMinMaxPrices('max') ? : 0 ?>,
                         "amountHtml": "{min_val} - {max_val}"
                     }
                 }

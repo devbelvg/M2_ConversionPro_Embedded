@@ -83,6 +83,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $registry;
     
     /**
+     * @var State
+     */
+    protected $state;
+    
+    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
@@ -95,11 +100,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\State $state,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Pricing\Helper\Data $priceHelper
     ) {
         $this->registry = $registry;
+        $this->state = $state;
         $this->messageManager = $messageManager;
         $this->storeManager = $storeManager;
         $this->priceHelper = $priceHelper;
@@ -138,10 +145,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     } else {
                         $engineStatus = true;
                     }
-                } elseif ($this->getCurrentWorkHandle() == 'catalogsearch_result') { 
+                } elseif ($this->getCurrentWorkHandle() == 'catalogsearch_result'
+                || $this->state->getAreaCode() == 'graphql') { 
                     $engineStatus = true;
                 }
-                
             }
             
             if ($this->isRequestDebug()) {

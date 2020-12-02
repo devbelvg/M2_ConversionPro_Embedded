@@ -48,3 +48,4 @@ Celebros ConversionPro Embedded
 
 1.3.1 - cache lifetime update; popular search terms queries removed for celebros engine
 
+1.4.0 - php 7.4.x has been added to require dependency, tech fixes for magento version >= 2.4.0; have been added: swatch filter + js refactoring + price slider

@@ -4,8 +4,9 @@
     <?php foreach ($filterItems as $key => $filterItem): ?>
     <?php if ($filterItem->getCount() > 0): ?>
         <?php if ($filterItem->getSwatchImage()): ?>
+        <?php $style = $filterItem->getSwatchImage() != '#' ? "background-image: url('" . $filterItem->getSwatchImage() . "');" : "background: " . $filterItem->getLabel() . ";"; ?>
         <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>">
-            <div class="swatch-option image<?php if ($filterItem->isSelected()): ?> checked<?php endif; ?>" style="background-image: url('<?php echo $filterItem->getSwatchImage() ?>')"></div>
+            <div class="swatch-option image<?php if ($filterItem->isSelected()): ?> checked<?php endif; ?>" style="<?php echo $style ?>"></div>
         </a>
         <?php endif; ?>
     <?php endif; ?>

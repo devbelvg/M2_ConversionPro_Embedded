@@ -15,7 +15,7 @@
     <default>
         <conversionpro>
             <general_settings>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <host></host>
                 <port>6035</port>
                 <sitekey></sitekey>
@@ -35,7 +35,7 @@
                 <fallback_redirect_url></fallback_redirect_url>
             </display_settings>
             <nav_to_search>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <nav_to_search_search_by>textual</nav_to_search_search_by>
                 <category_query_type>name</category_query_type>
                 <relevance_rename>0</relevance_rename>
