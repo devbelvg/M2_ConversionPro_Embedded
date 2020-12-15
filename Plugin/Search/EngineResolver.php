@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Celebros
  *
@@ -27,9 +28,9 @@ class EngineResolver
     ) {
         $this->helper = $helper;
     }
-    
+
     /**
-     * Returns MySQL search engine if Celebros search is enabled 
+     * Returns MySQL search engine if Celebros search is enabled
      *
      * @param \Magento\Search\Model\EngineResolver $resolver
      * @param string $currentSearchEngine
@@ -41,7 +42,7 @@ class EngineResolver
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             $currentSearchEngine = $resolver::CATALOG_SEARCH_MYSQL_ENGINE;
-        }       
+        }
 
         return $currentSearchEngine;
     }

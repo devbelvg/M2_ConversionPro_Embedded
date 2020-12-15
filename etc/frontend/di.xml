@@ -12,6 +12,9 @@
  * @package     Celebros_ConversionPro
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Search\Model\EngineResolver">
+        <plugin name="Celebros_ConversionPro_Search_EngineResolver" type="Celebros\ConversionPro\Plugin\Search\EngineResolver" sortOrder="10000" disabled="false"/>
+    </type>
     <type name="Magento\Search\Model\PopularSearchTerms">
         <plugin name="Celebros_ConversionPro_Search_Model_PopularSearchTerms" type="Celebros\ConversionPro\Plugin\Search\Model\PopularSearchTerms" sortOrder="10000" disabled="false"/>
     </type>

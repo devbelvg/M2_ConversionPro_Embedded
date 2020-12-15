@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Celebros
  *
@@ -31,7 +32,7 @@ class Collection
         $this->helper = $helper;
         $this->catModel = $catModel;
     }
-    
+
     public function beforeAddCategoryFilter(
         ProductCollection $collection,
         \Magento\Catalog\Model\Category $category
@@ -44,23 +45,23 @@ class Collection
 
         return [$category];
     }
-    
+
     public function afterAddAttributeToSort(
         ProductCollection $collection,
         $result
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             $this->applyScoreSorting($collection);
-        }       
+        }
 
         return $collection;
     }
-    
+
     /**
      * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $collection
      * @return bool
      */
-    public function applyScoreSorting(ProductCollection $collection) : bool
+    public function applyScoreSorting(ProductCollection $collection): bool
     {
         $fromPart = $collection->getSelect()->getPart('from');
         if (is_array($fromPart) && array_key_exists('search_result', $fromPart)) {
@@ -68,7 +69,7 @@ class Collection
             $collection->getSelect()->columns('search_result.score')->order('score ASC');
             return true;
         }
-        
+
         return false;
     }
 }

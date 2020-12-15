@@ -1,4 +1,17 @@
 <?php
+
+/*
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_ConversionPro
+ */
 namespace Celebros\ConversionPro\Model\Catalog\Layer;
 
 use Magento\Catalog\Model\Layer;
@@ -8,9 +21,9 @@ use Magento\Catalog\Model\Config\LayerCategoryConfig;
 
 class FilterList extends \Magento\Catalog\Model\Layer\FilterList
 {
-    const QUESTION_FILTER = 'question';
-    const APPLIED_FILTERS_ATTRIBUTE = 'SideText';
-    const PRICE_FILTER_NAME = 'Price';
+    public const QUESTION_FILTER = 'question';
+    public const APPLIED_FILTERS_ATTRIBUTE = 'SideText';
+    public const PRICE_FILTER_NAME = 'Price';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -26,14 +39,29 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
      * @var \Celebros\ConversionPro\Helper\Search
      */
     protected $searchHelper;
+    
+    
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $productMetadata;
 
     /**
      * @var Magento\Framework\Simplexml\Element
      */
     protected $response;
-    
+
     public $appliedFilters = [];
 
+    /**
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param Layer\FilterableAttributeListInterface $filterableAttributes
+     * @param \Celebros\ConversionPro\Helper\Data $helper
+     * @param \Celebros\ConversionPro\Helper\Search $searchHelper
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\RequestInterface $request,
@@ -48,15 +76,24 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         $this->request = $request;
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
-        if (version_compare($productMetadata->getVersion(), '2.4.0', '>=')) {
+        $this->productMetadata = $productMetadata;
+        $this->parentConstruct($objectManager, $filterableAttributes, $filters);
+    }
+
+    protected function parentConstruct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        Layer\FilterableAttributeListInterface $filterableAttributes,
+        array $filters
+    ) {
+        if (version_compare($this->productMetadata->getVersion(), '2.4.0', '<')) {
+            parent::__construct($objectManager, $filterableAttributes, $filters);
+        } else {
             $layerCategoryConfig = $objectManager->get('Magento\Catalog\Model\Config\LayerCategoryConfig');
             parent::__construct($objectManager, $filterableAttributes, $layerCategoryConfig, $filters);
-        } else {
-            parent::__construct($objectManager, $filterableAttributes, $filters);
         }
     }
 
-    public function sortFilters($questions) : array
+    public function sortFilters($questions): array
     {
         $priceSortOrder = $this->helper->getPriceFilterPosition();
         $questionsList = [];
@@ -65,14 +102,14 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             if ($priceSortOrder == $sort) {
                 $sort++;
             }
-            
+
             if ($question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE) == self::PRICE_FILTER_NAME) {
                 $questionsList[$priceSortOrder] = $question;
             } else {
                 $questionsList[$sort++] = $question;
             }
         }
-        
+
         ksort($questionsList);
 
         return $questionsList;
@@ -85,7 +122,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         }
 
         $priceQuestion = $this->searchHelper->getPriceQuestionMock();
-        
+
         if (!count($this->filters)) {
             $this->filters = [];
             // $response = $this->_getResponse($layer);
@@ -102,7 +139,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         foreach ($remFilters as $fltr) {
             $remFilters = array_merge($this->searchHelper->getAltRequestVars($fltr), $remFilters);
         }
-        
+
         $remFilters = array_unique($remFilters);
         foreach ($this->request->getParams() as $var => $value) {
             if (in_array($var, $remFilters) && !in_array($var, $this->appliedFilters)) {
@@ -113,14 +150,16 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
                     $this->appliedFilters[] = $var;
                 }
             }
-           
-            if ($var == 'price'
-            && !in_array($priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE), $this->appliedFilters)) {
+
+            if (
+                $var == 'price' &&
+                !in_array($priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE), $this->appliedFilters)
+            ) {
                 $this->createQuestionFilter($priceQuestion, $layer)->apply($this->request);
                 $this->appliedFilters[] = $priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
             }
         }
-        
+
         return $this->filters;
     }
 

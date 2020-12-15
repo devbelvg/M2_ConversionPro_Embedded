@@ -30,9 +30,6 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
         <plugin name="Celebros_ConversionPro_Fulltext_Collection" type="Celebros\ConversionPro\Plugin\Collection" sortOrder="10000" disabled="false"/>
     </type>
-    <type name="Magento\Search\Model\EngineResolver">
-        <plugin name="Celebros_ConversionPro_Search_EngineResolver" type="Celebros\ConversionPro\Plugin\Search\EngineResolver" sortOrder="10000" disabled="false"/>
-    </type>
     <virtualType name="Celebros\ConversionPro\Model\Logger\Api\Handler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
