@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
 use Magento\Framework\Simplexml\Element as XmlElement;
@@ -37,15 +39,16 @@ class DocumentFactory
             } else {
                 $fields[$name] = $this->objectManager->create(
                     'Magento\Framework\Search\AbstractKeyValuePair',
-                    ['name' => $name, 'value' => $value]);
+                    ['name' => $name, 'value' => $value]
+                );
             }
         }
-        
+
         $fields['score'] = $this->objectManager->create(
             'Magento\Framework\Search\AbstractKeyValuePair',
             ['name' => 'score', 'value' => $score]
         );
-      
+
         return $this->objectManager->create(
             'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Document',
             ['documentFields' => $fields, 'documentId' => $documentId]

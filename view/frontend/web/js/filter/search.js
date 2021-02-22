@@ -1,7 +1,7 @@
 define([
     'jquery'
 ], function ($) {
-	return function(cssSelector, options) {
+    return function(cssSelector, options) {
         var self = this;
         this._cssSelector = {
             filtersList: "#narrow-by-list .filter-options-content",
@@ -14,7 +14,7 @@ define([
             searchBoxHtmlTemplate: '<input type="text" id="attr-filter-{filter_id}" placeholder="Search {filter_name}..." /></li>'
         };
         this.cssSelector = $.extend({}, this._cssSelector, cssSelector);
-		this.options = $.extend({}, this._options, options);
+        this.options = $.extend({}, this._options, options);
         this.format = function(string, args) {
             for (k in args) {
                 string = string.replace("{" + k + "}", args[k])
@@ -37,6 +37,7 @@ define([
         };
         this.init = function() {
             $(self.cssSelector.filtersList).each( function(){
+                var container = this;
                 var ansQty = $(this).find(self.cssSelector.li).length;
                 if (self.checkIgnoredClasses($(this))
                 && self.options.minSearchFilterQty <= ansQty
@@ -45,7 +46,12 @@ define([
                     var filter_id = self.prepareId($(this).prev().text());
                     $(this).prepend(self.format(self.options.searchBoxHtmlTemplate, {filter_id, filter_name}));
                     $(this).on('keyup', function() {
+                        var evName = 'celFilterApplied';
                         var filter = $(this).find('#attr-filter-'+filter_id).val().toUpperCase();
+                        if (!filter) {
+                            evName = 'celFilterEmpty';
+                        }
+                        $(this).trigger(evName);
                         var lis = $(this).find(self.cssSelector.li);
                         for (var i = 0; i < lis.length; i++) {
                             var name = $.trim($(lis[i]).find('a').text());

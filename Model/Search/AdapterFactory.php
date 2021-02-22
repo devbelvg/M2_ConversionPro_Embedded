@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Search;
 
 class AdapterFactory extends \Magento\Search\Model\AdapterFactory
@@ -20,12 +22,12 @@ class AdapterFactory extends \Magento\Search\Model\AdapterFactory
         $helper = $this->objectManager->get('Celebros\ConversionPro\Helper\Data');
         if ($helper->isActiveEngine(get_class($this))) {
             $adapter = $this->objectManager->create(
-                'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter');
-                
+                'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter'
+            );
+
             return $adapter;
         }
-        
+
         return parent::create($data);
     }
-
 }

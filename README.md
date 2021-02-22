@@ -51,3 +51,6 @@ Celebros ConversionPro Embedded
 1.4.0 - php 7.4.x has been added to require dependency, tech fixes for magento version >= 2.4.0; have been added: swatch filter + js refactoring + price slider
 
 1.4.1 - di compilation fix
+
+1.4.2 - technical fixes
+

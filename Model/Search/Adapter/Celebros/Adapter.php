@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
 use Magento\Framework\DataObject;
@@ -29,8 +31,7 @@ class Adapter implements AdapterInterface
         Mapper $mapper,
         \Celebros\ConversionPro\Helper\Search $searchHelper,
         ResponseFactory $responseFactory
-        )
-    {
+    ) {
         $this->mapper = $mapper;
         $this->searchHelper = $searchHelper;
         $this->responseFactory = $responseFactory;
@@ -50,6 +51,4 @@ class Adapter implements AdapterInterface
     {
         return $this->searchHelper->getCustomResults($params);
     }
-
-
 }

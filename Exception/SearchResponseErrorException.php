@@ -13,8 +13,8 @@
  * @package     Celebros_ConversionPro
  */
 
-namespace Celebros\ConversionPro\Model;
+namespace Celebros\ConversionPro\Exception;
 
-class Session extends \Magento\Framework\Session\SessionManager
+class SearchResponseErrorException extends SearchException
 {
 }

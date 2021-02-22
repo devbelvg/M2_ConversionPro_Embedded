@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,15 +12,16 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
 use Magento\Framework\Api\AbstractSimpleObject;
 
 class Document extends AbstractSimpleObject implements \IteratorAggregate
 {
-    const CUSTOM_ATTRIBUTES = 'document_fields';
-    const ID = 'document_id';
-    
+    public const CUSTOM_ATTRIBUTES = 'document_fields';
+    public const ID = 'document_id';
+
     public function __construct(
         $documentId,
         array $documentFields

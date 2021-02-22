@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
 use Magento\Framework\DataObject as DataObject;
@@ -26,8 +28,8 @@ class Mapper
     protected $searchHelper;
 
     public function __construct(
-        \Celebros\ConversionPro\Helper\Search $searchHelper)
-    {
+        \Celebros\ConversionPro\Helper\Search $searchHelper
+    ) {
         $this->searchHelper = $searchHelper;
     }
 
@@ -37,13 +39,17 @@ class Mapper
         $this->processQuery(
             $request->getQuery(),
             $params,
-            BoolQuery::QUERY_CONDITION_MUST);
+            BoolQuery::QUERY_CONDITION_MUST
+        );
+
         return $params;
     }
 
     protected function processQuery(
-        RequestQueryInterface $query, DataObject $params, $conditionType)
-    {
+        RequestQueryInterface $query,
+        DataObject $params,
+        $conditionType
+    ) {
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_MATCH:
                 $this->processMatchQuery($query, $params, $conditionType);
@@ -58,35 +64,44 @@ class Mapper
     }
 
     protected function processMatchQuery(
-        MatchQuery $query, DataObject $params, $conditionType /* ignored */)
-    {
+        MatchQuery $query,
+        DataObject $params,
+        $conditionType
+    ) {
         $queryText = $params->hasQueryText() ? $params->getQueryText() . ' ' : '';
         $queryText .= $query->getValue();
         $params->setQuery($queryText);
     }
 
     protected function processBoolQuery(
-        BoolQuery $query, DataObject $params, $conditionType)
-    {
+        BoolQuery $query,
+        DataObject $params,
+        $conditionType
+    ) {
         $this->processBoolQueryCondition(
             $query->getMust(),
             $params,
-            BoolQuery::QUERY_CONDITION_MUST);
+            BoolQuery::QUERY_CONDITION_MUST
+        );
 
         $this->processBoolQueryCondition(
             $query->getShould(),
             $params,
-            BoolQuery::QUERY_CONDITION_SHOULD);
+            BoolQuery::QUERY_CONDITION_SHOULD
+        );
 
         $this->processBoolQueryCondition(
             $query->getMustNot(),
             $params,
-            BoolQuery::QUERY_CONDITION_NOT);
+            BoolQuery::QUERY_CONDITION_NOT
+        );
     }
 
     protected function processFilterQuery(
-        FilterQuery $query, DataObject $params, $conditionType)
-    {
+        FilterQuery $query,
+        DataObject $params,
+        $conditionType
+    ) {
         switch ($query->getReferenceType()) {
             case FilterQuery::REFERENCE_QUERY:
                 $this->processQuery($query->getReference(), $params, $conditionType);
@@ -98,8 +113,10 @@ class Mapper
     }
 
     protected function processBoolQueryCondition(
-        array $subQueryList, DataObject $params, $conditionType)
-    {
+        array $subQueryList,
+        DataObject $params,
+        $conditionType
+    ) {
         foreach ($subQueryList as $subQuery) {
             $this->processQuery($subQuery, $params, $conditionType);
         }
@@ -107,8 +124,10 @@ class Mapper
 
     // see Magento/Framework/Search/Adapter/Mysql/Filter/Builder.php
     protected function processFilter(
-        RequestFilterInterface $filter, DataObject $params, $conditionType /* ignored */)
-    {
+        RequestFilterInterface $filter,
+        DataObject $params,
+        $conditionType
+    ) {
         if ($filter->getType() == RequestFilterInterface::TYPE_TERM) {
             $filters = $params->hasFilters() ? $params->getFilters() : [];
             $filters[$filter->getField()] = $filter->getValue();

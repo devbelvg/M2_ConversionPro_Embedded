@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Celebros
  *
  * DISCLAIMER
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model;
 
 use Celebros\ConversionPro\Helper\Data as Helper;
@@ -21,11 +23,11 @@ class Logger extends \Monolog\Logger
      * @var Helper
      */
     protected $helper;
-    
+
     /**
      * @param Helper             $helper     Celebros data helper
      * @param string             $name       The logging channel
-     * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc.
+     * @param HandlerInterface[] $handlers   Optional stack of handlers
      * @param callable[]         $processors Optional array of processors
      */
     public function __construct(
@@ -39,7 +41,7 @@ class Logger extends \Monolog\Logger
         $this->setHandlers($handlers);
         $this->processors = $processors;
     }
-    
+
     /**
      * Adds a log record.
      *
@@ -53,7 +55,7 @@ class Logger extends \Monolog\Logger
         if ($this->helper->isLogEnabled()) {
             return parent::addRecord($level, $message, $context);
         }
-        
+
         return false;
     }
 }

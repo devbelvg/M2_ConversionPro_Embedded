@@ -12,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  **/
+
 namespace Celebros\ConversionPro\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
