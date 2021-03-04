@@ -20,9 +20,6 @@ use Magento\Framework\Simplexml\Element as XmlElement;
 use Celebros\ConversionPro\Model\Logger;
 use Celebros\ConversionPro\Helper\Data;
 use Celebros\ConversionPro\Exception\SearchException;
-use Celebros\ConversionPro\Exception\SearchCurlErrorException;
-use Celebros\ConversionPro\Exception\SearchServiceErrorException;
-use Celebros\ConversionPro\Exception\SearchResponseErrorException;
 
 class Search
 {
@@ -557,61 +554,27 @@ class Search
         try {
             $xml = simplexml_load_string($response, '\Magento\Framework\Simplexml\Element');
         } catch (\Exception $message) {
-            $this->_logException(
-                $message,
-                $response,
-                new SearchServiceErrorException($message)
-            );
+            $exception = (new SearchException($message))->create();
         }
 
-        if ($xml === false) {
-            $message = __('Service response is empty');
+        $exception = $exception ?? (new SearchException($xml))->create();
+
+        if ($exception) {
             $this->_logException(
-                $message,
                 $response,
-                new SearchServiceErrorException($message)
+                $exception
             );
+            
+            $excMessage = [
+                'title' => __('Celebros Search Engine'),
+                'request' => $exception->getMessage()
+            ];
+            
+            $this->messageManager->addSuccess($this->helper->prepareDebugMessage($excMessage));
+            //throw $exception;
         }
 
-        // check if error is indicated in response
-        if ($xml->getAttribute('ErrorOccurred') == 'true') {
-            if (isset($xml->QwiserError)) {
-                $message = '';
-                if (null !== $xml->QwiserError->getAttribute('MethodName')) {
-                    $message .= sprintf(
-                        'Error occured in method %s: ',
-                        $xml->QwiserError->getAttribute('MethodName')
-                    );
-                }
-
-                $message .= (null !== $xml->QwiserError->getAttribute('ErrorMessage'))
-                    ? $xml->QwiserError->getAttribute('ErrorMessage')
-                    : __('Unknown error');
-            }
-
-            $this->_logException(
-                $message,
-                $response,
-                new SearchResponseErrorException($message)
-            );
-        }
-
-        if (
-            isset($xml->ReturnValue)
-            && $xml->ReturnValue instanceof \Magento\Framework\Simplexml\Element
-            && !empty($xml->ReturnValue)
-        ) {
-            return $xml->ReturnValue;
-        } else {
-            $message = __('No return value in response');
-            $this->_logException(
-                $message,
-                $response,
-                new SearchServiceErrorException($message)
-            );
-        }
-
-        return false;
+        return $xml->ReturnValue ?? false;
     }
 
     /**
@@ -621,17 +584,14 @@ class Search
      * @return void
      */
     protected function _logException(
-        string $message,
         $response = null,
-        $exception = null
-    ) {
-        $this->logger->warning($message);
-        if ($response) {
-            $this->logger->warning('Response: ' . $response);
-        }
-
+        \Exception $exception = null
+    ): void {
         if ($exception) {
-            throw $exception;
+            $this->logger->warning($exception->getMessage());
+            if ($response) {
+                $this->logger->warning('Response: ' . $response);
+            }
         }
     }
 

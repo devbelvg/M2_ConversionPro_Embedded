@@ -15,6 +15,6 @@
 
 namespace Celebros\ConversionPro\Exception;
 
-class SearchServiceErrorException extends SearchException
+class SearchServiceErrorException extends \Exception
 {
 }
