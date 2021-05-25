@@ -29,16 +29,15 @@ class Search extends Helper\AbstractHelper
     const CACHE_TAG = 'CONVERSIONPRO';
     const CACHE_ID = 'conversionpro';
     const REDIRECT_DYNAMIC_PROPERTY_NAME = 'redirection url';
-    
+
     /**
      * @var Data
      */
     protected $helper;
-    
+
     protected $customResultsCache = [];
     protected $allQuestionsCache;
     protected $questionAnswers = [];
-    
     protected $currentPage;
     protected $pageSize;
     protected $order;
@@ -46,12 +45,12 @@ class Search extends Helper\AbstractHelper
     protected $category;
     protected $productAttributes = [];
     protected $currentSearchParams;
-    
+
     /**
      * @var \Celebros\ConversionPro\Model\Search
      */
     protected $search;
-    
+
     public function __construct(
         Helper\Context $context,
         Data $helper,
@@ -67,33 +66,30 @@ class Search extends Helper\AbstractHelper
         $this->response = $response;
         parent::__construct($context);
     }
-    
+
     public function getSearchParams()
     {
         if (!$this->currentSearchParams) {
             $request = $this->_getRequest();
             $params = new DataObject();
-            
             $queryText = '';
-            
+
             // search query text
             if ($request->getParam('q')) {
                 $queryText = $request->getParam('q');
             }
-                
+
             // category query text
             $category = $this->helper->getCurrentCategory();
             if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId()) {
                 if (!$this->helper->isTextualNav2Search()) {
-                    $queryText = '';
+                    $queryText = $this->helper->getAnswerIdPrefix() . $category->getId();
                 } else {
                     $queryText = $this->getCategoryQueryTerm($category);
                 }
             }
-          
+
             $params->setQuery($queryText);
-            
-            // filters
             $filters = [];
             foreach ($this->getFilterRequestVars() as $requestVar) {
                 $value = $this->getFilterValueAsArray($requestVar);
@@ -101,40 +97,34 @@ class Search extends Helper\AbstractHelper
                     $filters[$requestVar] = $value;
                 }
             }
-            
-            if ($category && $category->getId() != $this->helper->getCurrentStore()->getRootCategoryId()
-            && !$this->helper->isTextualNav2Search()) {
-                $filters[self::CATEGORY_QUESTION_TEXT][] = $this->getAnswerIdByCategoryId($category);
-            }
-            
+
             $params->setFilters($filters);
-            
             $this->currentSearchParams = $params;
             return $params;
         }
-        
+
         return $this->currentSearchParams;
     }
-    
+
     public function getCustomResults(DataObject $params = null)
     {
-        $params = is_null($params) ? $this->getSearchParams() : clone $params;
-        
+        $params = ($params === null) ? $this->getSearchParams() : clone $params;
+
         // order
-        if (!is_null($this->order) && !$params->hasSortBy()) {
+        if (!($this->order === null) && !$params->hasSortBy()) {
             $params->setSortBy($this->order);
         }
-        
+
         // page size
-        if (!is_null($this->pageSize) && !$params->hasPageSize()) {
+        if (!($this->pageSize === null) && !$params->hasPageSize()) {
             $params->setPageSize($this->pageSize);
         }
-        
+
         // current page
-        if (!is_null($this->currentPage) && !$params->hasCurrentPage()) {
+        if (!($this->currentPage === null) && !$params->hasCurrentPage()) {
             $params->setCurrentPage($this->currentPage - 1);
         }
-       
+
         $searchHandle = $this->search->createSearchHandle($params);
         if (!isset($this->customResultsCache[$searchHandle])) {
             $this->customResultsCache[$searchHandle] = $this->search->getCustomResults($searchHandle, true, '');
@@ -144,7 +134,7 @@ class Search extends Helper\AbstractHelper
         }
         return $this->customResultsCache[$searchHandle];
     }
-    
+
     public function checkRedirects($customResults)
     {
         $currentConcepts = $customResults->QwiserSearchResults->QueryConcepts->children();
@@ -152,7 +142,7 @@ class Search extends Helper\AbstractHelper
             if (!isset($concept->DynamicProperties)) {
                 continue;
             }
-            
+
             foreach ($concept->DynamicProperties->children() as $property) {
                 if ($property->getAttribute('name') == self::REDIRECT_DYNAMIC_PROPERTY_NAME) {
                     $this->response
@@ -164,16 +154,16 @@ class Search extends Helper\AbstractHelper
             }
         }
     }
-    
+
     public function getAllQuestions()
     {
-        if (is_null($this->allQuestionsCache)) {
+        if ($this->allQuestionsCache === null) {
             $this->allQuestionsCache = $this->search->getAllQuestions();
         }
-        
+
         return $this->allQuestionsCache;
     }
-    
+
     public function getQuestionAnswers($questionId)
     {
         if (!isset($this->questionAnswers[$questionId])) {
@@ -182,7 +172,7 @@ class Search extends Helper\AbstractHelper
         }
         return $this->questionAnswers[$questionId];
     }
-    
+
     public function getQuestionAnswersAsArray($questionId, $keyAttribute = 'Id', $valueAttribute = 'Text')
     {
         $options = [];
@@ -193,14 +183,14 @@ class Search extends Helper\AbstractHelper
         
         return $options;
     }
-    
+
     public function getCategoryQueryTerm(Category $category, $store = null)
     {
         $queryType = $this->helper->getCategoryQueryType($store);
         if ($queryType == CategoryQueryType::NAME) {
             return $category->getName();
         }
-        
+
         $parents = $category->getParentCategories();
         $parentIds = array_intersect($category->getParentIds(), array_keys($parents));
         switch ($queryType) {
@@ -214,7 +204,7 @@ class Search extends Helper\AbstractHelper
                 $parentIds = array_slice($parentIds, 0, 1);
                 break;
         }
-        
+
         $names = array_map(
             function ($id) use ($parents) {
                 return $parents[$id]->getName();
@@ -222,10 +212,10 @@ class Search extends Helper\AbstractHelper
             $parentIds
         );
         $names[] = $category->getName();
-        
+
         return str_replace(',', ' ', implode(' ', $names));
     }
-    
+
     public function getValueFromRequest($requestVar)
     {
         $vars = $this->getAltRequestVars($requestVar);
@@ -234,10 +224,10 @@ class Search extends Helper\AbstractHelper
                 return $value;
             }
         }
-        
+
         return null;
     }
-    
+
     public function checkRequestVar($requestVar)
     {
         $vars = $this->getAltRequestVars($requestVar);
@@ -247,44 +237,44 @@ class Search extends Helper\AbstractHelper
                 return $var;
             }
         }
-        
+
         return $requestVar;
     }
-    
+
     public function getAltRequestVars($requestVar)
     {
         $requestVar = str_replace('.', '_', $requestVar);
-        
+
         return [
             $requestVar,
             str_replace(' ', '_', $requestVar),
             str_replace(' ', '+', $requestVar)
         ];
     }
-    
+
     public function getFilterValue($requestVar)
     {
         $filterRequestVars  = $this->getFilterRequestVars();
         $value = $this->getValueFromRequest($requestVar);
-        
-        if (!is_null($value) && !$this->helper->isMultiselectEnabled()) {
+
+        if (!($value === null) && !$this->helper->isMultiselectEnabled()) {
             $values = $this->filterValueToArray($value);
             $value = reset($values);
         }
         return $value;
     }
-    
+
     public function getFilterValueAsArray($requestVar)
     {
         $value = $this->getFilterValue($requestVar);
-        return is_null($value) ? [] : $this->filterValueToArray($value);
+        return ($value === null) ? [] : $this->filterValueToArray($value);
     }
-    
+
     public function filterValueToArray($value)
     {
         return $this->helper->filterValueToArray($value);
     }
-    
+
     public function getFilterRequestVars()
     {
         $questions = $this->getAllQuestions();
@@ -297,30 +287,30 @@ class Search extends Helper\AbstractHelper
         
         return $names;
     }
-    
+
     public function getLabelByAnswerId($answerId)
     {
         return $this->questionAnswers;
     }
-    
+
     public function setCurrentPage($page)
     {
         $this->currentPage = $page;
         return $this;
     }
-    
+
     public function setPageSize($size)
     {
         $this->pageSize = $size;
         return $this;
     }
-    
+
     public function setOrder($order, $dir)
     {
         $this->order = [$order, $dir];
         return $this;
     }
-    
+
     public function getCurrentCustomResults($handle = null)
     {
         if ($handle) {
@@ -328,27 +318,22 @@ class Search extends Helper\AbstractHelper
                 return $this->customResultsCache[$hanlde];
             }
         }
-        
+
         return reset($this->customResultsCache);
     }
-    
-    /*CONST PERC_SIMILARITY = 90;*/
-    
+
     public function getQuestionByField($value, $field)
     {
         $allQuestions = $this->getAllQuestions()->Questions->Question;
         foreach ($allQuestions as $question) {
-            /*similar_text($question->getAttribute($field), $value, $perc);
-            if ($perc > self::PERC_SIMILARITY) {*/
-            /*if ($question->getAttribute($field) == $value) {*/
             if (in_array($value, $this->getAltRequestVars($question->getAttribute($field)))) {
                 return $question;
             }
         }
-        
+
         return false;
     }
-    
+
     public function getPriceQuestionMock()
     {
         $allQuestions = $this->getAllQuestions()->Questions->Question;
@@ -362,7 +347,7 @@ class Search extends Helper\AbstractHelper
             return $mock;
         }
     }
-    
+
     public function getAnswerIdByCategoryId($category)
     {
         $cacheId = $this->cache->getId(__METHOD__, [$category->getId()]);
@@ -377,7 +362,7 @@ class Search extends Helper\AbstractHelper
                 continue;
             }
         }
-        
+
         if (isset($catQuestionId)) {
             $catLabel = $category->getName();
             $answers = $this->getQuestionAnswers($catQuestionId);
@@ -390,7 +375,7 @@ class Search extends Helper\AbstractHelper
                         }
                     }
                 }
-                
+
                 /* try to find category by label */
                 if ($answer->getAttribute('Text') == $catLabel) {
                     $this->cache->save($answer->getAttribute('Id'), $cacheId);
@@ -398,10 +383,10 @@ class Search extends Helper\AbstractHelper
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Return product attribute value by another attribute value
      *
@@ -438,10 +423,10 @@ class Search extends Helper\AbstractHelper
                 }
             }
         }
-    
+
         return false;
     }
-    
+
     public function getToolbarData()
     {
         $searchResults = $this->getCustomResults()->QwiserSearchResults;
@@ -463,7 +448,7 @@ class Search extends Helper\AbstractHelper
         );
         return $data;
     }
-    
+
     public function sortOrderMap($order)
     {
         switch ($order) {
@@ -479,7 +464,7 @@ class Search extends Helper\AbstractHelper
         
         return $result;
     }
-    
+
     public function getMinMaxPrices($val = null)
     {
         $values = [];
@@ -495,14 +480,14 @@ class Search extends Helper\AbstractHelper
                 }
             }
         }
-        
+
         if (count($values) != 0) {
             if ($val == 'max') {
                 return (int)max($values);
             } elseif ($val == 'min') {
                 return (int)min($values);
             }
-            
+
             return [
                 'min' => min($values),
                 'max' => max($values)
@@ -512,19 +497,19 @@ class Search extends Helper\AbstractHelper
             return $return;
         }
     }
-    
+
     /**
      * Extract dynamic property by name from xml element
      *
      * @param  XmlElement $element
-     * @param  string $propertyName 
+     * @param  string $propertyName
      * @return XmlElement | null
      */
     public function extractDynamicProperty(
         XmlElement $element,
         string $propertyName = null
     ) : ?XmlElement {
-        if (!empty($element->DynamicProperties) 
+        if (!empty($element->DynamicProperties)
         && $element->DynamicProperties instanceof \Magento\Framework\Simplexml\Element) {
             if (!$propertyName) {
                 return $element->DynamicProperties;
@@ -536,7 +521,7 @@ class Search extends Helper\AbstractHelper
                 }
             }
         }
-        
+
         return null;
     }
 }

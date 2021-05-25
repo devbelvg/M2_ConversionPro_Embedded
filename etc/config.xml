@@ -39,6 +39,7 @@
                 <nav_to_search_search_by>textual</nav_to_search_search_by>
                 <category_query_type>name</category_query_type>
                 <relevance_rename>0</relevance_rename>
+                <answer_id_prefix>catid</answer_id_prefix>
             </nav_to_search>
             <anlx_settings>
                 <host></host>

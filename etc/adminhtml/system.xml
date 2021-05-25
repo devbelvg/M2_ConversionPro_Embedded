@@ -142,8 +142,9 @@
                         <field id="nav_to_search_search_by">textual</field>
                     </depends>
                 </field>
-                <field id="warning" translate="label" type="note" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <comment><![CDATA[<span style="color: red;">Note: Conversion Pro's campaigns do not work in this mode.</span>]]></comment>
+                <field id="answer_id_prefix" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Answer Id Prefix</label>
+                    <validate>required-entry</validate>
                     <depends>
                         <field id="nav_to_search_search_by">answer_id</field>
                     </depends>

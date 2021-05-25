@@ -53,3 +53,6 @@ Celebros ConversionPro Embedded
 1.4.1 - di compilation fix
 
 1.4.2 - 1.4.3 - technical fixes
+
+1.4.4 - algorithm for nav2search method 'answer_id' has been changed
+
