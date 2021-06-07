@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Celebros
  *
@@ -7,10 +8,10 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- ******************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -51,12 +52,12 @@ class Analytics extends Helper\AbstractHelper
         
         $long_ip = ip2long($SERVER_ADDR);
         if ($long_ip < 0) {
-            $long_ip += pow(2,32);
+            $long_ip += pow(2, 32);
         }
         
         $time = microtime();
         if ($time < 0) {
-            $time += pow(2,32);
+            $time += pow(2, 32);
         }
         
         $combined = $long_ip . $time;
@@ -84,7 +85,7 @@ class Analytics extends Helper\AbstractHelper
     {
         $host = $this->helper->getAnalyticsHost();
         $this->setUrlParam('cid', $this->helper->getAnalyticsCustId());
-        $pageReferrer = $this->_urlBuilder->getUrl('*/*/*', array('_current' => TRUE));
+        $pageReferrer = $this->_urlBuilder->getUrl('*/*/*', ['_current' => true]);
         $this->setUrlParam('ref', $this->_urlBuilder->getBaseUrl());
         $this->setUrlParam('src', $pageReferrer);
         $webSessionId = isset($_SESSION['core']['visitor_data']['session_id']) ? $_SESSION['core']['visitor_data']['session_id'] : session_id();
@@ -108,7 +109,7 @@ class Analytics extends Helper\AbstractHelper
     
     public function parseAnalyticsResponse($body)
     {
-        return json_decode(str_replace(array('anlxCallback(',');'), '', $body));
+        return json_decode(str_replace(['anlxCallback(',');'], '', $body));
     }
     
     public function getQwiserSearchLogHandle(\Magento\Framework\Simplexml\Element $results)

@@ -8,7 +8,6 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- * *****************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
@@ -23,44 +22,44 @@ use Celebros\ConversionPro\Model\Config\Source\PriceFilterTypes;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED  = 'conversionpro/general_settings/enabled';
-    const XML_PATH_HOST     = 'conversionpro/general_settings/host';
-    const XML_PATH_PORT     = 'conversionpro/general_settings/port';
-    const XML_PATH_SITE_KEY = 'conversionpro/general_settings/sitekey';
-    const XML_PATH_FILTER_MULTISELECT_ENABLED  = 'conversionpro/display_settings/filter_multiselect_enabled';
-    const XML_PATH_CAMPAIGNS_ENABLED           = 'conversionpro/display_settings/campaigns_enabled';
-    const XML_PATH_CAMPAIGNS_TYPE              = 'conversionpro/display_settings/campaigns_type';
-    const XML_PATH_PROFILE_NAME                = 'conversionpro/display_settings/profile_name';
-    const XML_PATH_PRICE_FILTER_TYPE           = 'conversionpro/display_settings/filter_price_type';
-    const XML_PATH_PRIC_FILTER_POSITION        = 'conversionpro/display_settings/filter_price_position';
-    const XML_PATH_GO_TO_PRODUCT_ON_ONE_RESULT = 'conversionpro/display_settings/go_to_product_on_one_result';
-    const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
-    const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
-    const XML_PATH_FILTER_SEARCH = 'conversionpro/display_settings/filter_search';
-    const XML_PATH_FILTER_SEARCH_QTY = 'conversionpro/display_settings/filter_search_min_qty';
-    const XML_PATH_FALLBACK_REDIRECT = 'conversionpro/display_settings/fallback_redirect';
-    const XML_PATH_FALLBACK_REDIRECT_URL = 'conversionpro/display_settings/fallback_redirect_url';
-    const XML_PATH_NAV_TO_SEARCH_ENABLED           = 'conversionpro/nav_to_search/enabled';
-    const XML_PATH_NAV_TO_SEARCH_BLACKLIST_ENABLED = 'conversionpro/nav_to_search/blacklist_enabled';
-    const XML_PATH_NAV_TO_SEARCH_BLACKLIST         = 'conversionpro/nav_to_search/blacklist';
-    const XML_PATH_CATEGORY_QUERY_TYPE             = 'conversionpro/nav_to_search/category_query_type';
-    const XML_PATH_NAV2SEARCH_BY                   = 'conversionpro/nav_to_search/nav_to_search_search_by';
-    const XML_PATH_NAV2SEARCH_RELEVANCE            = 'conversionpro/nav_to_search/relevance_rename';
-    const XML_PATH_ANSWER_ID_PREFIX                = 'conversionpro/nav_to_search/answer_id_prefix';
-    const XML_PATH_ANALYTICS_CUST_ID = 'conversionpro/anlx_settings/cid';
-    const XML_PATH_ANALYTICS_HOST    = 'conversionpro/anlx_settings/host';
-    const XML_PATH_CROSSSELL = 'conversionpro/crosssell_settings/crosssell_enabled';
-    const XML_PATH_CROSSSELL_LIMIT = 'conversionpro/crosssell_settings/crosssell_limit';
-    const XML_PATH_UPSELL = 'conversionpro/crosssell_settings/upsell_enabled';
-    const XML_PATH_UPSELL_LIMIT = 'conversionpro/crosssell_settings/upsell_limit';
-    const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
-    const XML_PATH_DEBUG_LOG = 'conversionpro/advanced/enable_log';
-    const RESPONSE_XML_LINK_ATTRIBUTE_NAME = 'Link';
-    const RESPONSE_XML_TITLE_ATTRIBUTE_NAME = 'Title';
-    const RESPONSE_XML_PRICE_ATTRIBUTE_NAME = 'Price';
-    const PRICE_RANGE_TEMPLATE = 'PRICE_RANGE';
+    public const XML_PATH_ENABLED  = 'conversionpro/general_settings/enabled';
+    public const XML_PATH_HOST     = 'conversionpro/general_settings/host';
+    public const XML_PATH_PORT     = 'conversionpro/general_settings/port';
+    public const XML_PATH_SITE_KEY = 'conversionpro/general_settings/sitekey';
+    public const XML_PATH_FILTER_MULTISELECT_ENABLED  = 'conversionpro/display_settings/filter_multiselect_enabled';
+    public const XML_PATH_CAMPAIGNS_ENABLED           = 'conversionpro/display_settings/campaigns_enabled';
+    public const XML_PATH_CAMPAIGNS_TYPE              = 'conversionpro/display_settings/campaigns_type';
+    public const XML_PATH_PROFILE_NAME                = 'conversionpro/display_settings/profile_name';
+    public const XML_PATH_PRICE_FILTER_TYPE           = 'conversionpro/display_settings/filter_price_type';
+    public const XML_PATH_PRIC_FILTER_POSITION        = 'conversionpro/display_settings/filter_price_position';
+    public const XML_PATH_GO_TO_PRODUCT_ON_ONE_RESULT = 'conversionpro/display_settings/go_to_product_on_one_result';
+    public const XML_PATH_IS_COLLAPSED = 'conversionpro/display_settings/collapse';
+    public const XML_PATH_COLLAPSE_QTY = 'conversionpro/display_settings/collapse_qty';
+    public const XML_PATH_FILTER_SEARCH = 'conversionpro/display_settings/filter_search';
+    public const XML_PATH_FILTER_SEARCH_QTY = 'conversionpro/display_settings/filter_search_min_qty';
+    public const XML_PATH_FALLBACK_REDIRECT = 'conversionpro/display_settings/fallback_redirect';
+    public const XML_PATH_FALLBACK_REDIRECT_URL = 'conversionpro/display_settings/fallback_redirect_url';
+    public const XML_PATH_NAV_TO_SEARCH_ENABLED           = 'conversionpro/nav_to_search/enabled';
+    public const XML_PATH_NAV_TO_SEARCH_BLACKLIST_ENABLED = 'conversionpro/nav_to_search/blacklist_enabled';
+    public const XML_PATH_NAV_TO_SEARCH_BLACKLIST         = 'conversionpro/nav_to_search/blacklist';
+    public const XML_PATH_CATEGORY_QUERY_TYPE             = 'conversionpro/nav_to_search/category_query_type';
+    public const XML_PATH_NAV2SEARCH_BY                   = 'conversionpro/nav_to_search/nav_to_search_search_by';
+    public const XML_PATH_NAV2SEARCH_RELEVANCE            = 'conversionpro/nav_to_search/relevance_rename';
+    public const XML_PATH_ANSWER_ID_PREFIX                = 'conversionpro/nav_to_search/answer_id_prefix';
+    public const XML_PATH_ANALYTICS_CUST_ID = 'conversionpro/anlx_settings/cid';
+    public const XML_PATH_ANALYTICS_HOST    = 'conversionpro/anlx_settings/host';
+    public const XML_PATH_CROSSSELL = 'conversionpro/crosssell_settings/crosssell_enabled';
+    public const XML_PATH_CROSSSELL_LIMIT = 'conversionpro/crosssell_settings/crosssell_limit';
+    public const XML_PATH_UPSELL = 'conversionpro/crosssell_settings/upsell_enabled';
+    public const XML_PATH_UPSELL_LIMIT = 'conversionpro/crosssell_settings/upsell_limit';
+    public const XML_PATH_DEBUG_REQUEST = 'conversionpro/advanced/request_show';
+    public const XML_PATH_DEBUG_LOG = 'conversionpro/advanced/enable_log';
+    public const RESPONSE_XML_LINK_ATTRIBUTE_NAME = 'Link';
+    public const RESPONSE_XML_TITLE_ATTRIBUTE_NAME = 'Title';
+    public const RESPONSE_XML_PRICE_ATTRIBUTE_NAME = 'Price';
+    public const PRICE_RANGE_TEMPLATE = 'PRICE_RANGE';
 
-    protected $_permittedHandles = [
+    protected $permittedHandles = [
         'catalog_category',
         'catalogsearch_result'
     ];
@@ -112,9 +111,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ScopeInterface::SCOPE_STORE,
             $store
         );
+
         if ($isEnabled && $this->getCurrentCategory()) {
             $isEnabled = $this->isEnabledForCategory($this->getCurrentCategory(), $store);
         }
+
         return $isEnabled;
     }
 
@@ -126,61 +127,107 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isActiveEngine($source = null)
     {
         if ($this->engineStatus === null) {
-            $engineStatus = false;
-            if ($this->isEnabled()) {
-                if ($this->getCurrentWorkHandle() == 'catalog_category'
-                && $this->isNavToSearchEnabled()) {
-                    if ($this->isNavToSearchBlacklistEnabled()) {
-                        $categoryId = (int)$this->_request->getParam('id', false);
-                        if ($categoryId) {
-                            $blacklist = $this->getNavToSearchBlacklist();
-                            if (!in_array($categoryId, $blacklist)) {
-                                $engineStatus = true;
-                            }
-                        }
-                    } else {
-                        $engineStatus = true;
-                    }
-                } elseif ($this->getCurrentWorkHandle() == 'catalogsearch_result'
-                || $this->state->getAreaCode() == 'graphql') {
-                    $engineStatus = true;
-                }
-            }
-
+            $this->engineStatus = $this->checkEngineStatus();
             if ($this->isRequestDebug()) {
-                $message = [
-                    'title' => __('Celebros Search Engine'),
-                    'status' => ($engineStatus ? 'Enabled' : 'Disabled')
-                ];
-
-                if ($source) {
-                    $message['source'] =  $source;
-                }
-
-                $this->messageManager->getMessages()->deleteMessageByIdentifier('celebros_engine_status');
-
-                if ($engineStatus) {
-                    $statusMessage = $this->messageManager->createMessage(
-                        MessageInterface::TYPE_SUCCESS,
-                        'celebros_engine_status'
-                    )->setText($this->prepareDebugMessage($message));
-                } else {
-                    $statusMessage = $this->messageManager->createMessage(
-                        MessageInterface::TYPE_NOTICE,
-                        'celebros_engine_status'
-                    )->setText($this->prepareDebugMessage($message));
-                }
-
-                $this->messageManager->addMessage($statusMessage);
+                $this->sendRequestDebugMessages($this->engineStatus, $source);
             }
-
-            $this->engineStatus = $engineStatus;
         }
 
         return $this->engineStatus;
     }
 
-    public function prepareDebugMessage(Array $data)
+    protected function checkEngineStatus()
+    {
+        $engineStatus = false;
+        if ($this->isEnabled()) {
+            if ($this->isCategory()
+                && $this->isNavToSearchEnabled()
+            ) {
+                $engineStatus = !$this->checkBlackList();
+            } elseif ($this->isSearch()
+                || $this->checkEngineAvConditions()
+            ) {
+                $engineStatus = true;
+            }
+        }
+
+        return $engineStatus;
+    }
+
+    public function checkEngineAvConditions(): bool
+    {
+        return false;
+    }
+
+    protected function sendRequestDebugMessages($engineStatus, $source = null)
+    {
+        $message = [
+            'title' => __('Celebros Search Engine'),
+            'status' => ($engineStatus ? 'Enabled' : 'Disabled')
+        ];
+
+        if ($source) {
+            $message['source'] =  $source;
+        }
+
+        $this->messageManager->getMessages()->deleteMessageByIdentifier('celebros_engine_status');
+
+        if ($engineStatus) {
+            $statusMessage = $this->messageManager->createMessage(
+                MessageInterface::TYPE_SUCCESS,
+                'celebros_engine_status'
+            )->setText($this->prepareDebugMessage($message));
+        } else {
+            $statusMessage = $this->messageManager->createMessage(
+                MessageInterface::TYPE_NOTICE,
+                'celebros_engine_status'
+            )->setText($this->prepareDebugMessage($message));
+        }
+
+        $this->messageManager->addMessage($statusMessage);
+    }
+
+    public function isCategory(): bool
+    {
+        return (bool) ($this->getCurrentWorkHandle() == 'catalog_category');
+    }
+
+    public function isSearch(): bool
+    {
+        return (bool) ($this->getCurrentWorkHandle() == 'catalogsearch_result');
+    }
+
+    public function getCategoryId(): ?int
+    {
+        return (int) $this->_request->getParam('id', false);
+    }
+
+    public function checkBlackList(int $catId = null): bool
+    {
+        if ($this->isNavToSearchBlacklistEnabled()) {
+            if (!$catId) {
+                $catId = $this->getCategoryId();
+            }
+
+            if ($catId) {
+                return $this->isCatIdInBlackList($catId);
+            }
+        }
+
+        return false;
+    }
+
+    public function isCatIdInBlackList(int $catId): bool
+    {
+        $blacklist = $this->getNavToSearchBlacklist();
+        if (in_array($catId, $blacklist)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function prepareDebugMessage(array $data)
     {
         if (isset($data['title'])) {
             $str = strtoupper(__($data['title']));
@@ -190,7 +237,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $str .= ' >>> ' . ucfirst(__($key)) . ': ' . $val;
                 }
             }
-            
+
             return $str;
         }
 
@@ -205,7 +252,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isPermittedHandle()
     {
         $currentHandle = $this->getCurrentWorkHandle();
-        return in_array($currentHandle, $this->_permittedHandles);
+        return in_array($currentHandle, $this->permittedHandles);
     }
 
     public function getPort($store = null)
@@ -262,7 +309,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    public function isCampaignsEnabled($type = null, $store = null)
+    public function isCampaignsEnabled($type = null, $store = null): bool
     {
         $campaignsEnabled = $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAMPAIGNS_ENABLED,
@@ -271,12 +318,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
 
         if (!$type) {
-            return  $campaignsEnabled;
+            return $campaignsEnabled;
         }
 
-        $campaingState = false;
+        $campaignState = false;
         $currentHandle = $this->getFullActionName();
-        $currentCampaignType = $currentHandle . ':' .$type;
+        $currentCampaignType = $currentHandle . ':' . $type;
 
         if (isset($this->campaignsStatus[$currentCampaignType])) {
             return $this->campaignsStatus[$currentCampaignType];
@@ -293,30 +340,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         ));
 
-        $campaingState = ($campaignsEnabled && in_array($currentCampaignType, $campaignsTypes));
+        $campaignState = ($campaignsEnabled && in_array($currentCampaignType, $campaignsTypes));
         if ($this->isRequestDebug()) {
             $message = [
                 'title' => __('Celebros Campaign'),
                 'type' => $type,
-                'status' => ($campaingState ? ' Enabled' : ' Disabled')
+                'status' => ($campaignState ? ' Enabled' : ' Disabled')
             ];
 
-            if ($campaingState) {
+            if ($campaignState) {
                 $this->messageManager->addSuccess($this->prepareDebugMessage($message));
             } else {
                 $this->messageManager->addNotice($this->prepareDebugMessage($message));
             }
         }
 
-        $this->campaignsStatus[$currentCampaignType] = $campaingState;
-        
-        return $campaingState;
+        $this->campaignsStatus[$currentCampaignType] = $campaignState;
+
+        return $campaignState;
     }
 
-    public function getFullActionName()
+    public function getFullActionName(): string
     {
-        return $this->_request->getModuleName() . '_'
-            . $this->_request->getControllerName() . '_' . $this->_request->getActionName();
+        return $this->_request->getModuleName()
+            . '_' . $this->_request->getControllerName()
+            . '_' . $this->_request->getActionName();
     }
 
     public function isNavToSearchEnabled($store = null)
@@ -345,6 +393,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
         $value = empty($value) ? [] : explode(',', $value);
+
         return $value;
     }
 
@@ -357,8 +406,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    public function isEnabledForCategory(Category $category, $store = null)
-    {
+    public function isEnabledForCategory(
+        Category $category,
+        $store = null
+    ) {
         return $this->isNavToSearchEnabled($store)
             && (!$this->isNavToSearchBlacklistEnabled()
                 || !in_array($category->getId(), $this->getNavToSearchBlacklist($store)));
@@ -469,9 +520,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    public function isRequestDebug($store = null)
+    public function isRequestDebug($store = null): bool
     {
-        return $this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DEBUG_REQUEST,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -496,7 +547,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    public function getFilterType($store = null) : array
+    public function getFilterType($store = null): array
     {
         return explode(',', $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_FILTER_TYPE,
@@ -505,17 +556,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         ));
     }
 
-    public function isPriceDefault($store = null) : bool
+    public function isPriceDefault($store = null): bool
     {
         return in_array(PriceFilterTypes::DEF, $this->getFilterType($store));
     }
 
-    public function isPriceSlider($store = null) : bool
+    public function isPriceSlider($store = null): bool
     {
         return in_array(PriceFilterTypes::SLIDER, $this->getFilterType($store));
     }
 
-    public function isPriceInputs($store = null) : bool
+    public function isPriceInputs($store = null): bool
     {
         return in_array(PriceFilterTypes::INPUTS, $this->getFilterType($store));
     }
@@ -525,8 +576,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $query = [
             'price' => self::PRICE_RANGE_TEMPLATE
         ];
-        
-        return $this->_urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);
+
+        return $this->_urlBuilder->getUrl(
+            '*/*/*',
+            [
+                '_current' => true,
+                '_use_rewrite' => true,
+                '_query' => $query
+            ]
+        );
     }
 
     public function isFallbackRedirectEnabled($store = null)
@@ -553,10 +611,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if ($priceValue = $this->validateAndPreparePriceAnswer($value)) {
                 return $priceValue;
             }
-            
+
             return array_map('intval', explode(',', $value));
         }
-      
+
         return (array)$value;
     }
 
@@ -564,26 +622,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $array = explode("_", $value);
         if (count($array) == 3
-        && (bool)$array[0] == false
-        && strpos($array[1], "P") !== false) {
+            && (bool)$array[0] == false
+            && strpos($array[1], "P") !== false
+        ) {
             return [implode("_", $array)];
         }
-        
+
         return false;
     }
 
-    public function getPriceFilterPosition($store = null) : int
+    public function getPriceFilterPosition($store = null): int
     {
         $position = $this->scopeConfig->getValue(
             self::XML_PATH_PRIC_FILTER_POSITION,
             ScopeInterface::SCOPE_STORE,
             $store
         );
-        
+
         return (int)$position;
     }
 
-    public function isFilterSearchEnabled($store = null) : bool
+    public function isFilterSearchEnabled($store = null): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FILTER_SEARCH,
@@ -592,7 +651,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    public function getMinQtyForFilterSearch($store = null) : int
+    public function getMinQtyForFilterSearch($store = null): int
     {
         return (int) $this->scopeConfig->getValue(
             self::XML_PATH_FILTER_SEARCH_QTY,
@@ -604,12 +663,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return string
      */
-    public function toJsBool($value) : string
+    public function toJsBool($value): string
     {
         return ((bool)$value) ? 'true' : 'false';
     }
-    
-    public function getPriceTemplate() : string
+
+    public function getPriceTemplate(): string
     {
         return $this->priceHelper->currency("{price}", true, false);
     }

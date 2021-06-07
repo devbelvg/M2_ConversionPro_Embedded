@@ -8,21 +8,23 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- ******************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
 
 namespace Celebros\ConversionPro\Model\Search;
 
+use Celebros\ConversionPro\Helper\Data;
+use Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter;
+
 class AdapterFactory extends \Magento\Search\Model\AdapterFactory
 {
     public function create(array $data = [])
     {
-        $helper = $this->objectManager->get('Celebros\ConversionPro\Helper\Data');
+        $helper = $this->objectManager->get(Data::class);
         if ($helper->isActiveEngine(get_class($this))) {
             $adapter = $this->objectManager->create(
-                'Celebros\ConversionPro\Model\Search\Adapter\Celebros\Adapter'
+                Adapter::class
             );
 
             return $adapter;

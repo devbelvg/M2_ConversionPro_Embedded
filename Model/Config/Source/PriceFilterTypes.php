@@ -32,9 +32,12 @@ class PriceFilterTypes
     {
         $array = $this->toArray();
         $options = array_map(
-            function ($value, $label) { return ['value' => $value, 'label' => $label]; },
+            function ($value, $label) {
+                return ['value' => $value, 'label' => $label];
+            },
             array_keys($array),
-            $array);
+            $array
+        );
         return $options;
     }
 }

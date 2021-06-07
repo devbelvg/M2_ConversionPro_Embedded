@@ -8,7 +8,6 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- ******************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
@@ -16,6 +15,9 @@
 namespace Celebros\ConversionPro\Model\Search\Adapter\Celebros;
 
 use Magento\Framework\Simplexml\Element as XmlElement;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Search\Response\{Aggregation, QueryResponse};
 
 class ResponseFactory
 {
@@ -24,37 +26,52 @@ class ResponseFactory
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        DocumentFactory $documentFactory
+        DocumentFactory $documentFactory,
+        BucketFactory $bucketFactory
     ) {
         $this->objectManager = $objectManager;
         $this->documentFactory = $documentFactory;
+        $this->bucketFactory = $bucketFactory;
+    }
+
+    public function getSearchResults($rawResponse): ?XmlElement
+    {
+        return $rawResponse->QwiserSearchResults ?? null;
     }
 
     public function create($rawResponse)
     {
         $documents = [];
-        $products = $rawResponse['documents']->QwiserSearchResults->Products;
+        $searchResult = $this->getSearchResults($rawResponse);
+        $total = $searchResult->getAttribute('RelevantProductsCount');
+        $products = $searchResult->Products;
         $entityMapping = $this->prepareEntityRowIdMapping($products);
-        $score = 0;
+        $score = count($products->children());
         foreach ($products->children() as $rawDocument) {
-            $entityId = isset($entityMapping[$rawDocument->getAttribute('MagId')])
-                ? $entityMapping[$rawDocument->getAttribute('MagId')]
-                : false;
+            $entityId = $entityMapping[$rawDocument->getAttribute('MagId')] ?? false;
             if ($entityId) {
                 $rawDocument->setAttribute('EntityId', $entityId);
-                /** @var \Magento\Framework\Search\Document[] $documents */
-                $documents[] = $this->documentFactory->create($rawDocument, $score++);
+                $documents[] = $this->documentFactory->create($rawDocument, $score--);
             }
+        }
+        $questions = $searchResult->Questions;
+        $buckets = [];
+        foreach ($questions->children() as $rawDocument) {
+            $buckets[] = $this->bucketFactory->create($rawDocument);
         }
 
         $aggregations = $this->objectManager->create(
-            'Magento\Framework\Search\Response\Aggregation',
-            ['buckets' => []]
+            Aggregation::class,
+            ['buckets' => $buckets]
         );
 
         return $this->objectManager->create(
-            'Magento\Framework\Search\Response\QueryResponse',
-            ['documents' => $documents, 'aggregations' => $aggregations]
+            QueryResponse::class,
+            [
+                'documents' => $documents,
+                'aggregations' => $aggregations,
+                'total' => $total
+            ]
         );
     }
 
@@ -72,12 +89,12 @@ class ResponseFactory
             }
         }
 
-        $productMetadata = $this->objectManager->get('Magento\Framework\App\ProductMetadataInterface');
+        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
         if ($productMetadata->getEdition() == 'Community') {
             return $ids;
         }
 
-        $products = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $products = $this->objectManager->create(Product::class);
         $collection = $products->getCollection()
             ->addFieldToFilter('row_id', $ids);
 

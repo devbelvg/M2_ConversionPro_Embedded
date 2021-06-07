@@ -45,7 +45,7 @@ class Query
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             return $resourceQuery;
-        } 
+        }
         
         return $proceed($object, $value);
     }
@@ -63,7 +63,7 @@ class Query
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             return;
-        }       
+        }
 
         return $proceed($query);
     }*/

@@ -43,7 +43,7 @@ class PopularSearchTerms
     ) {
         if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
             return true;
-        }       
+        }
 
         return $proceed($term, $storeId);
     }

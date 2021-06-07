@@ -85,7 +85,7 @@ class Item extends \Magento\Catalog\Model\Layer\Filter\Item
                 $values = null;
             }
 
-            $requestVar = $this->searchHelper->checkRequestVar($this->getFilter()->getRequestVar());           
+            $requestVar = $this->searchHelper->checkRequestVar($this->getFilter()->getRequestVar());
             $query = [
                 $requestVar => is_array($values) ? implode(',', $values) : $values,
                 // exclude current page from urls
@@ -101,17 +101,15 @@ class Item extends \Magento\Catalog\Model\Layer\Filter\Item
     public function checkRequestVar()
     {
         $requestVar = $this->getFilter()->getRequestVar();
-        
     }
     
     public function isSelected()
     {
         $previous_search = $this->searchHelper->getFilterValue($this->getFilter()->getRequestVar());
-        if ($previous_search && in_array($this->getValue(), explode(',', $previous_search))) { 
+        if ($previous_search && in_array($this->getValue(), explode(',', $previous_search))) {
             return true;
         }
         
         return false;
     }
-    
 }

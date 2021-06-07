@@ -26,8 +26,8 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
     public function __construct(
         CollectionFactory $productAttributeCollectionFactory,
         \Celebros\ConversionPro\Helper\Data $helper,
-        \Celebros\ConversionPro\Helper\Search $searchHelper)
-    {
+        \Celebros\ConversionPro\Helper\Search $searchHelper
+    ) {
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
         parent::__construct($productAttributeCollectionFactory);
@@ -36,8 +36,9 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
     public function generate()
     {
         $requests = parent::generate();
-        if (!$this->helper->isActiveEngine())
+        if (!$this->helper->isActiveEngine()) {
             return parent::generate();
+        }
 
         $requests['quick_search_container'] = $this->generateQuickSearchRequest();
 
@@ -87,5 +88,4 @@ class RequestGenerator extends \Magento\CatalogSearch\Model\Search\RequestGenera
       
         return $request;
     }
-
 }

@@ -8,7 +8,6 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- ******************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
@@ -33,8 +32,8 @@ class Logger extends \Monolog\Logger
     public function __construct(
         Helper $helper,
         $name,
-        array $handlers = array(),
-        array $processors = array()
+        array $handlers = [],
+        array $processors = []
     ) {
         $this->helper = $helper;
         $this->name = $name;
@@ -50,7 +49,7 @@ class Logger extends \Monolog\Logger
      * @param  array   $context The log context
      * @return bool Whether the record has been processed
      */
-    public function addRecord($level, $message, array $context = array())
+    public function addRecord($level, $message, array $context = [])
     {
         if ($this->helper->isLogEnabled()) {
             return parent::addRecord($level, $message, $context);

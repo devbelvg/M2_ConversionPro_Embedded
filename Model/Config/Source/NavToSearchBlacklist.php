@@ -34,31 +34,34 @@ class NavToSearchBlacklist implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         $options = $this->_toOptionArray();
-        if (!$isMultiselect)
+        if (!$isMultiselect) {
             array_unshift($options, ['value' => '', 'label' => __('--Please Select--')]);
+        }
         return $options;
     }
 
     protected function _toOptionArray()
     {
-        if (is_null($this->options)) {
+        if ($this->options === null) {
             // Create options
-            $this->options = array();
+            $this->options = [];
             $categories = $this->categoryCollection->getItems();
             foreach ($categories as $category) {
                 $pathIds = $category->getPathIds();
 
                 // skip root and default categories
-                if (count($pathIds) < 3)
+                if (count($pathIds) < 3) {
                     continue;
+                }
 
                 // remove root and default from path
                 $pathIds = array_slice($pathIds, 2);
 
                 $path = [];
                 foreach ($pathIds as $pathId) {
-                    if (isset($categories[$pathId]))
+                    if (isset($categories[$pathId])) {
                         $path[] = $categories[$pathId]->getName();
+                    }
                 }
                 $fullName = implode('/', $path);
                 $this->options[] = [
@@ -68,10 +71,12 @@ class NavToSearchBlacklist implements \Magento\Framework\Option\ArrayInterface
             // Sort options
             usort(
                 $this->options,
-                function($option1, $option2) {
-                    return strcmp($option1['label'],$option2['label']);
-                });
+                function ($option1, $option2) {
+                    return strcmp($option1['label'], $option2['label']);
+                }
+            );
         }
+
         return $this->options;
     }
 }

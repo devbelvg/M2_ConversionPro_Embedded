@@ -21,7 +21,7 @@ use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
 
 class FilterRenderer extends \Magento\LayeredNavigation\Block\Navigation\FilterRenderer
 {
-    protected $_templateByType = [
+    protected $templateByType = [
         'default' => 'default.phtml',
         'swatch' => 'swatch.phtml',
         'price' => 'price.phtml'
@@ -35,7 +35,6 @@ class FilterRenderer extends \Magento\LayeredNavigation\Block\Navigation\FilterR
     {
         $type = $filter->getType();
         $this->setTemplate($this->getTemplateByType($type));
-
         $this->assign('filterItems', $filter->getItems());
         $this->assign('filterType', $filter->getRequestVar());
         $html = $this->_toHtml();
@@ -52,9 +51,9 @@ class FilterRenderer extends \Magento\LayeredNavigation\Block\Navigation\FilterR
      */
     protected function getTemplateByType(string $type): string
     {
-        $template = isset($this->_templateByType[$type])
-            ? $this->_templateByType[$type]
-            : $this->_templateByType['default'];
+        $template = isset($this->templateByType[$type])
+            ? $this->templateByType[$type]
+            : $this->templateByType['default'];
         return sprintf('Celebros_ConversionPro::layered_navigation/layer/filter/%s', $template);
     }
 }

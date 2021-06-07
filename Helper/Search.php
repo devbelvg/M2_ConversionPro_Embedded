@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Celebros
  *
@@ -7,10 +8,10 @@
  * Do not edit or add to this file if you wish correct extension functionality.
  * If you wish to customize it, please contact Celebros.
  *
- ******************************************************************************
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Helper;
 
 use Magento\Framework\App\Helper;
@@ -24,17 +25,16 @@ use Magento\Store\Model\ScopeInterface;
 
 class Search extends Helper\AbstractHelper
 {
-    const CATEGORY_QUESTION_TEXT = 'Category';
-    const CAT_ID_DYN_PROPERTY = 'MagEntityID';
-    const CACHE_TAG = 'CONVERSIONPRO';
-    const CACHE_ID = 'conversionpro';
-    const REDIRECT_DYNAMIC_PROPERTY_NAME = 'redirection url';
+    public const CATEGORY_QUESTION_TEXT = 'Category';
+    public const CAT_ID_DYN_PROPERTY = 'MagEntityID';
+    public const CACHE_TAG = 'CONVERSIONPRO';
+    public const CACHE_ID = 'conversionpro';
+    public const REDIRECT_DYNAMIC_PROPERTY_NAME = 'redirection url';
 
     /**
      * @var Data
      */
     protected $helper;
-
     protected $customResultsCache = [];
     protected $allQuestionsCache;
     protected $questionAnswers = [];
@@ -45,6 +45,7 @@ class Search extends Helper\AbstractHelper
     protected $category;
     protected $productAttributes = [];
     protected $currentSearchParams;
+    public $appliedFilters = [];
 
     /**
      * @var \Celebros\ConversionPro\Model\Search
@@ -90,6 +91,8 @@ class Search extends Helper\AbstractHelper
             }
 
             $params->setQuery($queryText);
+
+            // filters
             $filters = [];
             foreach ($this->getFilterRequestVars() as $requestVar) {
                 $value = $this->getFilterValueAsArray($requestVar);
@@ -100,6 +103,7 @@ class Search extends Helper\AbstractHelper
 
             $params->setFilters($filters);
             $this->currentSearchParams = $params;
+
             return $params;
         }
 
@@ -180,7 +184,7 @@ class Search extends Helper\AbstractHelper
         foreach ($answers->Answers->Answer as $answer) {
             $options[$answer->getAttribute('Id')] = $answer->getAttribute('Text');
         };
-        
+
         return $options;
     }
 
@@ -254,7 +258,6 @@ class Search extends Helper\AbstractHelper
 
     public function getFilterValue($requestVar)
     {
-        $filterRequestVars  = $this->getFilterRequestVars();
         $value = $this->getValueFromRequest($requestVar);
 
         if (!($value === null) && !$this->helper->isMultiselectEnabled()) {
@@ -284,7 +287,7 @@ class Search extends Helper\AbstractHelper
                 $names[] = $question->getAttribute('Text');
             }
         }
-        
+
         return $names;
     }
 
@@ -343,7 +346,7 @@ class Search extends Helper\AbstractHelper
             $mock->setAttribute('Text', 'By price range');
             $mock->setAttribute('SideText', 'Price');
             $mock->setAttribute('Type', 'Price');
-            
+
             return $mock;
         }
     }
@@ -354,7 +357,7 @@ class Search extends Helper\AbstractHelper
         if ($answerId = $this->cache->load($cacheId)) {
             return $answerId;
         }
-        
+
         $allQuestions = $this->getAllQuestions()->Questions->Question;
         foreach ($allQuestions as $question) {
             if ($question->getAttribute('Text') == self::CATEGORY_QUESTION_TEXT) {
@@ -461,7 +464,7 @@ class Search extends Helper\AbstractHelper
             default:
                 $result = strtolower($order);
         }
-        
+
         return $result;
     }
 
@@ -508,13 +511,15 @@ class Search extends Helper\AbstractHelper
     public function extractDynamicProperty(
         XmlElement $element,
         string $propertyName = null
-    ) : ?XmlElement {
-        if (!empty($element->DynamicProperties)
-        && $element->DynamicProperties instanceof \Magento\Framework\Simplexml\Element) {
+    ): ?XmlElement {
+        if (
+            !empty($element->DynamicProperties)
+            && $element->DynamicProperties instanceof \Magento\Framework\Simplexml\Element
+        ) {
             if (!$propertyName) {
                 return $element->DynamicProperties;
             }
-            
+
             foreach ($element->DynamicProperties->children() as $property) {
                 if ($property->getAttribute('name') == $propertyName) {
                     return $property;

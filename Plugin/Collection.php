@@ -12,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Plugin;
 
 use Magento\Framework\DB\Select;
@@ -33,6 +34,11 @@ class Collection
         $this->catModel = $catModel;
     }
 
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param \Magento\Catalog\Model\Category $category
+     * @return array
+     */
     public function beforeAddCategoryFilter(
         ProductCollection $collection,
         \Magento\Catalog\Model\Category $category
@@ -46,6 +52,11 @@ class Collection
         return [$category];
     }
 
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $result
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
     public function afterAddAttributeToSort(
         ProductCollection $collection,
         $result
@@ -66,7 +77,7 @@ class Collection
         $fromPart = $collection->getSelect()->getPart('from');
         if (is_array($fromPart) && array_key_exists('search_result', $fromPart)) {
             $collection->getSelect()->reset(Select::ORDER);
-            $collection->getSelect()->columns('search_result.score')->order('score ASC');
+            $collection->getSelect()->columns('search_result.score')->order('score DESC');
             return true;
         }
 

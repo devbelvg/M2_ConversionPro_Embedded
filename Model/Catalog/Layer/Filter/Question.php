@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Celebros
  *
@@ -11,10 +12,11 @@
  * @category    Celebros
  * @package     Celebros_ConversionPro
  */
+
 namespace Celebros\ConversionPro\Model\Catalog\Layer\Filter;
 
-use \Magento\Catalog\Model\Layer;
-use \Magento\Framework\Simplexml\Element as XmlElement;
+use Magento\Catalog\Model\Layer;
+use Magento\Framework\Simplexml\Element as XmlElement;
 
 class Question extends Layer\Filter\AbstractFilter
 {
@@ -27,12 +29,15 @@ class Question extends Layer\Filter\AbstractFilter
      * @var \Celebros\ConversionPro\Helper\Data
      */
     protected $searchHelper;
-    
+
     /**
      * @var string
      */
     protected $type;
-    
+
+    /**
+     * @var array
+     */
     protected $specialTypes = [
         'swatch' => '_checkSwatch'
     ];
@@ -44,8 +49,8 @@ class Question extends Layer\Filter\AbstractFilter
         Layer\Filter\Item\DataBuilder $itemDataBuilder,
         \Celebros\ConversionPro\Helper\Data $helper,
         \Celebros\ConversionPro\Helper\Search $searchHelper,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
         parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $data);
@@ -54,12 +59,7 @@ class Question extends Layer\Filter\AbstractFilter
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         $filter = $this->searchHelper->getFilterValue($this->getRequestVar());
-        if (!empty($filter)) {
-            $this->getLayer()->getProductCollection()->addFieldToFilter(
-                $this->getRequestVar(),
-                $filter
-            );
-
+        if (!empty($filter) && !in_array($filter, $this->searchHelper->appliedFilters)) {
             $values = $this->searchHelper->filterValueToArray($filter);
             foreach ($values as $value) {
                 $text = $this->getOptionText($value);
@@ -69,6 +69,7 @@ class Question extends Layer\Filter\AbstractFilter
             }
 
             $this->_updateItems($values);
+            $this->searchHelper->appliedFilters[] = $filter;
         }
     }
 
@@ -85,8 +86,9 @@ class Question extends Layer\Filter\AbstractFilter
                 function ($item) use (&$values) {
                     return !in_array($item->getValue(), $values);
                 });*/
-            foreach ($this->_items as $item)
+            foreach ($this->_items as $item) {
                 $item->setSelectedValues($values);
+            }
         }
     }
 
@@ -95,60 +97,60 @@ class Question extends Layer\Filter\AbstractFilter
         if ($this->hasQuestionName()) {
             return $this->getQuestionName();
         }
-        
+
         if (!$this->hasQuestion()) {
             return __('Unknown');
         }
-        
+
         return $this->getQuestion()->getAttribute('Text');
     }
 
     /**
-     * Return question type 
-     *  
+     * Return question type
+     *
      * @return string Question type
      */
-    public function getType() : string
+    public function getType(): string
     {
         if (!$this->type) {
             if (!$type = $this->_checkSpecialType()) {
                 $type = (string) strtolower($this->getQuestion()->getAttribute('Type'));
             }
-            
+
             $this->type = $type;
         }
-        
+
         return $this->type;
     }
-    
+
     /**
-     * Check if current question corresponds to any special types 
-     *  
+     * Check if current question corresponds to any special types
+     *
      * @return string|bool
      */
-    protected function _checkSpecialType() : ?string
+    protected function _checkSpecialType(): ?string
     {
         foreach ($this->specialTypes as $specialType => $methodName) {
             if ($this->$methodName()) {
                 return $specialType;
             }
-        }    
-        
+        }
+
         return null;
     }
-    
+
     /**
-     * Special type check function 
-     *  
+     * Special type check function
+     *
      * @return bool
      */
-    protected function _checkSwatch() : bool
+    protected function _checkSwatch(): bool
     {
         if ($swatches = $this->searchHelper->extractDynamicProperty($this->getQuestion(), 'Swatches')) {
             return (bool) ($swatches instanceof XmlElement) ? $swatches->getAttribute('value') : false;
         }
-        
-        return false;  
+
+        return false;
     }
 
     public function getRequestVar()
@@ -156,15 +158,15 @@ class Question extends Layer\Filter\AbstractFilter
         if ($this->hasRequestVar()) {
             return $this->getRequestVar();
         }
-        
+
         if ($this->_isPrice()) {
             return 'price';
         }
-        
+
         if ($this->hasQuestion()) {
             $reqVar = $this->getQuestion()->getAttribute('SideText');
         }
-        
+
         return $this->searchHelper->checkRequestVar($reqVar);
     }
 
@@ -172,7 +174,7 @@ class Question extends Layer\Filter\AbstractFilter
     {
         return $this->_storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
     }
-    
+
     protected function getOptionText($optionId)
     {
         if ($this->_isPrice()) {
@@ -181,48 +183,28 @@ class Question extends Layer\Filter\AbstractFilter
                 return str_replace('_', ' - ' . $this->getCurrencySymbol(), $optionId);
             }
         }
-        
+
         if ($this->hasAnswers()) {
             foreach ($this->getAnswers()->children() as $answer) {
-                if ($answer->getAttribute('Id') == $optionId)
+                if ($answer->getAttribute('Id') == $optionId) {
                     return $this->_prepareAnswerText($answer);
+                }
             }
         }
-        
-        foreach ($this->searchHelper->getQuestionAnswers($this->getQuestion()->getAttribute('Id'))->Answers->Answer as $answer) {
+
+        $qAnswers = $this->searchHelper->getQuestionAnswers($this->getQuestion()
+            ->getAttribute('Id'))->Answers->Answer;
+        foreach ($qAnswers as $answer) {
             if ($answer->getAttribute('Id') == $optionId) {
-                return $this->_prepareAnswerText($answer); 
+                return $this->_prepareAnswerText($answer);
             }
         }
-        
+
         return __('Unknown value');
     }
 
-    /*protected function _getItemsData()
-    {
-        if (!$this->hasAnswers())
-            return [];
-
-        $items = [];
-        foreach ($this->getAnswers()->children() as $answer) {
-            $items[] = $this->_createItem(
-                $this->_prepareAnswerText($answer),
-                $answer->getAttribute('Id'),
-                $answer->getAttribute('ProductCount'));
-        }
-        
-        foreach ($this->getEanswers()->children() as $answer) {
-            $items[] = $this->_createItem(
-                $this->_prepareAnswerText($answer),
-                $answer->getAttribute('Id'),
-                $answer->getAttribute('ProductCount'));
-        }
-        
-        return $items;
-    }*/
-    
     /**
-     * Collect answers from response data 
+     * Collect answers from response data
      *
      * @return array
      */
@@ -232,17 +214,17 @@ class Question extends Layer\Filter\AbstractFilter
         if (!$this->hasAnswers()) {
             return $items;
         }
-        
+
         /* collect all regular answers */
         foreach ($this->getAnswers()->children() as $answer) {
             $items[] = $answer;
         }
-        
+
         /* collect all extra answers */
         foreach ($this->getEanswers()->children() as $answer) {
             $items[] = $answer;
         }
-        
+
         return $items;
     }
 
@@ -262,9 +244,10 @@ class Question extends Layer\Filter\AbstractFilter
                 $text = str_replace('<max>', $matches[2], $text);
             }
         }
+
         return $text;
     }
-    
+
     /**
      * Create filter item object
      *
@@ -287,7 +270,7 @@ class Question extends Layer\Filter\AbstractFilter
             ->setCount($count)
             ->setSwatchImage($swatchImage);
     }
-    
+
     /**
      * Initialize filter items
      *
@@ -305,8 +288,9 @@ class Question extends Layer\Filter\AbstractFilter
                 $itemData->getAttribute('ImageUrl')
             );
         }
-        
+
         $this->_items = $items;
+
         return $this;
     }
 }

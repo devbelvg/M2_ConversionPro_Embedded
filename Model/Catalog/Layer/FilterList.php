@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Layer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Simplexml\Element as XmlElement;
 use Magento\Catalog\Model\Config\LayerCategoryConfig;
+use Celebros\ConversionPro\Model\Catalog\Layer\Filter\Question;
 
 class FilterList extends \Magento\Catalog\Model\Layer\FilterList
 {
@@ -39,7 +40,6 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
      * @var \Celebros\ConversionPro\Helper\Search
      */
     protected $searchHelper;
-    
     
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
@@ -72,7 +72,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         array $filters = []
     ) {
         $this->filterTypes[self::QUESTION_FILTER] =
-            'Celebros\ConversionPro\Model\Catalog\Layer\Filter\Question';
+            Question::class;
         $this->request = $request;
         $this->helper = $helper;
         $this->searchHelper = $searchHelper;
@@ -88,7 +88,7 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
         if (version_compare($this->productMetadata->getVersion(), '2.4.0', '<')) {
             parent::__construct($objectManager, $filterableAttributes, $filters);
         } else {
-            $layerCategoryConfig = $objectManager->get('Magento\Catalog\Model\Config\LayerCategoryConfig');
+            $layerCategoryConfig = $objectManager->get(LayerCategoryConfig::class);
             parent::__construct($objectManager, $filterableAttributes, $layerCategoryConfig, $filters);
         }
     }
@@ -121,11 +121,8 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
             return parent::getFilters($layer);
         }
 
-        $priceQuestion = $this->searchHelper->getPriceQuestionMock();
-
         if (!count($this->filters)) {
             $this->filters = [];
-            // $response = $this->_getResponse($layer);
             $response = $this->searchHelper->getCustomResults();
             $questions = $response->QwiserSearchResults->Questions;
             $questionsList = $this->sortFilters($questions);
@@ -133,30 +130,33 @@ class FilterList extends \Magento\Catalog\Model\Layer\FilterList
                 $this->filters[] = $this->createQuestionFilter($question, $layer);
                 $this->appliedFilters[] = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
             }
-        }
 
-        $remFilters = array_diff($this->searchHelper->getFilterRequestVars(), $this->appliedFilters);
-        foreach ($remFilters as $fltr) {
-            $remFilters = array_merge($this->searchHelper->getAltRequestVars($fltr), $remFilters);
-        }
-
-        $remFilters = array_unique($remFilters);
-        foreach ($this->request->getParams() as $var => $value) {
-            if (in_array($var, $remFilters) && !in_array($var, $this->appliedFilters)) {
-                $question = $this->searchHelper->getQuestionByField($var, self::APPLIED_FILTERS_ATTRIBUTE);
-                if ($question) {
-                    $var = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
-                    $this->createQuestionFilter($question, $layer)->apply($this->request);
-                    $this->appliedFilters[] = $var;
-                }
+            $remFilters = array_diff($this->searchHelper->getFilterRequestVars(), $this->appliedFilters);
+            foreach ($remFilters as $fltr) {
+                $remFilters = array_merge($this->searchHelper->getAltRequestVars($fltr), $remFilters);
             }
 
-            if (
-                $var == 'price' &&
-                !in_array($priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE), $this->appliedFilters)
-            ) {
-                $this->createQuestionFilter($priceQuestion, $layer)->apply($this->request);
-                $this->appliedFilters[] = $priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
+            $priceQuestion = $this->searchHelper->getPriceQuestionMock();
+
+            $remFilters = array_unique($remFilters);
+            foreach ($this->request->getParams() as $var => $value) {
+                if (in_array($var, $remFilters)
+                    && !in_array($var, $this->appliedFilters)
+                ) {
+                    $question = $this->searchHelper->getQuestionByField($var, self::APPLIED_FILTERS_ATTRIBUTE);
+                    if ($question) {
+                        $var = $question->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
+                        $this->createQuestionFilter($question, $layer)->apply($this->request);
+                        $this->appliedFilters[] = $var;
+                    }
+                }
+
+                if ($var == 'price'
+                    && !in_array($priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE), $this->appliedFilters)
+                ) {
+                    $this->createQuestionFilter($priceQuestion, $layer)->apply($this->request);
+                    $this->appliedFilters[] = $priceQuestion->getAttribute(self::APPLIED_FILTERS_ATTRIBUTE);
+                }
             }
         }
 
