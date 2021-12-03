@@ -16,7 +16,7 @@
 namespace Celebros\ConversionPro\Plugin\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products as ProductsResolver;
-use Celebros\ConversionPro\Helper\Search as Helper;
+use Celebros\ConversionPro\Helper\Data;
 
 class Products
 {
@@ -25,7 +25,7 @@ class Products
      * @return void
      */
     public function __construct(
-        Helper $helper
+        Data $helper
     ) {
         $this->helper = $helper;
     }
@@ -38,7 +38,9 @@ class Products
         $value,
         $args
     ) {
-        if (isset($args['filter']['category_id']['eq'])) {
+        if (isset($args['filter']['category_id']['eq'])
+            && $this->helper->isActiveEngine()
+        ) {
             $queryText = 'CatId' . $args['filter']['category_id']['eq'];
             $args['search'] = $queryText;
         }

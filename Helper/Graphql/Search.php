@@ -30,13 +30,26 @@ class Search extends \Celebros\ConversionPro\Helper\Search
         $params = parent::getSearchParams();
         $params->setPageSize(9999);
         $this->currentSearchParams = $params;
+        $params->setSortBy(
+            $this->extractSortOrder(
+                $this->_getRequest()->getParam('variables', false)
+            )
+        );
 
         return $this->currentSearchParams;
     }
     
+    protected function extractSortOrder(string $variables)
+    {
+        $variables = json_decode($variables, true);
+        $sort = $variables['sort'] ?? [];
+        foreach ($sort as $sortOrder => $dir) {
+            return [$sortOrder, $dir];
+        }
+    }
+    
     public function getValueFromRequest($requestVar)
     {
-        $vars = $this->getAltRequestVars($requestVar);
         $variables = $this->_getRequest()->getParam('variables', false);
         $variables = json_decode($variables, true);
         $filters = $variables['filters'] ?? [];

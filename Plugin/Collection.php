@@ -61,7 +61,9 @@ class Collection
         ProductCollection $collection,
         $result
     ) {
-        if ($this->helper->isActiveEngine() && $this->helper->isPermittedHandle()) {
+        if ($this->helper->isActiveEngine()
+            && ($this->helper->isPermittedHandle() || $this->helper->isGraphql())
+        ) {
             $this->applyScoreSorting($collection);
         }
 

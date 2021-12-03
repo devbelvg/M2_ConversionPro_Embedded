@@ -23,10 +23,12 @@
         </arguments>
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products">
-        <plugin name="convpro_2342352354" type="Celebros\ConversionPro\Plugin\CatalogGraphQl\Model\Resolver\Products" sortOrder="10000" disabled="false"/>
+        <plugin name="celebros_conversionpro_plugin_cataloggraphql_model_resolver_products"
+            type="Celebros\ConversionPro\Plugin\CatalogGraphQl\Model\Resolver\Products" sortOrder="10000" disabled="false"/>
     </type>
     <type name="Magento\CatalogGraphQl\Model\Config\FilterAttributeReader">
-        <plugin name="convpro_asdasdqwdq" type="Celebros\ConversionPro\Plugin\CatalogGraphQl\Model\Config\FilterAttributeReader" sortOrder="10000" disabled="false"/>
+        <plugin name="celebros_conversionPro_plugin_cataloggraphql_model_config_filterattributereader"
+            type="Celebros\ConversionPro\Plugin\CatalogGraphQl\Model\Config\FilterAttributeReader" sortOrder="10000" disabled="false"/>
     </type>
     <preference for="Celebros\ConversionPro\Helper\Data" type="Celebros\ConversionPro\Helper\Graphql\Data" />
     <preference for="Celebros\ConversionPro\Helper\Search" type="Celebros\ConversionPro\Helper\Graphql\Search" />

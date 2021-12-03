@@ -36,9 +36,9 @@ class BucketFactory
             $values[] = $this->objectManager->create(
                 \Magento\Framework\Search\Response\Aggregation\Value::class,
                 [
-                    'value' => str_replace("_P", "", $rawAnswerDocument->getAttribute('Id')),
+                    'value' => $rawAnswerDocument->getAttribute('Id'),
                     'metrics' => [
-                        'value' => str_replace("_P", "", $rawAnswerDocument->getAttribute('Id')),
+                        'value' => $rawAnswerDocument->getAttribute('Id'),
                         'label' => $rawAnswerDocument->getAttribute('Text'),
                         'count' => $rawAnswerDocument->getAttribute('ProductCount')
                     ]
@@ -49,7 +49,7 @@ class BucketFactory
         return $this->objectManager->create(
             \Magento\Framework\Search\Response\Bucket::class,
             [
-                'name' => $label,
+                'name' => ($label == 'Price') ? strtolower($label) : $label,
                 'values' => $values
             ]
         );

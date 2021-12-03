@@ -63,6 +63,7 @@ class Curl extends \Magento\Framework\HTTP\Client\Curl
     protected function makeRequest($method, $uri, $params = [])
     {
         $requestUn = microtime(true);
+        $this->logger->logCurrentUrl($requestUn);
         $this->logger->info($requestUn . ' - Request URI: ' . $uri);
         parent::makeRequest($method, $uri, $params);
         $this->logger->info($requestUn . ' - Request Headers: ' . json_encode($this->getRequestHeaders()));

@@ -49,12 +49,6 @@ class FilterAttributeReader
     ) : array {
         $allQuestions = $this->search->getAllQuestions()->Questions->Question;
         foreach ($allQuestions as $question) {
-            /*similar_text($question->getAttribute($field), $value, $perc);
-            if ($perc > self::PERC_SIMILARITY) {*/
-            /*if ($question->getAttribute($field) == $value) {*/
-            /*if (in_array($value, $this->getAltRequestVars($question->getAttribute($field)))) {
-                return $question;
-            }*/
             $attributeCode = str_replace(" ", "_", $question->getAttribute('SideText'));
             if ($attributeCode) {
                 $result['ProductAttributeFilterInput']['fields'][$attributeCode] = [
@@ -67,6 +61,14 @@ class FilterAttributeReader
             }
         }
         
+        $result['ProductAttributeFilterInput']['fields']['price'] = [
+            'name' => 'price',
+            'type' => 'FilterEqualTypeInput',
+            'arguments' => [],
+            'required' => false,
+            'description' => sprintf('Attribute label: %s', 'price')
+        ];
+
         return $result;
     }
 }

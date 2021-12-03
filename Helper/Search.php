@@ -132,7 +132,8 @@ class Search extends Helper\AbstractHelper
         $searchHandle = $this->search->createSearchHandle($params);
         if (!isset($this->customResultsCache[$searchHandle])) {
             $this->customResultsCache[$searchHandle] = $this->search->getCustomResults($searchHandle, true, '');
-            if ($this->helper->isCampaignsEnabled()) {
+            if ($this->helper->isCampaignsEnabled()
+                && $this->helper->isRedirectAvailable()) {
                 $this->checkRedirects($this->customResultsCache[$searchHandle]);
             }
         }

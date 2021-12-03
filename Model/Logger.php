@@ -24,10 +24,10 @@ class Logger extends \Monolog\Logger
     protected $helper;
 
     /**
-     * @param Helper             $helper     Celebros data helper
-     * @param string             $name       The logging channel
-     * @param HandlerInterface[] $handlers   Optional stack of handlers
-     * @param callable[]         $processors Optional array of processors
+     * @param Helper $helper
+     * @param string $name
+     * @param HandlerInterface[] $handlers
+     * @param callable[] $processors
      */
     public function __construct(
         Helper $helper,
@@ -44,10 +44,10 @@ class Logger extends \Monolog\Logger
     /**
      * Adds a log record.
      *
-     * @param  int     $level   The logging level
-     * @param  string  $message The log message
-     * @param  array   $context The log context
-     * @return bool Whether the record has been processed
+     * @param int $level
+     * @param string $message
+     * @param array $context
+     * @return bool
      */
     public function addRecord($level, $message, array $context = [])
     {
@@ -55,6 +55,16 @@ class Logger extends \Monolog\Logger
             return parent::addRecord($level, $message, $context);
         }
 
+        return false;
+    }
+    
+    public function logCurrentUrl($requestUn)
+    {
+        if ($this->helper->isLogEnabled()) {
+            $currentUrl = $this->helper->getCurrentUrl();
+            return $this->info($requestUn . ' - Frontend Url: ' . $currentUrl);
+        }
+        
         return false;
     }
 }

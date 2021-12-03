@@ -2,15 +2,15 @@
 <!-- BEGIN: Analytics.Celebros.Product.Click-->
 <?php $protocol = ($this->getRequest()->isSecure()) ? 'https' : 'http'; ?>
 <script type="text/javascript">
-require(["<?php echo $protocol ?>://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>"], function() {
+require(["<?= $protocol ?>://<?= $this->getHost(); ?><?= $this->getJsPath(); ?>"], function() {
     anlxCallback = function() {
         var x = '';
     };
-    CelebrosAnalytics.customerid  = '<?php echo $this->getCustomerId(); ?>';
-    CelebrosAnalytics.productsku  = '<?php echo $this->getProductSku(); ?>';
-    CelebrosAnalytics.productname = '<?php echo $this->getProductName(); ?>';
-    CelebrosAnalytics.productprice = '<?php echo $this->getProductPrice(); ?>';
-    CelebrosAnalytics.websessionid = '<?php echo $this->getWebsessionId(); ?>';
+    CelebrosAnalytics.customerid  = '<?= $this->getCustomerId(); ?>';
+    CelebrosAnalytics.productsku  = '<?= $this->getProductSku(); ?>';
+    CelebrosAnalytics.productname = '<?= $this->getProductName(); ?>';
+    CelebrosAnalytics.productprice = '<?= $this->getProductPrice(); ?>';
+    CelebrosAnalytics.websessionid = '<?= $this->getWebsessionId(); ?>';
     CelebrosAnalytics.issecured = <?php echo ($this->getRequest()->isSecure()) ? 'true' : 'false' ?>;
     CelebrosAnalytics.AI_LogProduct();
 });

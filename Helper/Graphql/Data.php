@@ -96,7 +96,9 @@ class Data extends \Celebros\ConversionPro\Helper\Data
     {
         if ($this->isGraphql()) {
             $opName = $this->getOpName();
-            if ($opName == 'getProductFiltersByCategory') {
+            if ($opName == 'getProductFiltersByCategory'
+                && $this->isNavToSearchEnabled()
+            ) {
                 $vars = $this->_request->getParam('variables', false);
                 if ($vars) {
                     $vars = json_decode($vars, true);
@@ -144,5 +146,13 @@ class Data extends \Celebros\ConversionPro\Helper\Data
         }
 
         return (int) $this->_request->getParam('id', false);
+    }
+    
+    /**
+     * @return bool
+     */    
+    public function isRedirectAvailable(): bool
+    {
+        return false;
     }
 }

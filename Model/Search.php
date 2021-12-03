@@ -18,6 +18,7 @@ use \Magento\Framework\DataObject;
 use \Magento\Framework\Simplexml\Element as XmlElement;
 use Celebros\ConversionPro\Model\Logger;
 use Celebros\ConversionPro\Helper\Data;
+use Celebros\ConversionPro\Exception\SearchException;
 
 class Search
 {
@@ -111,7 +112,7 @@ class Search
             $searchInfoXml->addChild('Query', $query);
             $searchInfoXml->addChild('OriginalQuery', $query);
         }
-        
+      
         // Filters
         if ($params->hasFilters() && is_array($params->getFilters())) {
             // create answer container element
@@ -134,7 +135,7 @@ class Search
                     }
                 }
             }
-           
+          
             $answersXml->setAttribute('Count', $answerCount);
         }
      
@@ -147,7 +148,7 @@ class Search
             if (!($name === null)) {
                 // create sorting options element
                 $fieldName = $this->_getSortingFieldName($name);
-                $ascending = ($order == 'desc') ? 'false' : 'true';
+                $ascending = (strtolower($order) == 'desc') ? 'false' : 'true';
                 list($method, $isNumeric) = $this->_getSortingMethod($name);
                 $sortingOptionsXml = $searchInfoXml->addChild('SortingOptions');
                 $sortingOptionsXml->setAttribute('FieldName', $fieldName);
@@ -384,9 +385,10 @@ class Search
             $this->messageManager->addSuccess($this->helper->prepareDebugMessage($message));
         }
 
-        $this->isFallbackRedirect($response);
-        
-        $this->isSingleProductsRedirect($response);
+        if ($this->helper->isRedirectAvailable()) {
+            $this->isFallbackRedirect($response);
+            $this->isSingleProductsRedirect($response);
+        }
         
         // save previous search handle
         $previousSearchHandle = $response->QwiserSearchResults->getAttribute('SearchHandle');
@@ -555,81 +557,46 @@ class Search
     protected function _parseResponse($response)
     {
         try {
-            $xml = simplexml_load_string($response, XmlElement::class);
+            $xml = simplexml_load_string($response, '\Magento\Framework\Simplexml\Element');
         } catch (\Exception $message) {
-            $this->_logException(
-                $message,
-                $response,
-                new SearchServiceErrorException($message)
-            );
-        }
-        
-        if ($xml === false) {
-            $message = __('Service response is empty');
-            $this->_logException(
-                $message,
-                $response,
-                new SearchServiceErrorException($message)
-            );
-        }
-            
-        // check if error is indicated in response
-        if ($xml->getAttribute('ErrorOccurred') == 'true') {
-            if (isset($xml->QwiserError)) {
-                $message = '';
-                if (null !== $xml->QwiserError->getAttribute('MethodName')) {
-                    $message .= sprintf(
-                        'Error occured in method %s: ',
-                        $xml->QwiserError->getAttribute('MethodName')
-                    );
-                }
-                
-                $message .= (null !== $xml->QwiserError->getAttribute('ErrorMessage'))
-                    ? $xml->QwiserError->getAttribute('ErrorMessage')
-                    : __('Unknown error');
-            }
-            
-            $this->_logException(
-                $message,
-                $response,
-                new SearchResponseErrorException($message)
-            );
+            $exception = (new SearchException($message))->create();
         }
 
-        if (isset($xml->ReturnValue)
-        && $xml->ReturnValue instanceof \Magento\Framework\Simplexml\Element
-        && !empty($xml->ReturnValue)) {
-            return $xml->ReturnValue;
-        } else {
-            $message = __('No return value in response');
+        $exception = $exception ?? (new SearchException($xml))->create();
+
+        if ($exception) {
             $this->_logException(
-                $message,
                 $response,
-                new SearchServiceErrorException($message)
+                $exception
             );
+            
+            $excMessage = [
+                'title' => __('Celebros Search Engine'),
+                'request' => $exception->getMessage()
+            ];
+            
+            $this->messageManager->addSuccess($this->helper->prepareDebugMessage($excMessage));
+            //throw $exception;
         }
-        
-        return false;
+
+        return $xml->ReturnValue ?? false;
     }
-    
+
     /**
-     * @param  string           $message
-     * @param  string           $response
-     * @param  \Exception|null  $exception
+     * @param  string $message
+     * @param  string $response
+     * @param  \Exception|null $exception
      * @return void
      */
     protected function _logException(
-        string $message,
         $response = null,
-        $exception = null
-    ) {
-        $this->logger->warning($message);
-        if ($response) {
-            $this->logger->warning('Response: ' . $response);
-        }
-        
+        \Exception $exception = null
+    ): void {
         if ($exception) {
-            throw $exception;
+            $this->logger->warning($exception->getMessage());
+            if ($response) {
+                $this->logger->warning('Response: ' . $response);
+            }
         }
     }
     

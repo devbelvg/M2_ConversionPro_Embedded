@@ -2,18 +2,18 @@
 <!-- BEGIN: Analytics.Celebros.Search-->
 <?php $protocol = ($this->getRequest()->isSecure())?'https':'http'; ?>
 <script type="text/javascript">
-require(["<?php echo $protocol ?>://<?php echo $this->getHost(); ?><?php echo $this->getJsPath(); ?>"], function() {
+require(["<?= $protocol ?>://<?= $this->getHost(); ?><?= $this->getJsPath(); ?>"], function() {
     anlxCallback = function() {
         var x = '';
     };
-    CelebrosAnalytics.customerid = '<?php echo $this->getCustomerId(); ?>';
-    CelebrosAnalytics.pagereferrer = '<?php echo $this->getPageReferrer(); ?>';
-    CelebrosAnalytics.qwisersearchsessionid = '<?php echo $this->getQwiserSearchSessionId(); ?>';
-    CelebrosAnalytics.websessionid = '<?php echo $this->getWebsessionId(); ?>';
+    CelebrosAnalytics.customerid = '<?= $this->getCustomerId(); ?>';
+    CelebrosAnalytics.pagereferrer = '<?= $this->getPageReferrer(); ?>';
+    CelebrosAnalytics.qwisersearchsessionid = '<?= $this->getQwiserSearchSessionId(); ?>';
+    CelebrosAnalytics.websessionid = '<?= $this->getWebsessionId(); ?>';
 <?php if ($qwisersearchloghandle = $this->getQwiserSearchLogHandle()): ?>
-    CelebrosAnalytics.qwisersearchloghandle = '<?php echo $qwisersearchloghandle ?>';
+    CelebrosAnalytics.qwisersearchloghandle = '<?= $qwisersearchloghandle ?>';
 <?php endif; ?>
-    CelebrosAnalytics.issecured = <?php echo ($this->getRequest()->isSecure()) ? 'true' : 'false' ?>;
+    CelebrosAnalytics.issecured = <?= ($this->getRequest()->isSecure()) ? 'true' : 'false' ?>;
     CelebrosAnalytics.AI_LogSearchResult();
 });
 </script>

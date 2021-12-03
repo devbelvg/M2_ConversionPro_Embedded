@@ -56,5 +56,8 @@ Celebros ConversionPro Embedded
 
 1.4.4 - algorithm for nav2search method 'answer_id' has been changed
 
+1.4.5 - price filter labels format has been changed
+
 1.5.0 - graphql has been added
 
+1.5.1 - tech fixes for graphql; refactoring

@@ -88,19 +88,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $storeManager;
 
+    /**
+     * @var \Magento\Framework\Pricing\Helper\Data
+     */
+    protected $priceHelper;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $url;
+
     public function __construct(
         Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\State $state,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper
+        \Magento\Framework\Pricing\Helper\Data $priceHelper,
+        \Magento\Framework\UrlInterface $urlInterface
     ) {
         $this->registry = $registry;
         $this->state = $state;
         $this->messageManager = $messageManager;
         $this->storeManager = $storeManager;
         $this->priceHelper = $priceHelper;
+        $this->url = $urlInterface;
         parent::__construct($context);
     }
 
@@ -668,8 +680,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return ((bool)$value) ? 'true' : 'false';
     }
 
+    /**
+     * @return string
+     */
     public function getPriceTemplate(): string
     {
         return $this->priceHelper->currency("{price}", true, false);
+    }
+
+    /**
+     * @return string
+     */    
+    public function getCurrentUrl(): string
+    {
+        return $this->url->getCurrentUrl();
+    }
+    
+    /**
+     * @return bool
+     */    
+    public function isRedirectAvailable(): bool
+    {
+        return true;
     }
 }
